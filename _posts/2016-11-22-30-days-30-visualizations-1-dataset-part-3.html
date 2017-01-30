@@ -1,0 +1,175 @@
+---
+layout: post
+title: '30 Days, 30 Visualizations, 1 Dataset: Days 11-15'
+date: 2016-11-22 20:53:53.000000000 +00:00
+type: post
+published: true
+status: publish
+categories:
+- Project
+tags:
+- data
+- data science
+- ggplot2
+- R
+- RStudio
+- visualization
+meta:
+  _thumbnail_id: '615'
+  _rest_api_published: '1'
+  _rest_api_client_id: "-1"
+  _publicize_job_id: '29198556829'
+  _oembed_6da53558d1fa160db6716a7f687335bd: <div class="embed-cartodb"><iframe width='100%'
+    height='520px' frameborder='0' src='https://olj23.carto.com/viz/16d7e938-a869-11e6-b20f-0e3ebc282e83/embed_map'
+    allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe></div>
+  _oembed_time_6da53558d1fa160db6716a7f687335bd: '1479848182'
+  _wp_old_slug: 30-days-30-visualizations-1-dataset-days-11-16
+author:
+  login: owenjonesuob
+  email: joneso21164@gmail.com
+  display_name: owenjonesuob
+  first_name: Owen
+  last_name: Jones
+excerpt: The third riveting instalment of TDTVOD
+---
+<p>For an overview of this project and Days 00-05, <a href="https://owenjonesuob.wordpress.com/2016/11/12/30-days-30-visualizations-1-dataset/">see here</a>.</p>
+<p>For Days 06-10, <a href="https://owenjonesuob.wordpress.com/2016/11/17/30-days-30-visualizations-1-dataset-part-2/">see here</a>.</p>
+<p>For Days 16-20, <a href="https://owenjonesuob.wordpress.com/2016/11/27/30-days-30-visualizations-1-dataset-part-4/">see here</a>.</p>
+<p>For Days 21-25, <a href="https://owenjonesuob.wordpress.com/2016/12/02/30-days-30-visualizations-1-dataset-part-5/">see here</a>.</p>
+<p>For Days 26-30, <a href="https://owenjonesuob.wordpress.com/2016/12/07/30-days-30-visualizations-1-dataset-part-6/">see here</a>.</p>
+<hr />
+<p>&nbsp;</p>
+<h3>Day 11 (22/11/16): Type of “strange” occupancies</h3>
+<p>Looking at the dataframe of unusual occupancies from yesterday, I’ll put each record into one of four categories, in order to more easily see which records are definitely wrong, which are questionable, etc.</p>
+<pre class="r"><code class="r"><span class="identifier">type</span> <span class="operator">&lt;-</span> <span class="identifier">vector</span><span class="paren">(</span><span class="string">"character"</span>, <span class="identifier">nrow</span><span class="paren">(</span><span class="identifier">df3</span><span class="paren">)</span><span class="paren">)</span>
+
+<span class="identifier">type</span><span class="paren">[</span><span class="identifier">df3</span><span class="operator">$</span><span class="identifier">Occupancy</span> <span class="operator">==</span> <span class="number">0</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">"Zero"</span>
+<span class="identifier">type</span><span class="paren">[</span><span class="identifier">df3</span><span class="operator">$</span><span class="identifier">Occupancy</span> <span class="operator">&lt;</span> <span class="number">0</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">"Negative"</span>
+<span class="identifier">type</span><span class="paren">[</span><span class="identifier">df3</span><span class="operator">$</span><span class="identifier">Occupancy</span> <span class="operator">==</span> <span class="identifier">df3</span><span class="operator">$</span><span class="identifier">Capacity</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">"Full"</span>
+<span class="identifier">type</span><span class="paren">[</span><span class="identifier">df3</span><span class="operator">$</span><span class="identifier">Occupancy</span> <span class="operator">&gt;</span> <span class="identifier">df3</span><span class="operator">$</span><span class="identifier">Capacity</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="string">"Overfilled"</span>
+
+<span class="identifier">df3</span><span class="operator">$</span><span class="identifier">Type</span> <span class="operator">&lt;-</span> <span class="identifier">factor</span><span class="paren">(</span><span class="identifier">type</span>, <span class="identifier">levels</span> <span class="operator">=</span> <span class="identifier">c</span><span class="paren">(</span><span class="string">"Overfilled"</span>, <span class="string">"Full"</span>, <span class="string">"Zero"</span>, <span class="string">"Negative"</span><span class="paren">)</span><span class="paren">)</span>
+             
+
+<span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df3</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">LastUpdate</span>, <span class="identifier">y</span> <span class="operator">=</span> <span class="string">""</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
+    <span class="identifier">geom_point</span><span class="paren">(</span><span class="identifier">aes</span><span class="paren">(</span><span class="identifier">colour</span> <span class="operator">=</span> <span class="identifier">Type</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
+    <span class="identifier">facet_wrap</span><span class="paren">(</span><span class="operator">~</span> <span class="identifier">Name</span>, <span class="identifier">nrow</span> <span class="operator">=</span> <span class="number">4</span><span class="paren">)</span> <span class="operator">+</span>
+    <span class="identifier">scale_colour_manual</span><span class="paren">(</span><span class="identifier">values</span> <span class="operator">=</span> <span class="identifier">rev</span><span class="paren">(</span><span class="identifier">c</span><span class="paren">(</span><span class="string">"red"</span>, <span class="string">"black"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
+    <span class="identifier">ylab</span><span class="paren">(</span><span class="string">""</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">ggtitle</span><span class="paren">(</span><span class="string">"Type of \"Strange\" Occupancies"</span><span class="paren">)</span> <span class="operator">+</span>
+    <span class="identifier">theme</span><span class="paren">(</span><span class="identifier">plot.title</span> <span class="operator">=</span> <span class="identifier">element_text</span><span class="paren">(</span><span class="identifier">size</span> <span class="operator">=</span> <span class="identifier">rel</span><span class="paren">(</span><span class="number">1.5</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span>
+
+<span class="identifier">p</span></code></pre>
+<p><img class="alignnone size-full wp-image-615" src="{{ site.baseurl }}/assets/day11.jpeg" alt="day11" width="1000" height="350" /></p>
+<p>We can see, for example, that all the definitely-wrong negative-occupancy records are from SouthGate General - maybe the council should look into upgrading the sensors there…</p>
+<hr />
+<p>&nbsp;</p>
+<h3>Day 12 (23/11/16): Hours of over- and negative occupancy</h3>
+<p>We had another Bath ML Meetup tonight - we didn’t have too long to talk about the project, but plans are being made…</p>
+<p>Using the dataframe from yesterday, I’ll have a quick look at when the particularly dubious records - the overfilled and negative records, that is - are generally recorded. I’m curious as to whether, for example, overfilled records are more common at lunchtime than overnight.</p>
+<pre class="r"><code class="r"><span class="identifier">df4</span> <span class="operator">&lt;-</span> <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">df3</span>, <span class="identifier">Type</span> <span class="operator">==</span> <span class="string">"Overfilled"</span> <span class="operator">|</span> <span class="identifier">Type</span> <span class="operator">==</span> <span class="string">"Negative"</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">Time</span> <span class="operator">=</span> <span class="identifier">hour</span><span class="paren">(</span><span class="identifier">LastUpdate</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">minute</span><span class="paren">(</span><span class="identifier">LastUpdate</span><span class="paren">)</span><span class="operator">/</span><span class="number">60</span><span class="paren">)</span>
+
+<span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df4</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">Time</span>, <span class="identifier">y</span> <span class="operator">=</span> <span class="string">""</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
+    <span class="identifier">geom_point</span><span class="paren">(</span><span class="identifier">alpha</span> <span class="operator">=</span> <span class="number">0.01</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">facet_wrap</span><span class="paren">(</span><span class="operator">~</span> <span class="identifier">Type</span>, <span class="identifier">nrow</span> <span class="operator">=</span> <span class="number">2</span><span class="paren">)</span> <span class="operator">+</span>
+    <span class="identifier">scale_x_continuous</span><span class="paren">(</span><span class="identifier">breaks</span> <span class="operator">=</span> <span class="identifier">seq</span><span class="paren">(</span><span class="number">0</span>, <span class="number">24</span>, <span class="number">4</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
+    <span class="identifier">ggtitle</span><span class="paren">(</span><span class="string">"Hours of over- and negative occupancy"</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">ylab</span><span class="paren">(</span><span class="string">""</span><span class="paren">)</span> <span class="operator">+</span>
+    <span class="identifier">theme</span><span class="paren">(</span><span class="identifier">plot.title</span> <span class="operator">=</span> <span class="identifier">element_text</span><span class="paren">(</span><span class="identifier">size</span> <span class="operator">=</span> <span class="identifier">rel</span><span class="paren">(</span><span class="number">1.5</span><span class="paren">)</span><span class="paren">)</span>,
+          <span class="identifier">panel.background</span> <span class="operator">=</span> <span class="identifier">element_blank</span><span class="paren">(</span><span class="paren">)</span><span class="paren">)</span>
+
+<span class="identifier">p</span></code></pre>
+<p><img class="alignnone size-full wp-image-624" src="{{ site.baseurl }}/assets/day12.jpeg" alt="day12" width="800" height="500" /></p>
+<p>As it turns out, the overfilled records are spread over the whole day, with a decrease only in the early morning. Negative records tend to be from overnight, although there are some during the day too.</p>
+<hr />
+<p>&nbsp;</p>
+<h3>Day 13 (24/11/16): Spread of negative occupancies</h3>
+<p>I’m wondering how the negative occupancies are distributed - we’ve seen that there are some very large negative values, but I’m curious as to how many of these there are, compared to more modest values. My reasoning here is that there are probably a lot of small negative values due to physical, quickly-resolved sensor errors, and then fewer very large negative values due to errors in the uploading of data or some other issue.</p>
+<pre class="r"><code class="r"><span class="identifier">df4</span> <span class="operator">&lt;-</span> <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">df3</span>, <span class="identifier">Type</span> <span class="operator">==</span> <span class="string">"Negative"</span><span class="paren">)</span>
+
+<span class="comment"># Having sneakily looked at plot already, I'll points in certain ranges</span>
+<span class="identifier">counts</span> <span class="operator">&lt;-</span> <span class="identifier">c</span><span class="paren">(</span><span class="identifier">tally</span><span class="paren">(</span><span class="identifier">filter</span><span class="paren">(</span><span class="identifier">df4</span>, <span class="identifier">Occupancy</span> <span class="operator">&lt;</span> <span class="operator">-</span><span class="number">10000</span><span class="paren">)</span><span class="paren">)</span><span class="paren">[</span><span class="number">2</span><span class="paren">]</span>,
+            <span class="identifier">tally</span><span class="paren">(</span><span class="identifier">filter</span><span class="paren">(</span><span class="identifier">df4</span>, <span class="identifier">Occupancy</span> <span class="operator">&gt;=</span> <span class="operator">-</span><span class="number">10000</span>, <span class="identifier">Occupancy</span> <span class="operator">&lt;=</span> <span class="operator">-</span><span class="number">1000</span><span class="paren">)</span><span class="paren">)</span><span class="paren">[</span><span class="number">2</span><span class="paren">]</span>,
+            <span class="identifier">tally</span><span class="paren">(</span><span class="identifier">filter</span><span class="paren">(</span><span class="identifier">df4</span>, <span class="identifier">Occupancy</span> <span class="operator">&gt;</span> <span class="operator">-</span><span class="number">1000</span><span class="paren">)</span><span class="paren">)</span><span class="paren">[</span><span class="number">2</span><span class="paren">]</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">sapply</span><span class="paren">(</span><span class="identifier">sum</span><span class="paren">)</span>
+            
+            
+
+<span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df4</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">y</span> <span class="operator">=</span> <span class="string">""</span>, <span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">Occupancy</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
+    <span class="identifier">geom_point</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">ggtitle</span><span class="paren">(</span><span class="string">"Spread of negative occupancies"</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">ylab</span><span class="paren">(</span><span class="string">""</span><span class="paren">)</span> <span class="operator">+</span>
+    <span class="identifier">annotate</span><span class="paren">(</span><span class="string">"text"</span>, <span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">c</span><span class="paren">(</span><span class="operator">-</span><span class="number">14500</span>, <span class="operator">-</span><span class="number">2000</span>, <span class="operator">-</span><span class="number">100</span><span class="paren">)</span>, <span class="identifier">y</span> <span class="operator">=</span> <span class="identifier">c</span><span class="paren">(</span><span class="identifier">rep</span><span class="paren">(</span><span class="number">1.2</span>, <span class="number">3</span><span class="paren">)</span><span class="paren">)</span>,
+             <span class="identifier">label</span> <span class="operator">=</span> <span class="identifier">counts</span><span class="paren">)</span>
+
+<span class="identifier">p</span></code></pre>
+<p><img class="alignnone size-full wp-image-626" src="{{ site.baseurl }}/assets/day13.jpeg" alt="day13" width="600" height="150" /></p>
+<hr />
+<p>&nbsp;</p>
+<h3>Day 14: Massively negative occupancies</h3>
+<p>Yesterday’s plot revealed a small cluster of points at around -15000. Let’s have a more detailed look at these points, and see if we can work out ‘how’ they are wrong - for example, if they are all the same value, which might suggest it is a deliberate ‘indicator’ value used by the council to denote a closed car park.</p>
+<pre class="r"><code class="r"><span class="identifier">df4</span> <span class="operator">&lt;-</span> <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">df3</span>, <span class="identifier">Occupancy</span> <span class="operator">&lt;</span> <span class="operator">-</span><span class="number">10000</span><span class="paren">)</span>
+
+<span class="identifier">summary</span><span class="paren">(</span><span class="identifier">df4</span><span class="operator">$</span><span class="identifier">Name</span><span class="paren">)</span></code></pre>
+<pre><code>##       Avon Street CP  Charlotte Street CP         Lansdown P+R 
+##                    0                    0                    0 
+##        Newbridge P+R         Odd Down P+R            Podium CP 
+##                    0                    0                    0 
+## SouthGate General CP    SouthGate Rail CP        test car park 
+##                   26                    0                    0</code></pre>
+<pre class="r"><code class="r"><span class="identifier">range</span><span class="paren">(</span><span class="identifier">df4</span><span class="operator">$</span><span class="identifier">Occupancy</span><span class="paren">)</span></code></pre>
+<pre><code>## [1] -14787 -14638</code></pre>
+<pre class="r"><code class="r"><span class="identifier">time_length</span><span class="paren">(</span><span class="identifier">max</span><span class="paren">(</span><span class="identifier">as.double</span><span class="paren">(</span><span class="identifier">df4</span><span class="operator">$</span><span class="identifier">LastUpdate</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">-</span> <span class="identifier">min</span><span class="paren">(</span><span class="identifier">as.double</span><span class="paren">(</span><span class="identifier">df4</span><span class="operator">$</span><span class="identifier">LastUpdate</span><span class="paren">)</span><span class="paren">)</span>,
+            <span class="identifier">unit</span> <span class="operator">=</span> <span class="string">"hour"</span><span class="paren">)</span></code></pre>
+<pre><code>## [1] 0.02361111</code></pre>
+<p>So all of the points in this group are from SouthGate General CP, they span a range of values, and they were all recorded within a 2-hour period. Let’s have a look at the trend of these records.</p>
+<pre class="r"><code class="r"><span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df4</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">LastUpdate</span>, <span class="identifier">y</span> <span class="operator">=</span> <span class="identifier">Occupancy</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
+    <span class="identifier">geom_line</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">+</span>
+    <span class="identifier">ggtitle</span><span class="paren">(</span><span class="string">"SouthGate General CP: Occupancy on 05/01/2015"</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">xlab</span><span class="paren">(</span><span class="string">"Time"</span><span class="paren">)</span>
+
+<span class="identifier">p</span></code></pre>
+<p><img class="alignnone size-full wp-image-629" src="{{ site.baseurl }}/assets/day14.jpeg" alt="day14" width="600" height="400" /></p>
+<p>According to the records, the car park is emptying over this period - but the difference between 13:30 and 15:30 is only around 150 cars, which is a reasonable change over that period of time.</p>
+<p>Perhaps there was an unexplained, but precise, shift of -15000ish in the Occupancy records for this brief 2-hour period - in which case the data might be salvageable…</p>
+<hr />
+<p>&nbsp;</p>
+<h3>Day 15 (26/11/16): Trend of massively negative occupancies</h3>
+<p>Let’s see whether the records from that strange Monday afternoon last January follow the trend of records from a typical Monday afternoon.</p>
+<p>First I’ll take all the records from Mondays <em>except</em> for 05/01/2015 between 13:00 and 15:59, and average them out.</p>
+<pre class="r"><code class="r"><span class="identifier">df2</span> <span class="operator">&lt;-</span> <span class="identifier">select</span><span class="paren">(</span><span class="identifier">df</span>, <span class="identifier">Name</span>, <span class="identifier">LastUpdate</span>, <span class="identifier">Occupancy</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">Name</span> <span class="operator">==</span> <span class="string">"SouthGate General CP"</span>, <span class="identifier">Occupancy</span> <span class="operator">&gt;=</span> <span class="number">0</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">wday</span><span class="paren">(</span><span class="identifier">LastUpdate</span><span class="paren">)</span> <span class="operator">==</span> <span class="number">2</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">Time</span> <span class="operator">=</span> <span class="identifier">update</span><span class="paren">(</span><span class="identifier">LastUpdate</span>, <span class="identifier">year</span> <span class="operator">=</span> <span class="number">1970</span>,
+                                <span class="identifier">month</span> <span class="operator">=</span> <span class="number">1</span>, <span class="identifier">day</span> <span class="operator">=</span> <span class="number">1</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">Time</span> <span class="operator">=</span> <span class="identifier">round_date</span><span class="paren">(</span><span class="identifier">Time</span>, <span class="string">"10 minute"</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">hour</span><span class="paren">(</span><span class="identifier">Time</span><span class="paren">)</span> <span class="operator">==</span> <span class="number">13</span> <span class="operator">|</span> <span class="identifier">hour</span><span class="paren">(</span><span class="identifier">Time</span><span class="paren">)</span> <span class="operator">==</span> <span class="number">15</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">group_by</span><span class="paren">(</span><span class="identifier">Time</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">summarize</span><span class="paren">(</span><span class="identifier">newOcc</span> <span class="operator">=</span> <span class="identifier">mean</span><span class="paren">(</span><span class="identifier">Occupancy</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">Period</span> <span class="operator">=</span> <span class="string">"Average"</span><span class="paren">)</span></code></pre>
+<p>Now I’ll get the dodgy records from 05/01/2015, shift them by adding a constant to each (initially 15000 - an educated guess), and combine these in a dataframe with the averaged records.</p>
+<pre class="r"><code class="r"><span class="identifier">k</span> <span class="operator">&lt;-</span> <span class="number">15000</span>
+
+<span class="identifier">df3</span> <span class="operator">&lt;-</span> <span class="identifier">select</span><span class="paren">(</span><span class="identifier">df</span>, <span class="identifier">LastUpdate</span>, <span class="identifier">Occupancy</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">Occupancy</span> <span class="operator">&lt;</span> <span class="operator">-</span><span class="number">10000</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">Time</span> <span class="operator">=</span> <span class="identifier">update</span><span class="paren">(</span><span class="identifier">LastUpdate</span>, <span class="identifier">year</span> <span class="operator">=</span> <span class="number">1970</span>, <span class="identifier">month</span> <span class="operator">=</span> <span class="number">1</span>, <span class="identifier">day</span> <span class="operator">=</span> <span class="number">1</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">newOcc</span> <span class="operator">=</span> <span class="identifier">Occupancy</span> <span class="operator">+</span> <span class="identifier">k</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">select</span><span class="paren">(</span><span class="identifier">Time</span>, <span class="identifier">newOcc</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">Period</span> <span class="operator">=</span> <span class="string">"05/01/2015"</span><span class="paren">)</span>
+
+<span class="identifier">df4</span> <span class="operator">&lt;-</span> <span class="identifier">rbind</span><span class="paren">(</span><span class="identifier">df2</span>, <span class="identifier">df3</span><span class="paren">)</span></code></pre>
+<p>Now let’s plot!</p>
+<pre class="r"><code class="r"><span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df4</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">Time</span>, <span class="identifier">y</span> <span class="operator">=</span> <span class="identifier">newOcc</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
+    <span class="identifier">geom_line</span><span class="paren">(</span><span class="identifier">aes</span><span class="paren">(</span><span class="identifier">colour</span> <span class="operator">=</span> <span class="identifier">Period</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
+    <span class="identifier">scale_fill_discrete</span><span class="paren">(</span><span class="identifier">guide</span> <span class="operator">=</span> <span class="identifier">guide_legend</span><span class="paren">(</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
+    <span class="identifier">ggtitle</span><span class="paren">(</span><span class="string">"SouthGate General CP: Adjusted"</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">ylab</span><span class="paren">(</span><span class="string">"Occupancy"</span><span class="paren">)</span> <span class="operator">+</span>
+    <span class="identifier">annotate</span><span class="paren">(</span><span class="string">"text"</span>, <span class="identifier">x</span> <span class="operator">=</span> <span class="paren">(</span><span class="identifier">max</span><span class="paren">(</span><span class="identifier">df4</span><span class="operator">$</span><span class="identifier">Time</span><span class="paren">)</span> <span class="operator">-</span> <span class="number">1500</span><span class="paren">)</span>, <span class="identifier">y</span> <span class="operator">=</span> <span class="paren">(</span><span class="identifier">min</span><span class="paren">(</span><span class="identifier">df4</span><span class="operator">$</span><span class="identifier">newOcc</span><span class="paren">)</span> <span class="operator">+</span> <span class="number">80</span><span class="paren">)</span>,
+             <span class="identifier">label</span> <span class="operator">=</span> <span class="identifier">paste0</span><span class="paren">(</span><span class="string">"Shift: +"</span>, <span class="identifier">k</span><span class="paren">)</span><span class="paren">)</span>
+
+<span class="identifier">p</span></code></pre>
+<p><img class=" size-full wp-image-631 aligncenter" src="{{ site.baseurl }}/assets/day15.jpeg" alt="day15" width="600" height="400" /></p>
+<p>We can see that the shifted records do indeed follow the same pattern as the averaged records. A small adjustment to <code>k</code> confirms this.</p>
+<p><img class=" size-full wp-image-632 aligncenter" src="{{ site.baseurl }}/assets/day15_betterk.jpeg" alt="day15_betterk" width="600" height="400" /></p>
+<p>Maybe I can find a better value for this constant if I have a look at the records leading up to and away from the massively-negative period…</p>
+<hr />
+<p>&nbsp;</p>
+<p>On another note:</p>
+<h3 style="text-align:center;"><strong>WOOOOOOAH, I’M HALFWAY THERE!</strong></h3>
+<p>To be completely honest, when I started this project just over 2 weeks ago I didn’t know how I would even get this far without running out of ideas. Here’s hoping I can keep it up for another 15 days!</p>
+<hr />
+<p>Owen Jones | November 2016</p>

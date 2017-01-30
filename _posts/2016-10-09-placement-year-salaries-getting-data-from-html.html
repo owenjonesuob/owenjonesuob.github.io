@@ -1,0 +1,239 @@
+---
+layout: post
+title: Placement Year Salaries - Getting data from HTML
+date: 2016-10-09 18:00:17.000000000 +01:00
+type: post
+published: true
+status: publish
+categories:
+- Project
+tags:
+- data science
+- HTML
+- R
+- web data
+- web scraping
+meta:
+  _edit_last: '111034948'
+  _thumbnail_id: '240'
+  geo_public: '0'
+  _rest_api_published: '1'
+  _rest_api_client_id: "-1"
+  _publicize_job_id: '27673055066'
+author:
+  login: owenjonesuob
+  email: joneso21164@gmail.com
+  display_name: owenjonesuob
+  first_name: Owen
+  last_name: Jones
+excerpt: Notes from my first web data project
+---
+<div id="header" class="fluid-row">
+<h1 class="title toc-ignore">Context</h1>
+</div>
+<div id="context" class="section level2">
+<p>On this site’s homepage I allude to the fact that there are ‘other things’ I am generally supposed to be doing instead of putting together these projects. One such ‘other thing’ is the time-devouring task of researching work placements (I am hoping to complete a year-long placement from next summer as part of my degree).</p>
+<p>Several job descriptions which have caught my attention have something in common (other than generally being data science related): they don’t list a salary. At least, not explicitly. Instead they advertise a “competitive” salary or, on occasion, hint that applications to the position should include “salary expectations”.</p>
+<p>After seeing this for the third or fourth time, I realised I didn’t have any “salary expectations”. So once again abandoning the task I had planned on dedicating the weekend to, I set forth on this project.</p>
+<hr />
+</div>
+<div id="finding-the-average-placement-year-salary" class="section level2">
+<h2>Finding the average placement year salary</h2>
+<div id="source-of-information" class="section level3">
+<h3>Source of information</h3>
+<p>A quick Google search of ‘placement year uk’ brings up <a href="https://www.ratemyplacement.co.uk/search?show=jobs">RateMyPlacement</a> as the first result. This website claims to be “the TripAdvisor” for placements - the following paragraph can be found on their <a href="http://rmpenterprise.co.uk/services/ratemyplacement/">‘About’</a> page:</p>
+<blockquote><p>Our website is specifically targeted towards undergraduates, offering current university students the jobs they need to get their careers started. RateMyPlacement is the leader in this niche market, advertising more undergraduate placements, internships, vacation schemes and insights than any other website.</p></blockquote>
+<p>I decided to use this website, rather than a more general job-listing site such as Indeed, as my source since it guarantees that any jobs listed will be of the sort I am looking for - specifically, placement jobs, rather than full-time or the ambiguous ‘temporary’ or ‘contract’ jobs listed on many other sites.</p>
+</div>
+<div id="loading-packages-into-r" class="section level3">
+<h3>Loading packages into R</h3>
+<p>I have used the <code>magrittr</code> package’s ‘pipe’ operator (<code>%&gt;%</code>) rather extensively, since I find it greatly improves the readability of the code. It is particularly useful when performing many sequential operations on the same object, as will be seen shortly.</p>
+<p>The <code>RCurl</code> and <code>XML</code> packages are used to deal with the initially-overwhelming HTML code.</p>
+<pre class="r"><code class="r"><span class="keyword">library</span><span class="paren">(</span><span class="identifier">magrittr</span><span class="paren">)</span>
+<span class="keyword">library</span><span class="paren">(</span><span class="identifier">RCurl</span><span class="paren">)</span>
+<span class="keyword">library</span><span class="paren">(</span><span class="identifier">XML</span><span class="paren">)</span></code></pre>
+</div>
+<div id="detective-work" class="section level3">
+<h3>‘Detective work’</h3>
+<p>To begin with, we need to have a look at our target website and work out exactly where the ‘interesting’ parts are located. I’m using Google Chrome, but many other web browsers will be equally suitable for carrying out the following steps.</p>
+<p>This is the page that initially loads:</p>
+<p><img class=" size-large wp-image-225 aligncenter" src="{{ site.baseurl }}/assets/site.png?w=1024" alt="site" width="1024" height="552" /></p>
+<p>It is clearly a list of search results, although we currently don’t exactly what form they are in - i.e. if they are laid out in an HTML table (which would simplify matters) or not (which is more likely!). We can find out using the developer console, which can be opened by pressing F12.</p>
+<p>The ‘Inspect element’ button at the top left of the console can be used to quickly locate the section of HTML code responsible for a given feature on the page. Let’s have a look at one of the search results.</p>
+<p><img class=" size-large wp-image-223 aligncenter" src="{{ site.baseurl }}/assets/resultconsole.png?w=1024" alt="resultconsole" width="1024" height="552" /></p>
+<p>Each result is within a pair of <code>‹div›</code> tags (no tables in sight, unfortunately). Within each result there are several pieces of information. Only one of these is of interest to us (for this project at least): the salary. A little further inspection shows that this information is contained in one element of an unordered list, specifically - and rather confusingly - in the <code>‹li›</code> element which has <code>class=location</code>, presumably due to some previous website redesign.</p>
+<p><img class=" size-large wp-image-224 aligncenter" src="{{ site.baseurl }}/assets/salaryconsole.png?w=1024" alt="salaryconsole" width="1024" height="552" /></p>
+<p>There is the option to refine the search results further, but for now we’ll use the unfiltered set of results. It is worth noting that we don’t need to filter by duration since the site uses pro rata annual salary figures for all listed placements.</p>
+</div>
+<div id="extracting-salaries" class="section level3">
+<h3>Extracting salaries</h3>
+<p>Now we know where the information we want is, we can begin the process of importing it into R and tidying it up. I will use the <code>%&gt;%</code> operator here, and eventually the aim is to end up with a numeric vector containing each job’s (mean) salary - so I will work with an object called <code>salaries</code>, even though initially it is very different to its final form.</p>
+<p>The first stage is to load the raw HTML file into R. The <code>getURL</code> function (from the <code>RCurl</code> package) imports the HTML document as a single character string - which needless to say is very long (<code>nchar(salaries)</code> reveals it is 205604 characters long, to be precise) and not particularly readable.</p>
+<pre class="r"><code class="r"><span class="identifier">salaries</span> <span class="operator">&lt;-</span>
+        <span class="string">"https://www.ratemyplacement.co.uk/search?show=jobs"</span> <span class="operator">%&gt;%</span>
+        <span class="identifier">getURL</span><span class="paren">(</span><span class="paren">)</span></code></pre>
+<pre class="r"><code class="r"><span class="identifier">substring</span><span class="paren">(</span><span class="identifier">salaries</span>, <span class="number">100001</span>, <span class="number">101000</span><span class="paren">)</span></code></pre>
+<pre><code>## [1] "           ‹h2 class=\"Job-titleHeader\"›Engineering Coordinator Placement‹/h2›\n            ‹/a›\n            ‹p class=\"Search-industry\"›‹i class=\"icon-company\"›‹/i›\n                Volvo Group UK‹/p›\n            ‹ul class=\"Search-labels\"›\n                ‹li class=\"deadline\"›‹span\n                            class=\"icon-calendar\"›‹/span› 31st Oct 2016                ‹/li›\n                ‹li class=\"location\"›‹span class=\"icon-salary\"›‹/span›\n                                            Competitive\n                                    ‹/li›\n                ‹li class=\"duration\"›‹span class=\"icon-company\"›‹/span› Placement Year (10 Months+)‹/li›\n                ‹li class=\"company\"›‹span class=\"icon-location\"›‹/span› West Midlands‹/li›\n            ‹/ul›\n        ‹/div›\n        ‹div class=\"icon-cta\"›\n\n                        \n                ‹a href=\"#\" class=\"circle-cta my-wishlist tracker login\"\n                   data-message=\"You need to be logged in to add a job to your tracker\"\n           "
+</code></pre>
+<p>Luckily, the <code>XML</code> package can be used to manipulate this awkward mass of text into something much easier to work with in R. First, <code>htmlParse </code>is used to parse the HTML code so that each set of tags is represented as a ‘node’. The result of this can then be used in <code>xpathApply</code> with two other arguments.</p>
+<p>The first is an XPath query <code>//li[@class='location']</code>, where:</p>
+<ul>
+<li><code>//li</code> finds all ‘list element’ (<code>‹li›</code>) nodes</li>
+<li><code>[@class='location']</code> finds the subset of these nodes which have a <code>class</code> attribute of <code>location</code> (recall that this is where the salaries are stored)</li>
+</ul>
+<p>The second is what we want to return from each of these nodes, which in this case is its <code>xmlValue</code>. The values are returned by <code>xpathApply</code> in list form.</p>
+<pre class="r"><code class="r"><span class="identifier">salaries</span> <span class="operator">&lt;-</span>
+    <span class="identifier">salaries</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">htmlParse</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">xpathApply</span><span class="paren">(</span><span class="string">"//li[@class='location']"</span>, <span class="identifier">xmlValue</span><span class="paren">)</span></code></pre>
+<pre class="r"><code class="r"><span class="identifier">salaries</span><span class="paren">[</span><span class="number">1</span><span class="operator">:</span><span class="number">3</span><span class="paren">]</span></code></pre>
+<pre><code>## [[1]]
+## [1] "\n                                            Competitive\n                                    "
+## 
+## [[2]]
+## [1] "\n                                            Competitive\n                                    "
+## 
+## [[3]]
+## [1] "\n                                            £18,000 - £19,999                                    "</code></pre>
+<p>We now have the data we want - although each salary is still in an untidy character vector. To tidy each element we can first remove any of the following from the string:</p>
+<ul>
+<li><code>\n</code></li>
+<li>[space]</li>
+<li><code>£</code></li>
+<li><code>,</code></li>
+</ul>
+<p>Each salary is either not given (listed as “Competitive”) or is given as a range. We can split each character vector at the ‘<code>-</code>’ symbol (if it is present) to obtain separate character vectors containing the lower and upper values of the range.</p>
+<pre class="r"><code class="r"><span class="identifier">salaries</span> <span class="operator">&lt;-</span>
+    <span class="identifier">salaries</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">lapply</span><span class="paren">(</span><span class="identifier">gsub</span>, <span class="identifier">pattern</span> <span class="operator">=</span> <span class="string">"\n| |£|,"</span>, <span class="identifier">replacement</span> <span class="operator">=</span> <span class="string">""</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">lapply</span><span class="paren">(</span><span class="identifier">strsplit</span>, <span class="identifier">split</span> <span class="operator">=</span> <span class="string">"-"</span><span class="paren">)</span></code></pre>
+<pre class="r"><code class="r"><span class="identifier">salaries</span><span class="paren">[</span><span class="number">1</span><span class="operator">:</span><span class="number">3</span><span class="paren">]</span></code></pre>
+<pre><code>## [[1]]
+## [[1]][[1]]
+## [1] "Competitive"
+## 
+## 
+## [[2]]
+## [[2]][[1]]
+## [1] "Competitive"
+## 
+## 
+## [[3]]
+## [[3]][[1]]
+## [1] "18000" "19999"</code></pre>
+<p>Initially I had planned on calculating the midway point for each range of salaries. However there is an easier option, given that the (eventual) vector of salaries will be averaged anyway. Averaging each pair of range values, and then averaging all of the resulting values, is equivalent to simply averaging all the range values:</p>
+<p>$latex \frac{\frac{(a^{(1)}_1 + a^{(1)}_2)}{2} + \frac{(a^{(2)}_1 + a^{(2)}_2)}{2} + \ldots + \frac{(a^{(n)}_1 + a^{(n)}_2)}{2}}{n} = \frac{(a^{(1)}_1 + a^{(1)}_2) + \ldots + (a^{(n)}_1 + a^{(n)}_2)}{2n}$</p>
+<pre class="r"><code class="r"><span class="identifier">salaries</span> <span class="operator">&lt;-</span>
+    <span class="identifier">salaries</span> <span class="operator">%&gt;%</span>
+        <span class="identifier">lapply</span><span class="paren">(</span><span class="identifier">unlist</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+        <span class="identifier">unlist</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+        <span class="identifier">as.numeric</span><span class="paren">(</span><span class="paren">)</span></code></pre>
+<pre><code>## Warning in function_list[[k]](value): NAs introduced by coercion</code></pre>
+<pre class="r"><code class="r"><span class="identifier">salaries</span><span class="paren">[</span><span class="number">1</span><span class="operator">:</span><span class="number">10</span><span class="paren">]</span></code></pre>
+<pre><code>##  [1]    NA    NA 18000 19999    NA    NA    NA    NA 16000 17999</code></pre>
+<pre class="r"><code class="r"><span class="identifier">mean</span><span class="paren">(</span><span class="identifier">salaries</span>, <span class="identifier">na.rm</span> <span class="operator">=</span> <span class="literal">TRUE</span><span class="paren">)</span></code></pre>
+<pre><code>## [1] 17307.19</code></pre>
+</div>
+<div id="multiple-pages-creating-urls" class="section level3">
+<h3>Multiple pages: creating URLs</h3>
+<p>Now that we can get the mean salary for one page, we can consider the fact that there are actually multiple pages of positions - and with positions being added and removed continuously, the number of pages we need to get data from could change.</p>
+<p>The first task is to find how many pages of results we need to look at. As before, we start by importing and parsing the first page of results, but this time we will use a different XPath query.</p>
+<p>First we must have another look at the webpage - but this time we are interested in the ‘pages’ bar at the bottom of the list of results:</p>
+<p><img class="alignnone size-full wp-image-222" src="{{ site.baseurl }}/assets/paginationcolsole.png" alt="paginationcolsole" width="1366" height="736" /></p>
+<p>We want the page number that appears in the button immediately to the left of the ‘Next page’ button. We can construct the XPath query <code>//li[@class='pagination-last']/preceding::li[1]</code>:</p>
+<ul>
+<li><code>//li</code> finds all ‘list element’ nodes on the page</li>
+<li><code>[@class='pagination-last']</code> finds the subset of these nodes with <code>class</code> attribute <code>pagination-last</code> (there is only one such node, which is the ‘Next page’ button)</li>
+<li><code>/preceding::li[1]</code> finds, working backwards from the current node, the 1st ‘list element’ node</li>
+</ul>
+<p>The <code>xmlValue</code> of this node is the number appearing in the last numbered button - i.e. the number of results pages. It is currently in character vector form and inside a list (courtesy of <code>xpathApply</code>), but it can be extracted easily enough.</p>
+<pre class="r"><code class="r"><span class="identifier">num_pages</span> <span class="operator">&lt;-</span>
+    <span class="string">"https://www.ratemyplacement.co.uk/search?show=jobs"</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">getURL</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">htmlParse</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">xpathApply</span><span class="paren">(</span><span class="string">"//li[@class='pagination-last']/preceding::li[1]"</span>, <span class="identifier">xmlValue</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">unlist</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">as.numeric</span><span class="paren">(</span><span class="paren">)</span></code></pre>
+<pre class="r"><code class="r"><span class="identifier">num_pages</span></code></pre>
+<pre><code>## [1] 10</code></pre>
+<p>To manually navigate to a different results page we simply need to add <code>page=[page number]&amp;</code> to the search string in the page address; so we can make a list of all the results pages as follows.</p>
+<pre class="r"><code class="r"><span class="identifier">urls</span> <span class="operator">&lt;-</span> <span class="keyword">function</span><span class="paren">(</span><span class="identifier">x</span><span class="paren">)</span> <span class="identifier">paste0</span><span class="paren">(</span><span class="string">"https://www.ratemyplacement.co.uk/search?page="</span>,
+                           <span class="identifier">x</span>, <span class="string">"&amp;show=jobs"</span><span class="paren">)</span>
+
+<span class="identifier">pages</span> <span class="operator">&lt;-</span> <span class="identifier">lapply</span><span class="paren">(</span><span class="number">1</span><span class="operator">:</span><span class="identifier">num_pages</span>, <span class="identifier">urls</span><span class="paren">)</span></code></pre>
+<pre class="r"><code class="r"><span class="identifier">pages</span><span class="paren">[</span><span class="number">1</span><span class="operator">:</span><span class="number">3</span><span class="paren">]</span></code></pre>
+<pre><code>## [[1]]
+## [1] "https://www.ratemyplacement.co.uk/search?page=1&amp;show=jobs"
+## 
+## [[2]]
+## [1] "https://www.ratemyplacement.co.uk/search?page=2&amp;show=jobs"
+## 
+## [[3]]
+## [1] "https://www.ratemyplacement.co.uk/search?page=3&amp;show=jobs"</code></pre>
+</div>
+<div id="finding-the-mean-salary" class="section level3">
+<h3>Finding the mean salary</h3>
+<p>We can now run the salary-extracting code on each page in turn. We’ll store the full list salaries from each page for later analysis.</p>
+<p><em>Note: There are three sponsored results which appear at the top of each results page - these are the same on all pages, so are not counted for any pages except the first (i.e. for all but the first page, the first 4 elements of <code>salaries</code> are removed, corresponding to two “Competitive” listings and one numerical listing - the make-up of the sponsored listings at the time of writing).</em></p>
+<pre class="r"><code class="r"><span class="identifier">page_salaries</span> <span class="operator">&lt;-</span> <span class="identifier">vector</span><span class="paren">(</span><span class="identifier">mode</span> <span class="operator">=</span> <span class="string">"list"</span>, <span class="identifier">length</span> <span class="operator">=</span> <span class="number">0</span><span class="paren">)</span>
+<span class="identifier">page_avg_salary</span> <span class="operator">&lt;-</span> <span class="identifier">vector</span><span class="paren">(</span><span class="identifier">mode</span> <span class="operator">=</span> <span class="string">"numeric"</span>, <span class="identifier">length</span> <span class="operator">=</span> <span class="identifier">num_pages</span><span class="paren">)</span>
+
+<span class="keyword">for</span> <span class="paren">(</span><span class="identifier">i</span> <span class="keyword">in</span> <span class="number">1</span><span class="operator">:</span><span class="identifier">num_pages</span><span class="paren">)</span> <span class="paren">{</span>
+    
+    <span class="identifier">salaries</span> <span class="operator">&lt;-</span>
+        <span class="identifier">pages</span><span class="paren">[</span><span class="paren">[</span><span class="identifier">i</span><span class="paren">]</span><span class="paren">]</span> <span class="operator">%&gt;%</span>
+        <span class="identifier">getURL</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+        <span class="identifier">htmlParse</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+        <span class="identifier">xpathApply</span><span class="paren">(</span><span class="string">"//li[@class='location']"</span>, <span class="identifier">xmlValue</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+        <span class="identifier">lapply</span><span class="paren">(</span><span class="identifier">gsub</span>, <span class="identifier">pattern</span> <span class="operator">=</span> <span class="string">"\n| |£|,"</span>, <span class="identifier">replacement</span> <span class="operator">=</span> <span class="string">""</span><span class="paren">)</span>
+    <span class="comment"># Pause to add list of salaries to page_salaries</span>
+    <span class="identifier">page_salaries</span> <span class="operator">&lt;-</span> <span class="identifier">append</span><span class="paren">(</span><span class="identifier">page_salaries</span>, <span class="identifier">salaries</span><span class="paren">)</span>
+    <span class="comment"># Resume pipe</span>
+    <span class="identifier">salaries</span> <span class="operator">&lt;-</span>
+        <span class="identifier">salaries</span> <span class="operator">%&gt;%</span>
+        <span class="identifier">lapply</span><span class="paren">(</span><span class="identifier">strsplit</span>, <span class="identifier">split</span> <span class="operator">=</span> <span class="string">"-"</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+        <span class="identifier">lapply</span><span class="paren">(</span><span class="identifier">unlist</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+        <span class="identifier">unlist</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+        <span class="comment"># Ignore 'Coercion to NA' warnings since this is expected</span>
+        <span class="identifier">as.numeric</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+        <span class="paren">{</span><span class="keyword">if</span> <span class="paren">(</span><span class="identifier">i</span> <span class="operator">!=</span> <span class="number">1</span><span class="paren">)</span>  <span class="identifier">tail</span><span class="paren">(</span>., <span class="operator">-</span><span class="number">4</span><span class="paren">)</span> <span class="keyword">else</span> .<span class="paren">}</span>
+
+    <span class="identifier">page_avg_salary</span><span class="paren">[</span><span class="identifier">i</span><span class="paren">]</span> <span class="operator">&lt;-</span> <span class="identifier">mean</span><span class="paren">(</span><span class="identifier">salaries</span>, <span class="identifier">na.rm</span> <span class="operator">=</span> <span class="literal">TRUE</span><span class="paren">)</span>
+<span class="paren">}</span></code></pre>
+<p>So now we have a list of all salaries, and vector of the average salaries of all the positions on each results page. If we calculate the mean of this vector then we will have the mean salary across all the positions.</p>
+<pre><code>mean(page_avg_salary)</code></pre>
+<pre><code>## [1] 17878.68</code></pre>
+<p>We can also visualize the proportions of different salaries being offered:</p>
+<pre class="r"><code class="r"><span class="identifier">page_salaries</span> <span class="operator">&lt;-</span>
+    <span class="identifier">page_salaries</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">unlist</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
+    <span class="identifier">as.factor</span><span class="paren">(</span><span class="paren">)</span>
+
+<span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">plot</span><span class="paren">(</span><span class="identifier">page_salaries</span>, <span class="identifier">main</span> <span class="operator">=</span> <span class="string">"Rates of pay"</span>, <span class="identifier">ylim</span> <span class="operator">=</span> <span class="identifier">c</span><span class="paren">(</span><span class="number">0</span>, <span class="number">400</span><span class="paren">)</span>,
+         <span class="identifier">xlab</span> <span class="operator">=</span> <span class="string">"Salary range"</span>, <span class="identifier">ylab</span> <span class="operator">=</span> <span class="string">"No. of positions"</span>, <span class="identifier">cex.names</span> <span class="operator">=</span> <span class="number">0.5</span><span class="paren">)</span>
+
+<span class="identifier">text</span><span class="paren">(</span><span class="identifier">p</span>, <span class="identifier">y</span> <span class="operator">=</span> <span class="identifier">summary</span><span class="paren">(</span><span class="identifier">page_salaries</span><span class="paren">)</span>, <span class="identifier">label</span> <span class="operator">=</span> <span class="identifier">summary</span><span class="paren">(</span><span class="identifier">page_salaries</span><span class="paren">)</span>, <span class="identifier">pos</span> <span class="operator">=</span> <span class="number">3</span>,
+     <span class="identifier">cex</span> <span class="operator">=</span> <span class="number">0.7</span><span class="paren">)</span></code></pre>
+<p><img class="aligncenter size-large wp-image-240" src="{{ site.baseurl }}/assets/ratesofpay.png?w=1024" alt="ratesofpay" width="1024" height="731" /></p>
+<p>This reveals how nearly twice as many positions are advertised <em>without</em> an explicit salary as those advertised with one. (It also reveals that one of the salaries coerced to <code>NA</code> earlier was in fact “Unpaid”, rather than “Competitive”. Although it shows I was a little careless earlier when I stated that all non-numeric elements were “Competitive”, it doesn’t have any effect on the calculations.)</p>
+</div>
+<div id="london-specific-salaries" class="section level3">
+<h3>London-specific salaries</h3>
+<p>Although I do have a general dislike for London, I am slowly coming to terms with the fact that many companies with data science positions are young start-ups, and the vast majority of them are located in the capital. As such, and knowing that London is more expensive than other areas of the country, I thought I would re-run the code on the placements listed with locations ‘Central London and City’ and ‘Greater London’ only. This extra filtering is done by adding <code>&amp;location=CTY,GTL</code> to the end of the HTTP address. The results are as follows:</p>
+<pre class="r"><code class="r"><span class="identifier">mean</span><span class="paren">(</span><span class="identifier">page_avg_salary_L</span><span class="paren">)</span></code></pre>
+<pre><code>## [1] 19015.6</code></pre>
+<p>This is, as expected, higher than the nationwide figure.</p>
+<p>A quick look at the relevant plot reveals some more information:</p>
+<p><img class="aligncenter size-large wp-image-241" src="{{ site.baseurl }}/assets/ratesofpayl.png?w=1024" alt="ratesofpayl" width="1024" height="731" /></p>
+<p>Notice how the highest-paid positions are all in London (between the nationwide and London plots, there is no difference in the bars for the two highest salary bands). The significant decrease is in the number of lower-than-average-salary positions.</p>
+<hr />
+</div>
+</div>
+<div id="project-evaluation" class="section level2">
+<h2>Project evaluation</h2>
+<p>It turns out that the average annual placement position salary is just under £18,000, increasing to slightly over £19,000 for London-based placements.</p>
+<p>This was my first attempt at a project using non-tabluar web-based data. Moreover, I had no previous experience with the HTML-manipulating packages in R, and as per usual a large amount of reading and experimentation was necessary before I managed to achieve what I was aiming for. Perhaps it is a little ambitious to call this a ‘web scraping’ project, but I believe it has given me some of the fundamental knowledge needed to put together more complicated projects involving web data in the future. An added bonus was my discovery of the XPath language, which might have come in handy for <a href="https://owenjonesuob.wordpress.com/2016/10/02/ie-automation-with-vba-in-microsoft-excel/">one of my previous projects</a>.</p>
+<p>All in all, I shall consider this a weekend well spent, although it has no doubt come at the cost of a few late-night maths sessions later in the week.</p>
+<hr />
+<p>Owen Jones | October 2016</p>
+</div>
