@@ -16,14 +16,14 @@ h1, h2, h3 {
 }
 
 h1 {
-	color: #FFF;
-	font-size: 2.2em;
+	font-size: 2em;
 	a, a:visited {
 		text-decoration: none;
 		color: #EEE;
 	}
     a:hover {
         text-decoration: none;
+        color: $lblu;
     }
 }
 
@@ -49,8 +49,7 @@ a:hover {
 
 
 header {
-    margin-top: 5px;
-    margin-left: 50px;
+    margin-top: 3px;
 	text-align: left;
 	height: 5vh;
 	display: flex;
@@ -62,7 +61,7 @@ header {
 main {
 	padding: 0 15px;
 	max-width: $content-width;
-	margin: 0 auto;
+	margin: 70px auto;
 }
 
 time {
@@ -105,7 +104,7 @@ aside {
 					box-shadow: 0;
 					&:hover,
 					&:active {
-						@include gradfill((#555, #555, #222, #111));
+						@include gradfill((#333, #222, #111, #222, darken($lblu, 70%), $lblu));
 						text-decoration: none;
                         font-weight: bold;
 						color: #FFF;
@@ -185,13 +184,13 @@ footer {
             @include box-sizing(border-box);
             
             &:hover {
-                background: #99F0FF;
-                border: 3px outset lighten(#99F0FF, 10%);
+                background: $lblu;
+                border: 3px outset lighten($lblu, 10%);
             }
             
             &:active {
-                background: darken(#99F0FF, 10%);
-                border: 3px inset #99F0FF;
+                background: darken($lblu, 10%);
+                border: 3px inset $lblu;
             }
         }
     }
