@@ -104,7 +104,7 @@ aside {
 					box-shadow: 0;
 					&:hover,
 					&:active {
-						@include gradfill((#333, #222, #111, #222, darken($lblu, 70%), $lblu));
+						@include gradfill((#111, #333, #777, #AAA));
 						text-decoration: none;
                         font-weight: bold;
 						color: #FFF;
