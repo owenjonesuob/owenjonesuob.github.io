@@ -1,0 +1,53 @@
+@mixin transform($transformation) {
+    -webkit-transform: $transformation;
+    -moz-transform: $transformation;
+    -ms-transform: $transformation;
+    -o-transform: $transformation;
+    transform: $transformation;
+}
+
+@mixin box-sizing($size) {
+    -webkit-box-sizing: $size;
+    -moz-box-sizing: $size;
+    -ms-box-sizing: $size;
+    -o-box-sizing: $size;
+    box-sizing: $size;
+}
+    
+@mixin transform-style($style) {
+    -webkit-transform-style: $style;
+    -moz-transform-style: $style;
+    -ms-transform-style: $style;
+    -o-transform-style: $style;
+     transform-style: $style;
+  }
+
+@mixin transition($time){
+  -webkit-transition: $time;
+  -moz-transition: $time;
+  -ms-transition: $time;
+  -o-transition: $time;
+  transition: $time;  
+}
+
+@mixin backface-visibility($visibility: hidden) {
+  -webkit-backface-visibility: $visibility;
+  -moz-backface-visibility: $visibility;
+  -ms-backface-visibility: $visibility;
+  -o-backface-visibility: $visibility;
+  backface-visibility: $visibility;
+}
+
+@mixin photo-content($file) {
+    content: url(../assets/#{$file});
+    object-fit: cover;
+}
+
+@mixin gradfill($colscale) {
+    background: #333333;
+    background: -webkit-linear-gradient($colscale);
+    background: -moz-linear-gradient($colscale);
+    background: -ms-linear-gradient($colscale);
+    background: -o-linear-gradient($colscale);
+    background: linear-gradient($colscale);
+}
