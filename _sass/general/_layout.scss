@@ -37,10 +37,8 @@ h3 {
     font-size: 1.5em;
 }
 
-
-a:hover {
-	color: $link-hover-color;
-	text-decoration: underline;
+a {
+    text-decoration: none;
 }
 
 main {
@@ -300,7 +298,7 @@ footer {
     }
     
     .back {
-        @include transform(rotateY(180deg));
+        @include transform(rotateX(180deg));
         @include box-sizing(border-box);
         padding: 15px;
         
@@ -332,11 +330,11 @@ footer {
 }
 
 .cardbox:hover .projectcard {
-    @include transform(rotateY(180deg));
+    @include transform(rotateX(180deg));
 }
 
 .minicardbox:hover .projectcard {
-    @include transform(rotateY(180deg));
+    @include transform(rotateX(180deg));
 }
 
 
