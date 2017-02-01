@@ -159,6 +159,9 @@ footer {
         #gettinghtmldata &{
             @include photo-content("featured/ratesofpay.png");
         }
+        #tdtvod &{
+            @include photo-content("featured/day01.jpg");
+        }
         #ieautomation &{
             @include photo-content("featured/ieautomation.png");
         }
