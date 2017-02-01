@@ -1,3 +1,5 @@
+// Site-wide
+
 body {
     background: $page-bg;
 	margin: 0;
@@ -46,6 +48,7 @@ main {
 	max-width: $content-width;
 	margin: 70px auto;
 }
+
 
 #navmenu {
 	position: absolute;
@@ -106,6 +109,21 @@ main {
     display: block;
     overflow: hidden;
 }
+
+
+
+.banner {
+    width: 100%;
+    @include photo-content("featured/neuronsbanner.png");
+}
+
+footer {
+	text-align: center;
+    padding-top: 50px;
+}
+
+
+// Home
 
 #intro {
     margin: 0px 20px 20px 20px;
@@ -322,12 +340,48 @@ main {
 }
 
 
-.banner {
-    width: 100%;
-    @include photo-content("featured/neuronsbanner.png");
-}
+// Contact
 
-footer {
-	text-align: center;
-	padding: 40px;
+.contactbox {
+    display: inline-block;
+    width: 20%;
+    height: 60px;
+    margin: 10px;
+    padding: 5px 8px;
+    color: #CCC;
+    text-align: center;
+    line-height: 300%;
+    @include box-sizing(border-box);
+    @include gradfill((#999, #444, #000, #111, #333, #777));
+    
+    .flphoto {
+        height: 100%;
+        float: left;
+        opacity: 0.7;
+    }
+    
+    #emaillogo {
+        @include photo-content("contact/emaillogo.png");
+    }
+    #githublogo {
+        @include photo-content("contact/githublogo.png");
+    }
+    #linkedinlogo {
+        @include photo-content("contact/linkedinlogo.png");
+    }
+    #twitterlogo {
+        @include photo-content("contact/twitterlogo.png");
+    }
+
+    &:hover, &:active {
+		text-decoration: none;
+        font-weight: bold;
+		color: #FFF;
+        box-shadow: 0px 0px 15px $lblu;
+	}
+    
+    &:hover .flphoto, &:active .flphoto {
+        opacity: 1;
+        @include transform(scale(1.1));
+    }
 }
