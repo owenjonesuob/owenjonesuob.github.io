@@ -159,7 +159,7 @@ footer {
         }
     
         .front {
-            @include photo-content("featured/libraryBANES.png");
+            @include photo-content("featured/libraryBANES.PNG");
         }
     
         .back {
@@ -285,13 +285,13 @@ footer {
             @include photo-content("featured/day01.jpg");
         }
         #ieautomation &{
-            @include photo-content("featured/ieautomation.png");
+            @include photo-content("featured/ieautomation.PNG");
         }
         #rstudiosettings &{
             @include photo-content("featured/rstudiosettings.png");
         }
         #snippets &{
-            @include photo-content("featured/snippetsopt.png");
+            @include photo-content("featured/snippetsopt.PNG");
         }
     }
     
