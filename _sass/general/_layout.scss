@@ -27,10 +27,12 @@ h2 {
 }
 
 h3 {
-    font-size: 1.5em;
+    font-size: 1.6em;
 }
 
-
+h4 {
+    font-size: 1.2em;
+}
 
 main {
 	padding: 0 15px;
@@ -307,6 +309,7 @@ footer {
         
         .projectname {
             font-weight: bold;
+            margin-bottom: 10px;
         }
         
         .linkbox {
@@ -403,4 +406,60 @@ footer {
         opacity: 1;
         @include transform(scale(1.1));
     }
+}
+
+
+// Posts
+
+.timestamp {
+    font-weight: bold;
+    color: #999;
+    margin: 0 auto 20px;
+}
+
+.content {
+    position: relative;
+    margin: 0 20px;
+}
+
+hr {
+    margin: 30px auto;
+    &#posttitle {
+        margin: 30px auto 0px;
+    }
+}
+
+iframe {
+    display: block;
+    margin: 20px auto;
+}
+
+table {
+    margin: 20px auto;
+    text-align: center;
+    border-collapse: separate;
+    border-spacing: 50px 0;
+}
+
+.captfigure {
+    display: table;
+    margin: 20px auto;
+    text-align: center;
+    img {
+        display: block;
+        width: 100%;
+    }
+    figcaption {
+        display: table-caption;
+        caption-side: bottom;
+        font-size: 0.8em;
+        background: lighten($page-bg, 10%);
+    }
+}
+
+.cimg {
+    max-width: 80%;
+    max-height: 80%;
+    display: block;
+    margin: 20px auto;
 }

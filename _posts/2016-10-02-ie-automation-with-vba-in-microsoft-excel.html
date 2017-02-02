@@ -1,4 +1,5 @@
 ---
+permalink: /:categories/:title/
 layout: post
 title: IE Automation with VBA in Excel
 date: 2016-10-02 15:32:43.000000000 +01:00
@@ -6,22 +7,11 @@ type: post
 published: true
 status: publish
 categories:
-- Mini-project
+- Mini-projects
 tags:
 - automation
 - Excel
 - VBA
-meta:
-  _rest_api_published: '1'
-  _rest_api_client_id: "-1"
-  _publicize_job_id: '27429499861'
-  _thumbnail_id: '213'
-author:
-  login: owenjonesuob
-  email: joneso21164@gmail.com
-  display_name: owenjonesuob
-  first_name: Owen
-  last_name: Jones
 excerpt: A rough-and-ready automated name-searching program in VBA
 ---
 <p>A bit of context: as well as being a super-hard-working maths student (...), I am a peer mentor for eight first-year students who have just started maths courses at the university. I am, in fact, a 'lead' peer mentor - generally speaking this doesn't entail much more work than the peer mentoring itself, but occasionally there is a little bit of work to be done around the management of the peer mentoring scheme within the department.</p>
@@ -36,94 +26,139 @@ excerpt: A rough-and-ready automated name-searching program in VBA
 </ol>
 <p>A lot of experimentation and a lot of digging around in HTML source code later, a very rough-and-ready, very situation-specific, but nonetheless functional program did eventually emerge.</p>
 <p>Here's the code:</p>
-<p>[code language="vb"]<br />
-Sub findemail()</p>
-<p>' Launch an Internet Explorer window<br />
-Set IE = CreateObject(&quot;InternetExplorer.Application&quot;)</p>
-<p>IE.Visible = True</p>
-<p>' Navigate to webmail client<br />
-IE.Navigate &quot;http://mail.bath.ac.uk/&quot;</p>
-<p>' Update Excel status bar<br />
-Application.StatusBar = &quot;Bath mail client loading...&quot;</p>
-<p>' Wait for page to load<br />
-Do While IE.Busy<br />
-Application.Wait DateAdd(&quot;s&quot;, 1, Now)<br />
-Loop</p>
-<p>' Add short delay to ensure all elements fully loaded<br />
-Application.Wait DateAdd(&quot;s&quot;, 2, Now)</p>
-<p>' Update Excel status bar<br />
-Application.StatusBar = &quot;Finding mentee...&quot;</p>
-<p>' Find &quot;People&quot; button on menu bar at top of webpage<br />
-Set topButtons = IE.document.getElementById(&quot;_ariaId_20&quot;)</p>
-<p>topButtons.Click</p>
-<p>' Wait for page to load<br />
-Do While IE.Busy<br />
-Application.Wait DateAdd(&quot;s&quot;, 1, Now)<br />
-Loop</p>
-<p>' Add short delay to ensure all elements fully loaded<br />
-Application.Wait DateAdd(&quot;s&quot;, 2, Now)</p>
-<p>' Find &quot;Search people&quot; box<br />
-Set searchbox = IE.document.getElementsByClassName(&quot;_n_o1 o365button ms-font-m ms-border-color-themeLighter&quot;)<br />
-' Workaround to resolve issue occuring when trying to click single object<br />
-For Each obj In searchbox<br />
-obj.Click<br />
-Next</p>
-<p>' Add short delay for loading<br />
-Application.Wait DateAdd(&quot;s&quot;, 1, Now)</p>
-<p>' Input name from spreadsheet in &quot;Forename Surname&quot; format<br />
-SendKeys ActiveSheet.Range(&quot;G&quot; &amp; ActiveCell.Row).Value &amp; &quot; &quot; &amp; ActiveSheet.Range(&quot;F&quot; &amp; ActiveCell.Row).Value</p>
-<p>' Wait to ensure name is pasted<br />
-Application.Wait DateAdd(&quot;s&quot;, 1, Now)</p>
-<p>' Find search button<br />
-Set searchButton = IE.document.getElementsByClassName(&quot;_n_z searchImgWidth o365button ms-font-m&quot;)</p>
-<p>' Workaround for single-object click issue mentioned earlier<br />
-For Each obj In searchButton<br />
-If obj.Type = &quot;button&quot; Then<br />
-obj.Click<br />
-End If<br />
-Next</p>
-<p>' Update Excel status bar<br />
-Application.StatusBar = &quot;Getting mentee email...&quot;</p>
-<p>' Give results time to load<br />
-Application.Wait DateAdd(&quot;s&quot;, 2, Now)</p>
-<p>' Create list of all results from search<br />
-Set people = IE.document.getElementsByClassName(&quot;_pe_b _pe_s&quot;)</p>
-<p>' There are 2 &quot;invisible&quot; non-result elements of the same class as the results, so a length-3 list means 1 person found<br />
-' If no people or multiple people found, give an error message (manual intervention needed later)<br />
-' Else find the person's email address on the page, and copy it into the spreadsheet<br />
-If people.Length &lt;&gt; 3 Then</p>
-<p>ActiveCell.Value = &quot;ERROR!&quot;</p>
-<p>Else</p>
-<p>emailAddress = IE.document.getElementsByClassName(&quot;_rpc_41 ms-font-s allowTextSelection _rpc_m1 ms-font-color-themePrimary _rpc_p1&quot;).Item(0).innerText</p>
-<p>ActiveCell.Value = emailAddress</p>
-<p>End If</p>
-<p>' Close IE window<br />
-IE.Quit</p>
-<p>' Clear Excel status bar<br />
-Application.StatusBar = False</p>
-<p>End Sub</p>
-<p>'=============================================================================</p>
-<p>Sub Go()</p>
-<p>For Each cell In ActiveSheet.Range(&quot;J2:J326&quot;)<br />
-cell.Select<br />
-findemail<br />
-' Wait to ensure process has finished before moving on to next cell<br />
-Application.Wait DateAdd(&quot;s&quot;, 2, Now)<br />
-Next</p>
-<p>End Sub</p>
-<p>'=============================================================================</p>
-<p>Sub GoFrom()</p>
-<p>For Each cell In ActiveSheet.Range(ActiveCell, &quot;J326&quot;)<br />
-cell.Select<br />
-findemail<br />
-' Wait to ensure process has finished before moving on to next cell<br />
-Application.Wait DateAdd(&quot;s&quot;, 2, Now)<br />
-Next</p>
-<p>End Sub<br />
-[/code]</p>
+
+{% highlight vb %}
+Sub findemail()
+ 
+' Launch an Internet Explorer window
+Set IE = CreateObject("InternetExplorer.Application")
+ 
+IE.Visible = True
+ 
+' Navigate to webmail client
+IE.Navigate "http://mail.bath.ac.uk/"
+ 
+' Update Excel status bar
+Application.StatusBar = "Bath mail client loading..."
+ 
+' Wait for page to load
+Do While IE.Busy
+Application.Wait DateAdd("s", 1, Now)
+Loop
+ 
+' Add short delay to ensure all elements fully loaded
+Application.Wait DateAdd("s", 2, Now)
+ 
+' Update Excel status bar
+Application.StatusBar = "Finding mentee..."
+ 
+' Find "People" button on menu bar at top of webpage
+Set topButtons = IE.document.getElementById("_ariaId_20")
+ 
+topButtons.Click
+ 
+' Wait for page to load
+Do While IE.Busy
+Application.Wait DateAdd("s", 1, Now)
+Loop
+ 
+' Add short delay to ensure all elements fully loaded
+Application.Wait DateAdd("s", 2, Now)
+ 
+' Find "Search people" box
+Set searchbox = IE.document.getElementsByClassName("_n_o1 o365button " & _
+"ms-font-m ms-border-color-themeLighter")
+' Workaround to resolve issue occuring when trying to click single object
+For Each obj In searchbox
+obj.Click
+Next
+ 
+' Add short delay for loading
+Application.Wait DateAdd("s", 1, Now)
+ 
+' Input name from spreadsheet in "Forename Surname" format
+SendKeys ActiveSheet.Range("G" & ActiveCell.Row).Value & " " & _
+ActiveSheet.Range("F" & ActiveCell.Row).Value
+ 
+' Wait to ensure name is pasted
+Application.Wait DateAdd("s", 1, Now)
+ 
+' Find search button
+Set searchButton = _
+IE.document.getElementsByClassName("_n_z searchImgWidth o365button ms-font-m")
+ 
+' Workaround for single-object click issue mentioned earlier
+For Each obj In searchButton
+If obj.Type = "button" Then
+obj.Click
+End If
+Next
+ 
+' Update Excel status bar
+Application.StatusBar = "Getting mentee email..."
+ 
+' Give results time to load
+Application.Wait DateAdd("s", 2, Now)
+ 
+' Create list of all results from search
+Set people = IE.document.getElementsByClassName("_pe_b _pe_s")
+ 
+' There are 2 "invisible" non-result elements of the same class as the results,
+' so a length-3 list means 1 person found
+' If no people or multiple people found, give an error message (manual
+' intervention needed later)
+' Else find the person's email address on the page, and copy it into the
+' spreadsheet
+If people.Length <> 3 Then
+ 
+ActiveCell.Value = "ERROR!"
+ 
+Else
+ 
+emailAddress = IE.document.getElementsByClassName("_rpc_41 ms-font-s " & _
+"allowTextSelection _rpc_m1 ms-font-color-themePrimary " & _
+"_rpc_p1").Item(0).innerText
+ 
+ActiveCell.Value = emailAddress
+ 
+End If
+ 
+' Close IE window
+IE.Quit
+ 
+' Clear Excel status bar
+Application.StatusBar = False
+ 
+End Sub
+ 
+'=============================================================================
+ 
+Sub Go()
+ 
+For Each cell In ActiveSheet.Range("J2:J326")
+cell.Select
+findemail
+' Wait to ensure process has finished before moving on to next cell
+Application.Wait DateAdd("s", 2, Now)
+Next
+ 
+End Sub
+ 
+'=============================================================================
+ 
+Sub GoFrom()
+ 
+For Each cell In ActiveSheet.Range(ActiveCell, "J326")
+cell.Select
+findemail
+' Wait to ensure process has finished before moving on to next cell
+Application.Wait DateAdd("s", 2, Now)
+Next
+ 
+End Sub
+{% endhighlight %}
+
 <p>And here's the program in action:</p>
-<p>[youtube https://www.youtube.com/watch?v=ey3tHDzigHQ]</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ey3tHDzigHQ" frameborder="0" allowfullscreen></iframe>
 <p>Writing the program, and running the whole list of names through it, probably took much longer than it would have done to find the email addresses manually; and certainly it would have been much easier to take the divide-and-conquer approach and ask the other mentors to find their own mentees' email addresses themselves. However, I did feel immensely proud of myself for rising to the challenge I had set myself, for creating a working program in a language I wasn't too familiar with and for helping out my fellow mentors.</p>
 <p>The following day, I was sent an updated list of names by the department - with an extra column containing each student's email address.</p>
-<hr />
-<p>Owen Jones | October 2016</p>
