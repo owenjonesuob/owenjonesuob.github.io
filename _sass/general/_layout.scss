@@ -8,6 +8,7 @@ body {
 	font-size: 1em;
 	line-height: 1.6;
 	-webkit-font-smoothing: antialiased;
+    min-width: $min-width;
 }
 
 h1, h2, h3 {
@@ -47,6 +48,7 @@ main {
 	width: 100%;
 	border-bottom: 1px solid lighten(#000000, 30%);
     z-index: 2;
+    min-width: $min-width;
     
     #navbox {
         max-width: $content-width;
@@ -107,7 +109,7 @@ main {
 	margin: 0 auto 20px;
     position: relative;
     display: block;
-    overflow: hidden;
+    overflow: hidden;        
 }
 
 .banner {
@@ -213,6 +215,7 @@ footer {
     padding: 5px 8px;
     color: #CCC;
     text-align: center;
+    overflow: hidden;
     @include box-sizing(border-box);
     @include gradfill((#999, #444, #000, #111, #333, #777));
     
@@ -340,6 +343,10 @@ footer {
 
 // Contact
 
+#contacts {
+    text-align: center;
+}
+    
 .anchorbox {
     display: inline-block;
     width: 20%;
@@ -357,6 +364,7 @@ footer {
     color: #CCC;
     text-align: center;
     line-height: 300%;
+    overflow: hidden;
     @include box-sizing(border-box);
     @include gradfill((#999, #444, #000, #111, #333, #777));
     
