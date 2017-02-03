@@ -131,13 +131,13 @@ footer {
     margin: 0px 20px 20px 20px;
 }
 
-#fdesc {
+.fdesc {
     margin-left: 20px;
     width: 40%;
     float: left;
 }
 
-#fmedia {
+.fmedia {
     margin-left: 50%;
     margin-right: 20px;
     overflow: hidden;
@@ -148,7 +148,7 @@ footer {
         margin-bottom: 20px;
     }
     
-    #fphoto {
+    .fphoto {
         width: 100%;
         height: 100%;
         border: 2px solid black;
@@ -166,6 +166,9 @@ footer {
     
         .front {
             @include photo-content("featured/libraryBANES.PNG");
+        }
+        #ftdtvod {
+            @include photo-content("tdtvod/day01.jpg");
         }
     
         .back {
@@ -197,7 +200,7 @@ footer {
         }
     }
     
-    .fcardbox:hover #fphoto {
+    .fcardbox:hover .fphoto {
         @include transform(rotateX(180deg));
     }
     
@@ -279,6 +282,7 @@ footer {
     }
     
     .front {
+        // Home
         #digitrecognition &{
             @include photo-content("featured/digitrecognition.png");
         }
@@ -299,6 +303,26 @@ footer {
         }
         #snippets &{
             @include photo-content("featured/snippetsopt.PNG");
+        }
+        
+        // TDTVOD
+        #d00-05 &{
+            @include photo-content("tdtvod/day05.jpeg");
+        }
+        #d06-10 &{
+            @include photo-content("tdtvod/day07final.jpeg");
+        }
+        #d11-15 &{
+            @include photo-content("tdtvod/day11.jpeg");
+        }
+        #d16-20 &{
+            @include photo-content("tdtvod/day17.jpeg");
+        }
+        #d21-25 &{
+            @include photo-content("tdtvod/day23.jpeg");
+        }
+        #d26-30 &{
+            @include photo-content("tdtvod/day26.jpeg");
         }
     }
     
@@ -430,6 +454,7 @@ hr {
 }
 
 iframe {
+    max-width: 90%;
     display: block;
     margin: 20px auto;
 }
@@ -458,13 +483,14 @@ table {
 }
 
 .cimg {
-    max-width: 90%;
-    max-height: 90%;
+    max-width: 95%;
+    max-height: 95%;
     display: block;
     margin: 20px auto;
 }
 
 .highlight {
+    margin: 30px auto;
     overflow-x: auto;
     word-wrap: normal;
     code {
