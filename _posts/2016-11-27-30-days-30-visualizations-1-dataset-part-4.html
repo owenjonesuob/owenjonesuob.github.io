@@ -1,4 +1,5 @@
 ---
+permalink: /:categories/:title
 layout: post
 title: '30 Days, 30 Visualizations, 1 Dataset: Days 16-20'
 date: 2016-11-27 17:59:45.000000000 +00:00
@@ -6,7 +7,7 @@ type: post
 published: true
 status: publish
 categories:
-- Project
+- Projects
 tags:
 - data
 - data science
@@ -14,87 +15,66 @@ tags:
 - R
 - RStudio
 - visualization
-meta:
-  _thumbnail_id: '639'
-  _rest_api_published: '1'
-  _rest_api_client_id: "-1"
-  _publicize_job_id: '29362575514'
-  _oembed_6da53558d1fa160db6716a7f687335bd: <div class="embed-cartodb"><iframe width='100%'
-    height='520px' frameborder='0' src='https://olj23.carto.com/viz/16d7e938-a869-11e6-b20f-0e3ebc282e83/embed_map'
-    allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe></div>
-  _oembed_time_6da53558d1fa160db6716a7f687335bd: '1480269660'
-author:
-  login: owenjonesuob
-  email: joneso21164@gmail.com
-  display_name: owenjonesuob
-  first_name: Owen
-  last_name: Jones
 excerpt: TDTVOD Goes Fourth
 ---
-<p>For an overview of this project and Days 00-05, <a href="https://owenjonesuob.wordpress.com/2016/11/12/30-days-30-visualizations-1-dataset/">see here</a>.</p>
-<p>For Days 06-10, <a href="https://owenjonesuob.wordpress.com/2016/11/17/30-days-30-visualizations-1-dataset-part-2/">see here</a>.</p>
-<p>For Days 11-15, <a href="https://owenjonesuob.wordpress.com/2016/11/22/30-days-30-visualizations-1-dataset-part-3/">see here</a>.</p>
-<p>For Days 21-25, <a href="https://owenjonesuob.wordpress.com/2016/12/02/30-days-30-visualizations-1-dataset-part-5/">see here</a>.</p>
-<p>For Days 26-30, <a href="https://owenjonesuob.wordpress.com/2016/12/07/30-days-30-visualizations-1-dataset-part-6/">see here</a>.</p>
-<hr />
+
 <h3>Day 16 (27/11/16): Shifting massively negative values</h3>
 <p>As a culmination of the effort of the last few days, let’s see if the shifted values line up nicely with the unaffected values from that day.</p>
 <p>I’ll keep my guess of 15220 for the shift <code>k</code> from yesterday for now.</p>
-<pre class="r"><code class="r"><span class="identifier">timerange</span> <span class="operator">&lt;-</span> <span class="identifier">interval</span><span class="paren">(</span><span class="identifier">ymd_hms</span><span class="paren">(</span><span class="string">"2015-01-05 10:00:00"</span><span class="paren">)</span>,
-                      <span class="identifier">ymd_hms</span><span class="paren">(</span><span class="string">"2015-01-05 18:00:00"</span><span class="paren">)</span><span class="paren">)</span>
+{% highlight r %}timerange <- interval(ymd_hms("2015-01-05 10:00:00"),
+                      ymd_hms("2015-01-05 18:00:00"))
 
-<span class="identifier">k</span> <span class="operator">&lt;-</span> <span class="number">15220</span>
+k <- 15220
 
-<span class="identifier">df2</span> <span class="operator">&lt;-</span> <span class="identifier">select</span><span class="paren">(</span><span class="identifier">df</span>, <span class="identifier">Name</span>, <span class="identifier">LastUpdate</span>, <span class="identifier">Occupancy</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">Name</span> <span class="operator">==</span> <span class="string">"SouthGate General CP"</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">LastUpdate</span> <span class="operator">%within%</span> <span class="identifier">timerange</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">arrange</span><span class="paren">(</span><span class="identifier">LastUpdate</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">newOcc1</span> <span class="operator">=</span> <span class="identifier">ifelse</span><span class="paren">(</span><span class="identifier">Occupancy</span> <span class="operator">&lt;</span> <span class="operator">-</span><span class="number">10000</span>, <span class="identifier">Occupancy</span> <span class="operator">+</span> <span class="identifier">k</span>, <span class="identifier">Occupancy</span><span class="paren">)</span><span class="paren">)</span></code></pre>
+df2 <- select(df, Name, LastUpdate, Occupancy) %>%
+    filter(Name == "SouthGate General CP") %>%
+    filter(LastUpdate %within% timerange) %>%
+    arrange(LastUpdate) %>%
+    mutate(newOcc1 = ifelse(Occupancy < -10000, Occupancy + k, Occupancy)){% endhighlight %}
 <p>I can actually check whether my guess for k is reasonable fairly easily - I’ll find the largest changes in occupancy, and then average them.</p>
-<pre class="r"><code class="r"><span class="identifier">rng</span> <span class="operator">&lt;-</span> <span class="identifier">range</span><span class="paren">(</span><span class="identifier">diff</span><span class="paren">(</span><span class="identifier">df2</span><span class="operator">$</span><span class="identifier">Occupancy</span><span class="paren">)</span><span class="paren">)</span>
-<span class="identifier">mean</span><span class="paren">(</span><span class="identifier">abs</span><span class="paren">(</span><span class="identifier">rng</span><span class="paren">)</span><span class="paren">)</span></code></pre>
-<pre><code>## [1] 15219.5</code></pre>
+{% highlight r %}rng <- range(diff(df2$Occupancy))
+mean(abs(rng)){% endhighlight %}
+{% highlight r %}## [1] 15219.5{% endhighlight %}
 <p>It turns out my guess was actually very reasonable indeed!</p>
 <p>OK, let’s try plotting the corrected occupancies on top of the correct records.</p>
-<pre class="r"><code class="r"><span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df2</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">LastUpdate</span>, <span class="identifier">y</span> <span class="operator">=</span> <span class="identifier">newOcc</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">geom_path</span><span class="paren">(</span><span class="identifier">aes</span><span class="paren">(</span><span class="identifier">colour</span> <span class="operator">=</span> <span class="paren">(</span><span class="identifier">Occupancy</span> <span class="operator">&lt;</span> <span class="operator">-</span><span class="number">10000</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">ggtitle</span><span class="paren">(</span><span class="string">"Adjustment of massively negative occupancies"</span><span class="paren">)</span>
+{% highlight r %}p <- ggplot(df2, aes(x = LastUpdate, y = newOcc)) +
+    geom_path(aes(colour = (Occupancy < -10000))) +
+    ggtitle("Adjustment of massively negative occupancies")
 
-<span class="identifier">p</span></code></pre>
-<p><img class=" size-full wp-image-639 aligncenter" src="{{ site.baseurl }}/assets/day16.jpeg" alt="day16" width="600" height="350" /></p>
+p{% endhighlight %}
+<img class="cimg" src="{{ site.baseurl }}/assets/tdtvod/day16.jpeg" />
 <p>I had hoped that the simple shift would mean the records would line up - but we can see that in fact this is not the case.</p>
 <p>Perhaps then, despite the saga of the last few days, it is going to be too much trouble to try to correct these records, and it will be much simpler to just ignore them.</p>
-<hr />
+<hr>
 <h3>Day 17 (28/11/16): Duplicate records</h3>
 <p>While working with the massively negative records over the past few days, I noticed something slightly odd.</p>
 <p>On occasion, there are two records which are identical - same car park, same occupancy, same time of update. These duplicate records are certainly not helpful, and might affect calculated averages - for example, mean occupancy of a car park over a given week, if this were calculated simply by averaging the occupancy values from all records in that week and if an outlying value were duplicated.</p>
 <p>Let’s see where we have duplicate records…</p>
-<pre class="r"><code class="r"><span class="identifier">df2</span> <span class="operator">&lt;-</span> <span class="identifier">select</span><span class="paren">(</span><span class="identifier">df</span>, <span class="identifier">Name</span>, <span class="identifier">LastUpdate</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">Name</span> <span class="operator">!=</span> <span class="string">"test car park"</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">group_by</span><span class="paren">(</span><span class="identifier">Name</span>, <span class="identifier">LastUpdate</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">summarize</span><span class="paren">(</span><span class="identifier">count</span> <span class="operator">=</span> <span class="identifier">n</span><span class="paren">(</span><span class="paren">)</span><span class="paren">)</span>
+{% highlight r %}df2 <- select(df, Name, LastUpdate) %>%
+    filter(Name != "test car park") %>%
+    group_by(Name, LastUpdate) %>%
+    summarize(count = n())
 
-<span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df2</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">LastUpdate</span>, <span class="identifier">y</span> <span class="operator">=</span> <span class="identifier">count</span>, <span class="identifier">colour</span> <span class="operator">=</span> <span class="identifier">Name</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">geom_point</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">ggtitle</span><span class="paren">(</span><span class="string">"Duplicate records"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">ylab</span><span class="paren">(</span><span class="string">"Number of records"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">theme</span><span class="paren">(</span><span class="identifier">plot.title</span> <span class="operator">=</span> <span class="identifier">element_text</span><span class="paren">(</span><span class="identifier">size</span> <span class="operator">=</span> <span class="identifier">rel</span><span class="paren">(</span><span class="number">1.5</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span>
+p <- ggplot(df2, aes(x = LastUpdate, y = count, colour = Name)) +
+    geom_point() + ggtitle("Duplicate records") +
+    ylab("Number of records") +
+    theme(plot.title = element_text(size = rel(1.5)))
 
-<span class="identifier">p</span></code></pre>
-<p><img class="alignnone size-full wp-image-650" src="{{ site.baseurl }}/assets/day17.jpeg" alt="day17" width="1000" height="600" /></p>
+p{% endhighlight %}
+<img class="cimg" src="{{ site.baseurl }}/assets/tdtvod/day17.jpeg" />
 <p>It turns out that not only are there many, many instances where a record is recorded twice. There are, in fact, a lot of records which are present hundreds of times - one record from Odd Down P+R is present 1145 times!</p>
-<hr />
-<p>&nbsp;</p>
+<hr>
 <h3>Day 18 (29/11/16): Number of n-plicate records</h3>
 <p>Having discovered the slightly worrying number of duplicate records yesterday, I thought I would see how many groups of identical records there are, and how many records are in these groups.</p>
-<pre class="r"><code class="r"><span class="identifier">df2</span> <span class="operator">&lt;-</span> <span class="identifier">select</span><span class="paren">(</span><span class="identifier">df</span>, <span class="identifier">Name</span>, <span class="identifier">LastUpdate</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">Name</span> <span class="operator">!=</span> <span class="string">"test car park"</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">group_by</span><span class="paren">(</span><span class="identifier">Name</span>, <span class="identifier">LastUpdate</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">summarize</span><span class="paren">(</span><span class="identifier">count</span> <span class="operator">=</span> <span class="identifier">n</span><span class="paren">(</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">group_by</span><span class="paren">(</span><span class="identifier">count</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">summarize</span><span class="paren">(</span><span class="identifier">metacount</span> <span class="operator">=</span> <span class="identifier">n</span><span class="paren">(</span><span class="paren">)</span>, <span class="identifier">proportion</span> <span class="operator">=</span> <span class="identifier">metacount</span> <span class="operator">/</span> <span class="identifier">nrow</span><span class="paren">(</span>.<span class="paren">)</span><span class="paren">)</span>
+{% highlight r %}df2 <- select(df, Name, LastUpdate) %>%
+    filter(Name != "test car park") %>%
+    group_by(Name, LastUpdate) %>%
+    summarize(count = n()) %>%
+    group_by(count) %>%
+    summarize(metacount = n(), proportion = metacount / nrow(.))
 
-<span class="identifier">head</span><span class="paren">(</span><span class="identifier">df2</span><span class="paren">)</span></code></pre>
-<pre><code>## # A tibble: 6 × 3
+head(df2){% endhighlight %}
+{% highlight r %}## # A tibble: 6 × 3
 ##   count metacount   proportion
 ##                
 ## 1     1   1041683 0.8290611487
@@ -102,9 +82,9 @@ excerpt: TDTVOD Goes Fourth
 ## 3     3      1072 0.0008531900
 ## 4     4       730 0.0005809969
 ## 5     5       217 0.0001727073
-## 6     6       185 0.0001472390</code></pre>
-<pre class="r"><code class="r"><span class="identifier">tail</span><span class="paren">(</span><span class="identifier">df2</span><span class="paren">)</span></code></pre>
-<pre><code>## # A tibble: 6 × 3
+## 6     6       185 0.0001472390{% endhighlight %}
+{% highlight r %}tail(df2){% endhighlight %}
+{% highlight r %}## # A tibble: 6 × 3
 ##   count metacount   proportion
 ##                
 ## 1  1069         1 7.958862e-07
@@ -112,81 +92,82 @@ excerpt: TDTVOD Goes Fourth
 ## 3  1089         1 7.958862e-07
 ## 4  1130         1 7.958862e-07
 ## 5  1143         1 7.958862e-07
-## 6  1145         1 7.958862e-07</code></pre>
+## 6  1145         1 7.958862e-07{% endhighlight %}
 <p>So the majority of records are only recorded once, but a significant proportion (about 16.8%) of records are recorded twice, and another small subset (around 0.3%) are recorded more than twice - with some recorded over 1000 times, as we saw yesterday!</p>
 <p>Let’s try to visualize exactly what we’re dealing with here.</p>
-<pre class="r"><code class="r"><span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df2</span><span class="paren">[</span><span class="operator">-</span><span class="identifier">c</span><span class="paren">(</span><span class="number">1</span><span class="paren">)</span>, <span class="paren">]</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">count</span>, <span class="identifier">y</span> <span class="operator">=</span> <span class="paren">(</span><span class="identifier">metacount</span> <span class="operator">+</span> <span class="number">0.5</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">geom_bar</span><span class="paren">(</span><span class="identifier">colour</span> <span class="operator">=</span> <span class="string">"black"</span>, <span class="identifier">stat</span> <span class="operator">=</span> <span class="string">"identity"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">scale_y_log10</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">ggtitle</span><span class="paren">(</span><span class="string">"Number of n-plicate records"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">xlab</span><span class="paren">(</span><span class="string">"Size of group of identical records"</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">ylab</span><span class="paren">(</span><span class="string">"Number of groups"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">theme</span><span class="paren">(</span><span class="identifier">plot.title</span> <span class="operator">=</span> <span class="identifier">element_text</span><span class="paren">(</span><span class="identifier">size</span> <span class="operator">=</span> <span class="identifier">rel</span><span class="paren">(</span><span class="number">1.5</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span>
+{% highlight r %}p <- ggplot(df2[-c(1), ], aes(x = count, y = (metacount + 0.5))) +
+    geom_bar(colour = "black", stat = "identity") +
+    scale_y_log10() +
+    ggtitle("Number of n-plicate records") +
+    xlab("Size of group of identical records") + ylab("Number of groups") +
+    theme(plot.title = element_text(size = rel(1.5)))
 
-<span class="identifier">p</span></code></pre>
-<p><img class="alignnone size-full wp-image-652" src="{{ site.baseurl }}/assets/day18.jpeg" alt="day18" width="1000" height="550" /></p>
+p{% endhighlight %}
+<img class="cimg" src="{{ site.baseurl }}/assets/tdtvod/day18.jpeg" />
 <p>I’ve had to use a log scale since there are many more size-2-to-12-ish records than most others - but this causes the bars to all but vanish when there is only one group of a particular size. I’ve tried to get around this problem by adding a black border to the bars, so if you look very closely you can just about see them on the x-axis.</p>
 <p>Anyway, we can see there are a very large number of groups with a few identical records, as well as a few groups with a very large number of identical records.</p>
-<hr />
-<p>&nbsp;</p>
+<hr>
 <h3>Day 19 (30/11/16): Times of duplicate uploads</h3>
 <p>First I’m just going to make sure that if two records have the same Name and LastUpdate entries, that they are also identical in the other fields - most importantly, Occupancy.</p>
-<pre class="r"><code class="r"><span class="identifier">df3</span> <span class="operator">&lt;-</span> <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">df</span>, <span class="identifier">Name</span> <span class="operator">!=</span> <span class="string">"test car park"</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">group_by</span><span class="paren">(</span><span class="identifier">Name</span>, <span class="identifier">LastUpdate</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">n</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">&gt;</span> <span class="number">1</span><span class="paren">)</span>
+{% highlight r %}df3 <- filter(df, Name != "test car park") %>%
+    group_by(Name, LastUpdate) %>%
+    filter(n() > 1)
     
 
-<span class="identifier">df4</span> <span class="operator">&lt;-</span> <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">df</span>, <span class="identifier">Name</span> <span class="operator">!=</span> <span class="string">"test car park"</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">group_by</span><span class="paren">(</span><span class="identifier">Name</span>, <span class="identifier">LastUpdate</span>, <span class="identifier">Occupancy</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">n</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">&gt;</span> <span class="number">1</span><span class="paren">)</span>
+df4 <- filter(df, Name != "test car park") %>%
+    group_by(Name, LastUpdate, Occupancy) %>%
+    filter(n() > 1)
     
-<span class="identifier">setdiff</span><span class="paren">(</span><span class="identifier">df3</span>, <span class="identifier">df4</span><span class="paren">)</span></code></pre>
-<pre><code>## # A tibble: 0 × 0</code></pre>
+setdiff(df3, df4){% endhighlight %}
+{% highlight r %}## # A tibble: 0 × 0{% endhighlight %}
 <p>So there are 0 rows identical in Name and LastUpdate but different in Occupancy. This is a good thing!</p>
 <p>We have a dataframe (well, 2 identical dataframes!) containing all the duplicate records. Let’s see if there’s any sort of pattern in the times when duplicates are recorded.</p>
-<pre class="r"><code class="r"><span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df3</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">LastUpdate</span>, <span class="identifier">y</span> <span class="operator">=</span> <span class="string">""</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">geom_point</span><span class="paren">(</span><span class="identifier">alpha</span> <span class="operator">=</span> <span class="number">0.1</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">facet_wrap</span><span class="paren">(</span><span class="operator">~</span> <span class="identifier">Name</span>, <span class="identifier">nrow</span> <span class="operator">=</span> <span class="number">2</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">ggtitle</span><span class="paren">(</span><span class="string">"Times of duplicate uploads"</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">ylab</span><span class="paren">(</span><span class="string">""</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">theme</span><span class="paren">(</span><span class="identifier">plot.title</span> <span class="operator">=</span> <span class="identifier">element_text</span><span class="paren">(</span><span class="identifier">size</span> <span class="operator">=</span> <span class="identifier">rel</span><span class="paren">(</span><span class="number">1.5</span><span class="paren">)</span><span class="paren">)</span>,
-          <span class="identifier">panel.background</span> <span class="operator">=</span> <span class="identifier">element_blank</span><span class="paren">(</span><span class="paren">)</span><span class="paren">)</span>
+{% highlight r %}p <- ggplot(df3, aes(x = LastUpdate, y = "")) +
+    geom_point(alpha = 0.1) + facet_wrap(~ Name, nrow = 2) +
+    ggtitle("Times of duplicate uploads") + ylab("") +
+    theme(plot.title = element_text(size = rel(1.5)),
+          panel.background = element_blank())
 
-<span class="identifier">p</span></code></pre>
-<p><img class="alignnone size-full wp-image-669" src="{{ site.baseurl }}/assets/day19.jpeg" alt="day19" width="1500" height="400" /></p>
+p{% endhighlight %}
+<img class="cimg" src="{{ site.baseurl }}/assets/tdtvod/day19.jpeg" />
 <p>We can see that duplicates are recorded almost constantly at the SouthGate car parks, very often at the Odd Down and Lansdown P+Rs and then less frequently but seemingly at random in the other car parks.</p>
-<hr />
-<p>&nbsp;</p>
+<hr>
+
 <h3>Day 20 (01/12/16): Delay between update and upload</h3>
 <p>For the majority of this project I have been working with <code>df</code>, a trimmed-down version of the original dataframe which I created in the first week or so.</p>
 <p>One of the columns I cut when I created <code>df</code> was <code>DateUploaded</code>: which is, of course, the time when a record was uploaded to the database.</p>
 <p>Perhaps there are some interesting features to find in this column though…</p>
 <p>For example, what is the delay in between a record being taken, and it being uploaded?</p>
-<pre class="r"><code class="r"><span class="comment"># Read in the original dataframe again</span>
-<span class="identifier">df0</span> <span class="operator">&lt;-</span> <span class="identifier">read.csv</span><span class="paren">(</span><span class="string">"C:/Users/Owen/Documents/Coding/Parking/data/BANES_Historic_Car_Park_Occupancy.csv"</span><span class="paren">)</span>
+{% highlight r %}# Read in the original dataframe again
+df0 <- read.csv("C:/Users/Owen/Documents/Coding/Parking/data/BANES_Historic_Car_Park_Occupancy.csv")
 
-<span class="keyword">library</span><span class="paren">(</span><span class="identifier">dplyr</span><span class="paren">)</span>
-<span class="keyword">library</span><span class="paren">(</span><span class="identifier">lubridate</span><span class="paren">)</span>
+library(dplyr)
+library(lubridate)
 
-<span class="identifier">df1</span> <span class="operator">&lt;-</span> <span class="identifier">df0</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">select</span><span class="paren">(</span><span class="identifier">Name</span>, <span class="identifier">LastUpdate</span>, <span class="identifier">DateUploaded</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">LastUpdate</span> <span class="operator">=</span> <span class="identifier">as.POSIXct</span><span class="paren">(</span><span class="identifier">LastUpdate</span>, <span class="identifier">tz</span> <span class="operator">=</span> <span class="string">"UTC"</span>,
-                                   <span class="identifier">format</span> <span class="operator">=</span> <span class="string">"%d/%m/%Y %I:%M:%S %p"</span><span class="paren">)</span>,
-           <span class="identifier">DateUploaded</span> <span class="operator">=</span> <span class="identifier">as.POSIXct</span><span class="paren">(</span><span class="identifier">DateUploaded</span>, <span class="identifier">tz</span> <span class="operator">=</span> <span class="string">"UTC"</span>,
-                                     <span class="identifier">format</span> <span class="operator">=</span> <span class="string">"%d/%m/%Y %I:%M:%S %p"</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">Delay</span> <span class="operator">=</span> <span class="identifier">as.numeric</span><span class="paren">(</span><span class="identifier">DateUploaded</span> <span class="operator">-</span> <span class="identifier">LastUpdate</span><span class="paren">)</span><span class="paren">)</span>
+df1 <- df0 %>%
+    select(Name, LastUpdate, DateUploaded) %>%
+    mutate(LastUpdate = as.POSIXct(LastUpdate, tz = "UTC",
+                                   format = "%d/%m/%Y %I:%M:%S %p"),
+           DateUploaded = as.POSIXct(DateUploaded, tz = "UTC",
+                                     format = "%d/%m/%Y %I:%M:%S %p")) %>%
+    mutate(Delay = as.numeric(DateUploaded - LastUpdate))
 
 
-<span class="keyword">library</span><span class="paren">(</span><span class="identifier">ggplot2</span><span class="paren">)</span>
+library(ggplot2)
 
-<span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df1</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">Delay</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">geom_histogram</span><span class="paren">(</span><span class="identifier">colour</span> <span class="operator">=</span> <span class="string">"black"</span>, <span class="identifier">bins</span> <span class="operator">=</span> <span class="number">40</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">ggtitle</span><span class="paren">(</span><span class="string">"Delay between update and upload"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">xlab</span><span class="paren">(</span><span class="string">"Seconds"</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">ylab</span><span class="paren">(</span><span class="string">"Number of records"</span><span class="paren">)</span>
+p <- ggplot(df1, aes(x = Delay)) +
+    geom_histogram(colour = "black", bins = 40) +
+    ggtitle("Delay between update and upload") +
+    xlab("Seconds") + ylab("Number of records")
 
-<span class="identifier">p</span></code></pre>
-<p><img class="alignnone size-full wp-image-673" src="{{ site.baseurl }}/assets/day20.jpeg" alt="day20" width="600" height="400" /></p>
+p{% endhighlight %}
+<img class="cimg" src="{{ site.baseurl }}/assets/tdtvod/day20.jpeg" />
 <p>So the vast majority of the records are uploaded pretty quickly. But there is a suspicious black line along the bottom of the plot…</p>
 <p>Let’s replot using a log scale.</p>
-<pre class="r"><code class="r"><span class="identifier">p</span> <span class="operator">+</span> <span class="identifier">scale_y_log10</span><span class="paren">(</span><span class="paren">)</span></code></pre>
-<p><img class="alignnone size-full wp-image-674" src="{{ site.baseurl }}/assets/day20log.jpeg" alt="day20log" width="600" height="400" /></p>
+{% highlight r %}p + scale_y_log10(){% endhighlight %}
+<img class="alignnone size-full wp-image-674" src="{{ site.baseurl }}/assets/tdtvod/day20log.jpeg" />
 <p>So we actually have quite a lot of records where the delay between update and upload is fairly large - over 300000 seconds (about 3.5 days) in some cases. There are also a significant number of records which were somehow uploaded BEFORE they were recorded.</p>
-<hr />
-<p>Owen Jones | November 2016</p>
+<hr>
+<a href="{{ site.baseurl }}/tdtvod-menu">
+    <div class="backbox">Back to menu</div>
+</a>

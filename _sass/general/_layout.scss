@@ -490,7 +490,9 @@ table {
 }
 
 .highlight {
+    background: lighten($page-bg, 5%);
     margin: 30px auto;
+    padding: 10px;
     overflow-x: auto;
     word-wrap: normal;
     code {
@@ -504,5 +506,43 @@ code {
     font-size: 0.9em;
     margin: auto 0.2em;
     background: lighten($page-bg, 5%);
+}
+
+.photoib {
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+    margin: 10px;
+    
+    &#day301 {
+        @include photo-content("tdtvod/day301.jpg");
+    }
+    &#day302 {
+        @include photo-content("tdtvod/day302.jpg");
+    }
+    &#day303 {
+        @include photo-content("tdtvod/day303.jpg");
+    }
+}
+
+.backbox {
+    color: #CCC;
+    width: 140px;
+    height: 50px;
+    margin: 10px;
+    float: left;
+    clear: both;
+    text-align: center;
+    line-height: 300%;
+    @include box-sizing(border-box);
+    
+    @include gradfill((#999, #444, #000, #111, #333, #777));
+    
+    &:hover, &:active {
+		text-decoration: none;
+        font-weight: bold;
+		color: #FFF;
+        box-shadow: 0px 0px 15px $sblu;
+	}
 }
     

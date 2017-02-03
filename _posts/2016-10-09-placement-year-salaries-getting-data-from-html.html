@@ -55,7 +55,7 @@ library(XML)
 
 <img class="cimg" src="{{ site.baseurl }}/assets/resultconsole.PNG"/>
 
-<p>Each result is within a pair of <code>‹div›</code> tags (no tables in sight, unfortunately). Within each result there are several pieces of information. Only one of these is of interest to us (for this project at least): the salary. A little further inspection shows that this information is contained in one element of an unordered list, specifically - and rather confusingly - in the <code>‹li›</code> element which has <code>class=location</code>, presumably due to some previous website redesign.</p>
+<p>Each result is within a pair of <code>&lt;div&gt;</code> tags (no tables in sight, unfortunately). Within each result there are several pieces of information. Only one of these is of interest to us (for this project at least): the salary. A little further inspection shows that this information is contained in one element of an unordered list, specifically - and rather confusingly - in the <code>&lt;li&gt;</code> element which has <code>class=location</code>, presumably due to some previous website redesign.</p>
 
 <img class="cimg" src="{{ site.baseurl }}/assets/salaryconsole.PNG" />
 
@@ -78,13 +78,13 @@ substring(salaries, 100001, 101000)
         
 
 {% highlight r %}
-## [1] "           ‹h2 class=\"Job-titleHeader\"›Engineering Coordinator Placement‹/h2›\n            ‹/a›\n            ‹p class=\"Search-industry\"›‹i class=\"icon-company\"›‹/i›\n                Volvo Group UK‹/p›\n            ‹ul class=\"Search-labels\"›\n                ‹li class=\"deadline\"›‹span\n                            class=\"icon-calendar\"›‹/span› 31st Oct 2016                ‹/li›\n                ‹li class=\"location\"›‹span class=\"icon-salary\"›‹/span›\n                                            Competitive\n                                    ‹/li›\n                ‹li class=\"duration\"›‹span class=\"icon-company\"›‹/span› Placement Year (10 Months+)‹/li›\n                ‹li class=\"company\"›‹span class=\"icon-location\"›‹/span› West Midlands‹/li›\n            ‹/ul›\n        ‹/div›\n        ‹div class=\"icon-cta\"›\n\n                        \n                ‹a href=\"#\" class=\"circle-cta my-wishlist tracker login\"\n                   data-message=\"You need to be logged in to add a job to your tracker\"\n           "
+## [1] "           &lt;h2 class=\"Job-titleHeader\"&gt;Engineering Coordinator Placement&lt;/h2&gt;\n            &lt;/a&gt;\n            &lt;p class=\"Search-industry\"&gt;&lt;i class=\"icon-company\"&gt;&lt;/i&gt;\n                Volvo Group UK&lt;/p&gt;\n            &lt;ul class=\"Search-labels\"&gt;\n                &lt;li class=\"deadline\"&gt;&lt;span\n                            class=\"icon-calendar\"&gt;&lt;/span&gt; 31st Oct 2016                &lt;/li&gt;\n                &lt;li class=\"location\"&gt;&lt;span class=\"icon-salary\"&gt;&lt;/span&gt;\n                                            Competitive\n                                    &lt;/li&gt;\n                &lt;li class=\"duration\"&gt;&lt;span class=\"icon-company\"&gt;&lt;/span&gt; Placement Year (10 Months+)&lt;/li&gt;\n                &lt;li class=\"company\"&gt;&lt;span class=\"icon-location\"&gt;&lt;/span&gt; West Midlands&lt;/li&gt;\n            &lt;/ul&gt;\n        &lt;/div&gt;\n        &lt;div class=\"icon-cta\"&gt;\n\n                        \n                &lt;a href=\"#\" class=\"circle-cta my-wishlist tracker login\"\n                   data-message=\"You need to be logged in to add a job to your tracker\"\n           "
 {% endhighlight %}
 
-<p>Luckily, the <code>XML</code> package can be used to manipulate this awkward mass of text into something much easier to work with in R. First, <code>htmlParse </code>is used to parse the HTML code so that each set of tags is represented as a ‘node’. The result of this can then be used in <code>xpathApply</code> with two other arguments.</p>
+<p>Luckily, the <code>XML</code> package can be used to manipulate this awkward mass of text into something much easier to work with in R. First, <code>htmlParse</code> is used to parse the HTML code so that each set of tags is represented as a ‘node’. The result of this can then be used in <code>xpathApply</code> with two other arguments.</p>
 <p>The first is an XPath query <code>//li[@class='location']</code>, where:</p>
 <ul>
-<li><code>//li</code> finds all ‘list element’ (<code>‹li›</code>) nodes</li>
+<li><code>//li</code> finds all ‘list element’ (<code>&lt;li&gt;</code>) nodes</li>
 <li><code>[@class='location']</code> finds the subset of these nodes which have a <code>class</code> attribute of <code>location</code> (recall that this is where the salaries are stored)</li>
 </ul>
 <p>The second is what we want to return from each of these nodes, which in this case is its <code>xmlValue</code>. The values are returned by <code>xpathApply</code> in list form.</p>

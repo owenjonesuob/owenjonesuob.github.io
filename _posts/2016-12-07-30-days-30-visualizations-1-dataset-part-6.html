@@ -1,4 +1,5 @@
 ---
+permalink: /:categories/:title
 layout: post
 title: '30 Days, 30 Visualizations, 1 Dataset: Days 26-30'
 date: 2016-12-07 23:05:34.000000000 +00:00
@@ -6,7 +7,7 @@ type: post
 published: true
 status: publish
 categories:
-- Project
+- Projects
 tags:
 - data
 - data science
@@ -14,139 +15,113 @@ tags:
 - R
 - RStudio
 - visualization
-meta:
-  _rest_api_published: '1'
-  _rest_api_client_id: "-1"
-  _publicize_job_id: '29745195884'
-  _wp_old_slug: 30-days-30-visualizations-1-dataset-days-26-30
-  _thumbnail_id: '708'
-  _oembed_6da53558d1fa160db6716a7f687335bd: <div class="embed-cartodb"><iframe width='100%'
-    height='520px' frameborder='0' src='https://olj23.carto.com/viz/16d7e938-a869-11e6-b20f-0e3ebc282e83/embed_map'
-    allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe></div>
-  _oembed_time_6da53558d1fa160db6716a7f687335bd: '1481152182'
-author:
-  login: owenjonesuob
-  email: joneso21164@gmail.com
-  display_name: owenjonesuob
-  first_name: Owen
-  last_name: Jones
 excerpt: The epic finale of a month-long journey
 ---
-<p>For an overview of this project and Days 00-05, <a href="https://owenjonesuob.wordpress.com/2016/11/12/30-days-30-visualizations-1-dataset/">see here</a>.</p>
-<p>For Days 06-10, <a href="https://owenjonesuob.wordpress.com/2016/11/17/30-days-30-visualizations-1-dataset-part-2/">see here</a>.</p>
-<p>For Days 11-15, <a href="https://owenjonesuob.wordpress.com/2016/11/22/30-days-30-visualizations-1-dataset-part-3/">see here</a>.</p>
-<p>For Days 16-20, <a href="https://owenjonesuob.wordpress.com/2016/11/27/30-days-30-visualizations-1-dataset-part-4/">see here</a>.</p>
-<p>For Days 21-25, <a href="https://owenjonesuob.wordpress.com/2016/12/02/30-days-30-visualizations-1-dataset-part-5/">see here</a>.</p>
-<hr />
-<h3></h3>
+
 <h3>Day 26 (07/12/16): Mean occupancy by weekday revisited</h3>
 <p>We're on the home straight!</p>
 <p>Partly due to lack of time, partly due to lack of new ideas, and mostly because I want to, I am going to spend the last five days of this project revisiting some of the earlier plots I made, tidying them up and using cleaned data.</p>
 <p>Let’s make this “cleaned data” - having spent the last couple of weeks looking at what makes the data messy, I’m now in a much better position to do this than I would have been at the start!</p>
-<pre class="r"><code class="r"><span class="identifier">df1</span> <span class="operator">&lt;-</span> <span class="identifier">select</span><span class="paren">(</span><span class="identifier">df0</span>, <span class="identifier">Name</span>, <span class="identifier">LastUpdate</span>, <span class="identifier">DateUploaded</span>,
-              <span class="identifier">Capacity</span>, <span class="identifier">Occupancy</span>, <span class="identifier">Percentage</span>, <span class="identifier">Status</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">LastUpdate</span> <span class="operator">=</span> <span class="identifier">as.POSIXct</span><span class="paren">(</span><span class="identifier">LastUpdate</span>,
-                                   <span class="identifier">format</span> <span class="operator">=</span> <span class="string">"%d/%m/%Y %I:%M:%S %p"</span><span class="paren">)</span>,
-           <span class="identifier">DateUploaded</span> <span class="operator">=</span> <span class="identifier">as.POSIXct</span><span class="paren">(</span><span class="identifier">DateUploaded</span>,
-                                     <span class="identifier">format</span> <span class="operator">=</span> <span class="string">"%d/%m/%Y %I:%M:%S %p"</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="comment"># Cleaning:</span>
-    <span class="comment">#   Remove single (?) row with NA</span>
-    <span class="identifier">filter</span><span class="paren">(</span><span class="operator">!</span><span class="identifier">is.na</span><span class="paren">(</span><span class="identifier">LastUpdate</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="comment">#   Remove "strange" occupancies ("strange" is arbitrary...)</span>
-    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">Occupancy</span> <span class="operator">&gt;</span> <span class="operator">-</span><span class="number">100</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">Percentage</span> <span class="operator">&lt;</span> <span class="number">110</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="comment">#   Remove duplicates</span>
-    <span class="identifier">group_by</span><span class="paren">(</span><span class="identifier">Name</span>, <span class="identifier">LastUpdate</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">slice</span><span class="paren">(</span><span class="number">1L</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">ungroup</span><span class="paren">(</span><span class="paren">)</span></code></pre>
+{% highlight r %}df1 <- select(df0, Name, LastUpdate, DateUploaded,
+              Capacity, Occupancy, Percentage, Status) %>%
+    mutate(LastUpdate = as.POSIXct(LastUpdate,
+                                   format = "%d/%m/%Y %I:%M:%S %p"),
+           DateUploaded = as.POSIXct(DateUploaded,
+                                     format = "%d/%m/%Y %I:%M:%S %p")) %>%
+    # Cleaning:
+    #   Remove single (?) row with NA
+    filter(!is.na(LastUpdate)) %>%
+    #   Remove "strange" occupancies ("strange" is arbitrary...)
+    filter(Occupancy > -100) %>%
+    filter(Percentage < 110) %>%
+    #   Remove duplicates
+    group_by(Name, LastUpdate) %>%
+    slice(1L) %>%
+    ungroup(){% endhighlight %}
 <p>I’ll start by replotting Day 04. This time around I will use <code>dplyr</code> rather than base functions to prepare the data. I’ll also make sure to include an x-axis on each plot, and I won’t have any issues with my faceting this time either!</p>
-<pre class="r"><code class="r"><span class="identifier">df2</span> <span class="operator">&lt;-</span> <span class="identifier">select</span><span class="paren">(</span><span class="identifier">df1</span>, <span class="identifier">Name</span>, <span class="identifier">Percentage</span>, <span class="identifier">LastUpdate</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">Name</span> <span class="operator">!=</span> <span class="string">"test car park"</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">Time</span> <span class="operator">=</span> <span class="paren">(</span><span class="identifier">hour</span><span class="paren">(</span><span class="identifier">LastUpdate</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">round</span><span class="paren">(</span><span class="identifier">minute</span><span class="paren">(</span><span class="identifier">LastUpdate</span><span class="paren">)</span>, <span class="operator">-</span><span class="number">1</span><span class="paren">)</span><span class="operator">/</span><span class="number">60</span><span class="paren">)</span>,
-           <span class="identifier">Day</span> <span class="operator">=</span> <span class="identifier">wday</span><span class="paren">(</span><span class="identifier">LastUpdate</span>, <span class="identifier">label</span> <span class="operator">=</span> <span class="literal">TRUE</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">group_by</span><span class="paren">(</span><span class="identifier">Name</span>, <span class="identifier">Day</span>, <span class="identifier">Time</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">summarize</span><span class="paren">(</span><span class="identifier">X</span> <span class="operator">=</span> <span class="identifier">mean</span><span class="paren">(</span><span class="identifier">Percentage</span><span class="paren">)</span><span class="paren">)</span>
+{% highlight r %}df2 <- select(df1, Name, Percentage, LastUpdate) %>%
+    filter(Name != "test car park") %>%
+    mutate(Time = (hour(LastUpdate) + round(minute(LastUpdate), -1)/60),
+           Day = wday(LastUpdate, label = TRUE)) %>%
+    group_by(Name, Day, Time) %>%
+    summarize(X = mean(Percentage))
 
-<span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df2</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">Time</span>, <span class="identifier">y</span> <span class="operator">=</span> <span class="identifier">X</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">geom_line</span><span class="paren">(</span><span class="identifier">aes</span><span class="paren">(</span><span class="identifier">colour</span> <span class="operator">=</span> <span class="identifier">Name</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">facet_wrap</span><span class="paren">(</span><span class="operator">~</span> <span class="identifier">Day</span>, <span class="identifier">nrow</span> <span class="operator">=</span> <span class="number">2</span>, <span class="identifier">scales</span> <span class="operator">=</span> <span class="string">"free_x"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">ggtitle</span><span class="paren">(</span><span class="string">"Mean occupancy by weekday"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">labs</span><span class="paren">(</span><span class="identifier">y</span> <span class="operator">=</span> <span class="string">"Percentage occupancy"</span>, <span class="identifier">x</span> <span class="operator">=</span> <span class="string">"Time (hour)"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">theme</span><span class="paren">(</span><span class="identifier">plot.title</span> <span class="operator">=</span> <span class="identifier">element_text</span><span class="paren">(</span><span class="identifier">size</span> <span class="operator">=</span> <span class="identifier">rel</span><span class="paren">(</span><span class="number">1.8</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">guides</span><span class="paren">(</span><span class="identifier">colour</span> <span class="operator">=</span> <span class="identifier">guide_legend</span><span class="paren">(</span><span class="identifier">override.aes</span> <span class="operator">=</span> <span class="identifier">list</span><span class="paren">(</span><span class="identifier">size</span> <span class="operator">=</span> <span class="number">3</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span>
-<span class="identifier">p
-</span></code></pre>
-<p><img class="alignnone size-full wp-image-708" src="{{ site.baseurl }}/assets/day261.jpeg" alt="day26" width="1500" height="500" /></p>
-<hr />
-<div class="container-fluid main-container">
-<div id="day-27-081216-occupancy-per-weekday-by-car-park-revisited" class="section level3">
+p <- ggplot(df2, aes(x = Time, y = X)) +
+    geom_line(aes(colour = Name)) +
+    facet_wrap(~ Day, nrow = 2, scales = "free_x") +
+    ggtitle("Mean occupancy by weekday") +
+    labs(y = "Percentage occupancy", x = "Time (hour)") +
+    theme(plot.title = element_text(size = rel(1.8))) +
+    guides(colour = guide_legend(override.aes = list(size = 3)))
+p{% endhighlight %}
+<p><img class="cimg" src="{{ site.baseurl }}/assets/tdtvod/day26.jpeg" />
+<hr>
+
 <h3>Day 27 (08/12/16): Occupancy per weekday by car park, revisited</h3>
 <p>Revisiting Day 05. The alpha levels are scaled much better now there are no outlying data points.</p>
-<pre class="r"><code class="r"><span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">data</span> <span class="operator">=</span> <span class="identifier">df2</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">Time</span>, <span class="identifier">y</span> <span class="operator">=</span> <span class="identifier">Day</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">facet_wrap</span><span class="paren">(</span><span class="operator">~</span> <span class="identifier">Name</span>, <span class="identifier">nrow</span> <span class="operator">=</span> <span class="number">2</span>, <span class="identifier">scales</span> <span class="operator">=</span> <span class="string">"free_x"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">geom_point</span><span class="paren">(</span><span class="identifier">aes</span><span class="paren">(</span><span class="identifier">colour</span> <span class="operator">=</span> <span class="identifier">Name</span>, <span class="identifier">alpha</span> <span class="operator">=</span> <span class="identifier">X</span><span class="paren">)</span>, <span class="identifier">shape</span> <span class="operator">=</span> <span class="number">20</span>, <span class="identifier">size</span> <span class="operator">=</span> <span class="number">4</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">guides</span><span class="paren">(</span><span class="identifier">colour</span> <span class="operator">=</span> <span class="identifier">guide_legend</span><span class="paren">(</span><span class="identifier">override.aes</span> <span class="operator">=</span> <span class="identifier">list</span><span class="paren">(</span><span class="identifier">size</span> <span class="operator">=</span> <span class="number">3</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">scale_alpha</span><span class="paren">(</span><span class="identifier">range</span> <span class="operator">=</span> <span class="identifier">c</span><span class="paren">(</span><span class="number">0</span>, <span class="number">1</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">scale_y_discrete</span><span class="paren">(</span><span class="identifier">limits</span> <span class="operator">=</span> <span class="identifier">rev</span><span class="paren">(</span><span class="identifier">levels</span><span class="paren">(</span><span class="identifier">df2</span><span class="operator">$</span><span class="identifier">Day</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">labs</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="string">"Time (hour)"</span>, <span class="identifier">y</span> <span class="operator">=</span> <span class="string">""</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">ggtitle</span><span class="paren">(</span><span class="string">"Occupancy per weekday, by car park"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">theme</span><span class="paren">(</span><span class="identifier">plot.title</span> <span class="operator">=</span> <span class="identifier">element_text</span><span class="paren">(</span><span class="identifier">size</span> <span class="operator">=</span> <span class="number">22</span>, <span class="identifier">face</span> <span class="operator">=</span> <span class="string">"bold"</span><span class="paren">)</span>,
-          <span class="identifier">legend.position</span> <span class="operator">=</span> <span class="string">"None"</span><span class="paren">)</span>
-<span class="identifier">p</span></code></pre>
-</div>
-</div>
-<p><img class="alignnone size-full wp-image-726" src="{{ site.baseurl }}/assets/day27.jpeg" alt="day27" width="1500" height="600" /></p>
-<p>&nbsp;</p>
-<hr />
-<h3></h3>
+{% highlight r %}p <- ggplot(data = df2, aes(Time, y = Day)) +
+    facet_wrap(~ Name, nrow = 2, scales = "free_x") +
+    geom_point(aes(colour = Name, alpha = X), shape = 20, size = 4) +
+    guides(colour = guide_legend(override.aes = list(size = 3))) +
+    scale_alpha(range = c(0, 1)) +
+    scale_y_discrete(limits = rev(levels(df2$Day))) +
+    labs(x = "Time (hour)", y = "") +
+    ggtitle("Occupancy per weekday, by car park") +
+    theme(plot.title = element_text(size = 22, face = "bold"),
+          legend.position = "None")
+p{% endhighlight %}
+
+<img class="cimg" src="{{ site.baseurl }}/assets/tdtvod/day27.jpeg" />
+<hr>
+
 <h3>Day 28 (09/12/16): Status by weekday, revisited</h3>
 <p>Again, just tidying up a little and using the clean data.</p>
-<pre class="r"><code class="r"><span class="keyword">library</span><span class="paren">(</span><span class="identifier">lubridate</span><span class="paren">)</span>
-<span class="keyword">library</span><span class="paren">(</span><span class="identifier">reshape2</span><span class="paren">)</span>
-<span class="keyword">library</span><span class="paren">(</span><span class="identifier">scales</span><span class="paren">)</span>
+{% highlight r %}library(lubridate)
+library(reshape2)
+library(scales)
 
-<span class="identifier">df2</span> <span class="operator">&lt;-</span> <span class="identifier">select</span><span class="paren">(</span><span class="identifier">df1</span>, <span class="identifier">Name</span>, <span class="identifier">LastUpdate</span>, <span class="identifier">Status</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">Name</span> <span class="operator">!=</span> <span class="string">"test car park"</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">Day</span> <span class="operator">=</span> <span class="identifier">wday</span><span class="paren">(</span><span class="identifier">LastUpdate</span>, <span class="identifier">label</span> <span class="operator">=</span> <span class="literal">TRUE</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">group_by</span><span class="paren">(</span><span class="identifier">Name</span>, <span class="identifier">Day</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">summarize</span><span class="paren">(</span><span class="identifier">Filling</span> <span class="operator">=</span> <span class="identifier">sum</span><span class="paren">(</span><span class="identifier">Status</span> <span class="operator">==</span> <span class="string">"Filling"</span><span class="paren">)</span> <span class="operator">/</span> <span class="identifier">n</span><span class="paren">(</span><span class="paren">)</span>,
-              <span class="identifier">Static</span> <span class="operator">=</span> <span class="identifier">sum</span><span class="paren">(</span><span class="identifier">Status</span> <span class="operator">==</span> <span class="string">"Static"</span><span class="paren">)</span> <span class="operator">/</span> <span class="identifier">n</span><span class="paren">(</span><span class="paren">)</span>,
-              <span class="identifier">Emptying</span> <span class="operator">=</span> <span class="identifier">sum</span><span class="paren">(</span><span class="identifier">Status</span> <span class="operator">==</span> <span class="string">"Emptying"</span><span class="paren">)</span> <span class="operator">/</span> <span class="identifier">n</span><span class="paren">(</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">melt</span><span class="paren">(</span><span class="paren">)</span>
+df2 <- select(df1, Name, LastUpdate, Status) %>%
+    filter(Name != "test car park") %>%
+    mutate(Day = wday(LastUpdate, label = TRUE)) %>%
+    group_by(Name, Day) %>%
+    summarize(Filling = sum(Status == "Filling") / n(),
+              Static = sum(Status == "Static") / n(),
+              Emptying = sum(Status == "Emptying") / n()) %>%
+    melt()
 
-<span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df2</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">Day</span>, <span class="identifier">y</span> <span class="operator">=</span> <span class="identifier">value</span>, <span class="identifier">fill</span> <span class="operator">=</span> <span class="identifier">variable</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">geom_bar</span><span class="paren">(</span><span class="identifier">stat</span> <span class="operator">=</span> <span class="string">"identity"</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">coord_flip</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">facet_wrap</span><span class="paren">(</span><span class="operator">~</span> <span class="identifier">Name</span>, <span class="identifier">nrow</span> <span class="operator">=</span> <span class="number">2</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">scale_fill_manual</span><span class="paren">(</span><span class="identifier">values</span> <span class="operator">=</span> <span class="identifier">c</span><span class="paren">(</span><span class="string">"#FF4444"</span>, <span class="string">"#AAAAAA"</span>, <span class="string">"#6666FF"</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">scale_x_discrete</span><span class="paren">(</span><span class="identifier">limits</span> <span class="operator">=</span> <span class="identifier">rev</span><span class="paren">(</span><span class="identifier">levels</span><span class="paren">(</span><span class="identifier">df2</span><span class="operator">$</span><span class="identifier">Day</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">scale_y_continuous</span><span class="paren">(</span><span class="identifier">labels</span> <span class="operator">=</span> <span class="identifier">percent</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">labs</span><span class="paren">(</span><span class="identifier">y</span> <span class="operator">=</span> <span class="string">"Percent of records"</span>, <span class="identifier">x</span> <span class="operator">=</span> <span class="string">"Day"</span>, <span class="identifier">fill</span> <span class="operator">=</span> <span class="string">""</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">ggtitle</span><span class="paren">(</span><span class="string">"Status by weekday"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">theme</span><span class="paren">(</span><span class="identifier">plot.title</span> <span class="operator">=</span> <span class="identifier">element_text</span><span class="paren">(</span><span class="identifier">size</span> <span class="operator">=</span> <span class="number">22</span>, <span class="identifier">face</span> <span class="operator">=</span> <span class="string">"bold"</span><span class="paren">)</span><span class="paren">)</span>
-<span class="identifier">p</span></code></pre>
-<p><img class="alignnone size-full wp-image-730" src="{{ site.baseurl }}/assets/day28.jpeg" alt="day28" width="1000" height="800" /></p>
-<hr />
-<p>&nbsp;</p>
+p <- ggplot(df2, aes(x = Day, y = value, fill = variable)) +
+    geom_bar(stat = "identity") + coord_flip() +
+    facet_wrap(~ Name, nrow = 2) +
+    scale_fill_manual(values = c("#FF4444", "#AAAAAA", "#6666FF")) +
+    scale_x_discrete(limits = rev(levels(df2$Day))) +
+    scale_y_continuous(labels = percent) +
+    labs(y = "Percent of records", x = "Day", fill = "") +
+    ggtitle("Status by weekday") +
+    theme(plot.title = element_text(size = 22, face = "bold"))
+p{% endhighlight %}
+<img class="cimg" src="{{ site.baseurl }}/assets/tdtvod/day28.jpeg" />
+<hr>
+
 <h3>Day 29 (10/12/16): Mean percentage occupancy by week, revisited</h3>
 <p>Revisiting Day 09. The lines are, generally speaking, a little smoother now.</p>
-<pre class="r"><code class="r"><span class="identifier">df2</span> <span class="operator">&lt;-</span> <span class="identifier">select</span><span class="paren">(</span><span class="identifier">df1</span>, <span class="identifier">Name</span>, <span class="identifier">LastUpdate</span>, <span class="identifier">Percentage</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">Name</span> <span class="operator">!=</span> <span class="string">"test car park"</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">Week</span> <span class="operator">=</span> <span class="identifier">week</span><span class="paren">(</span><span class="identifier">LastUpdate</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">group_by</span><span class="paren">(</span><span class="identifier">Name</span>, <span class="identifier">Week</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">summarize</span><span class="paren">(</span><span class="identifier">meanP</span> <span class="operator">=</span> <span class="identifier">mean</span><span class="paren">(</span><span class="identifier">Percentage</span><span class="paren">)</span><span class="paren">)</span>
+{% highlight r %}df2 <- select(df1, Name, LastUpdate, Percentage) %>%
+    filter(Name != "test car park") %>%
+    mutate(Week = week(LastUpdate)) %>%
+    group_by(Name, Week) %>%
+    summarize(meanP = mean(Percentage))
 
-<span class="identifier">maxP</span> <span class="operator">&lt;-</span> <span class="identifier">top_n</span><span class="paren">(</span><span class="identifier">df2</span>, <span class="identifier">n</span> <span class="operator">=</span> <span class="number">1</span><span class="paren">)</span>
+maxP <- top_n(df2, n = 1)
 
-<span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df2</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">Week</span>, <span class="identifier">y</span> <span class="operator">=</span> <span class="identifier">meanP</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">geom_line</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">facet_wrap</span><span class="paren">(</span><span class="operator">~</span> <span class="identifier">Name</span>, <span class="identifier">nrow</span> <span class="operator">=</span> <span class="number">2</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">geom_label</span><span class="paren">(</span><span class="identifier">data</span> <span class="operator">=</span> <span class="identifier">maxP</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">Week</span>, <span class="identifier">y</span> <span class="operator">=</span> <span class="identifier">meanP</span> <span class="operator">+</span> <span class="number">10</span>, <span class="identifier">label</span> <span class="operator">=</span> <span class="identifier">Week</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">ggtitle</span><span class="paren">(</span><span class="string">"Mean percentage occupancy per week"</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">ylab</span><span class="paren">(</span><span class="string">"Percentage"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">theme</span><span class="paren">(</span><span class="identifier">plot.title</span> <span class="operator">=</span> <span class="identifier">element_text</span><span class="paren">(</span><span class="identifier">size</span> <span class="operator">=</span> <span class="number">22</span>, <span class="identifier">face</span> <span class="operator">=</span> <span class="string">"bold"</span><span class="paren">)</span><span class="paren">)</span>
-<span class="identifier">p</span></code></pre>
-<p><img class="alignnone size-full wp-image-732" src="{{ site.baseurl }}/assets/day29.jpeg" alt="day29" width="1000" height="700" /></p>
-<hr />
-<p>&nbsp;</p>
+p <- ggplot(df2, aes(x = Week, y = meanP)) +
+    geom_line() +
+    facet_wrap(~ Name, nrow = 2) +
+    geom_label(data = maxP, aes(x = Week, y = meanP + 10, label = Week)) +
+    ggtitle("Mean percentage occupancy per week") + ylab("Percentage") +
+    theme(plot.title = element_text(size = 22, face = "bold"))
+p{% endhighlight %}
+<img class="cimg" src="{{ site.baseurl }}/assets/tdtvod/day29.jpeg" />
+<hr>
+
 <h3>Day 30 (11/12/16): The End</h3>
 <p>Well, here I am. One month later.</p>
 <p>This has probably been the hardest project I've attempted to date.</p>
@@ -155,9 +130,11 @@ excerpt: The epic finale of a month-long journey
 <p>But actually, the hardest thing about this project was finding the time and motivation each day to spend a couple of hours, an hour, even 20 minutes working on it - when really, true (as per usual!) to this website's general theme, I should have been doing other things.</p>
 <p>Having said that, I've done it! I stuck with it. I have (approximately) 30 plots to prove it, as well as a much better command of ggplot and dplyr for manipulating and visualizing data in the future. And hopefully some of the knowledge I've gained about the dataset will come in useful for the Bath ML Meetup project.</p>
 <p>I thought I'd round off by sharing some of my ideas and doodles from when I was just starting out.</p>
-<p>[gallery ids="736,735,734" type="rectangular"]</p>
-<p>&nbsp;</p>
+<div class="photoib" id="day301"></div>
+<div class="photoib" id="day302"></div>
+<div class="photoib" id="day303"></div>
 <p>I'm now facing a busy month or two of revision and exams, so I can't say for sure when my next project will materialize (to be truthful they tend to be fairly spontaneous anyway...) - so until then, fare thee all well, and best wishes for the remainder of 2016 and for the New Year.</p>
-<p>&nbsp;</p>
-<hr />
-<p>Owen Jones | December 2016</p>
+<hr>
+<a href="{{ site.baseurl }}/tdtvod-menu">
+    <div class="backbox">Back to menu</div>
+</a>

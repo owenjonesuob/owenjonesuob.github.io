@@ -1,4 +1,5 @@
 ---
+permalink: /:categories/:title
 layout: post
 title: '30 Days, 30 Visualizations, 1 Dataset: Days 21-25'
 date: 2016-12-02 19:45:10.000000000 +00:00
@@ -6,7 +7,7 @@ type: post
 published: true
 status: publish
 categories:
-- Project
+- Projects
 tags:
 - data
 - data science
@@ -14,157 +15,138 @@ tags:
 - R
 - RStudio
 - visualization
-meta:
-  _rest_api_published: '1'
-  _rest_api_client_id: "-1"
-  _publicize_job_id: '29555789169'
-  _thumbnail_id: '679'
-  _oembed_6da53558d1fa160db6716a7f687335bd: <div class="embed-cartodb"><iframe width='100%'
-    height='520px' frameborder='0' src='https://olj23.carto.com/viz/16d7e938-a869-11e6-b20f-0e3ebc282e83/embed_map'
-    allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe></div>
-  _oembed_time_6da53558d1fa160db6716a7f687335bd: '1480808664'
-author:
-  login: owenjonesuob
-  email: joneso21164@gmail.com
-  display_name: owenjonesuob
-  first_name: Owen
-  last_name: Jones
 excerpt: The penultimate chapter as TDTVOD plunges headlong into December
 ---
-<p>For an overview of this project and Days 00-05, <a href="https://owenjonesuob.wordpress.com/2016/11/12/30-days-30-visualizations-1-dataset/">see here</a>.</p>
-<p>For Days 06-10, <a href="https://owenjonesuob.wordpress.com/2016/11/17/30-days-30-visualizations-1-dataset-part-2/">see here</a>.</p>
-<p>For Days 11-15, <a href="https://owenjonesuob.wordpress.com/2016/11/22/30-days-30-visualizations-1-dataset-part-3/">see here</a>.</p>
-<p>For Days 16-20, <a href="https://owenjonesuob.wordpress.com/2016/11/27/30-days-30-visualizations-1-dataset-part-4/">see here</a>.</p>
-<p>For Days 26-30, <a href="https://owenjonesuob.wordpress.com/2016/12/07/30-days-30-visualizations-1-dataset-part-6/">see here</a>.</p>
-<hr />
-<h3></h3>
+
 <h3>Day 21 (02/12/16): Delay to first upload</h3>
 <p>Perhaps the DateUploaded column can give us some help in working out why we have duplicate records.</p>
 <p>Let’s do a similar test to the one from a couple of days ago, to see if the upload time is different for records with the same update time.</p>
-<pre class="r"><code class="r"><span class="identifier">df3</span> <span class="operator">&lt;-</span> <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">df0</span>, <span class="identifier">Name</span> <span class="operator">!=</span> <span class="string">"test car park"</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">group_by</span><span class="paren">(</span><span class="identifier">Name</span>, <span class="identifier">LastUpdate</span>, <span class="identifier">DateUploaded</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">n</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">&gt;</span> <span class="number">1</span><span class="paren">)</span>
+{% highlight r %}df3 <- filter(df0, Name != "test car park") %>%
+    group_by(Name, LastUpdate, DateUploaded) %>%
+    filter(n() > 1)
 
-<span class="identifier">df3</span></code></pre>
-<pre><code>## Source: local data frame [0 x 12]
+df3{% endhighlight %}
+{% highlight r %}## Source: local data frame [0 x 12]
 ## Groups: Name, LastUpdate, DateUploaded [0]
 ## 
-## # ... with 12 variables: ID &lt;fctr&gt;, LastUpdate &lt;fctr&gt;, Name &lt;fctr&gt;,
-## #   Description &lt;fctr&gt;, Capacity &lt;int&gt;, Status &lt;fctr&gt;, Occupancy &lt;int&gt;,
-## #   Percentage &lt;int&gt;, Easting &lt;int&gt;, Northing &lt;int&gt;, DateUploaded &lt;fctr&gt;,
-## #   Location &lt;fctr&gt;</code></pre>
+## # ... with 12 variables: ID <fctr>, LastUpdate <fctr>, Name <fctr>,
+## #   Description <fctr>, Capacity <int>, Status <fctr>, Occupancy <int>,
+## #   Percentage <int>, Easting <int>, Northing <int>, DateUploaded <fctr>,
+## #   Location <fctr>{% endhighlight %}
 <p>Ah-ha! An empty dataframe! So it looks like the duplicate records are caused by the same record being uploaded at multiple different times.</p>
 <p>Let’s take the first upload only, and create a plot similar to yesterday’s.</p>
-<pre class="r"><code class="r"><span class="identifier">df4</span> <span class="operator">&lt;-</span> <span class="identifier">df0</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">select</span><span class="paren">(</span><span class="identifier">Name</span>, <span class="identifier">LastUpdate</span>, <span class="identifier">DateUploaded</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">Name</span> <span class="operator">!=</span> <span class="string">"test car park"</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">LastUpdate</span> <span class="operator">=</span> <span class="identifier">as.POSIXct</span><span class="paren">(</span><span class="identifier">LastUpdate</span>, <span class="identifier">tz</span> <span class="operator">=</span> <span class="string">"UTC"</span>,
-                                   <span class="identifier">format</span> <span class="operator">=</span> <span class="string">"%d/%m/%Y %I:%M:%S %p"</span><span class="paren">)</span>,
-           <span class="identifier">DateUploaded</span> <span class="operator">=</span> <span class="identifier">as.POSIXct</span><span class="paren">(</span><span class="identifier">DateUploaded</span>, <span class="identifier">tz</span> <span class="operator">=</span> <span class="string">"UTC"</span>,
-                                     <span class="identifier">format</span> <span class="operator">=</span> <span class="string">"%d/%m/%Y %I:%M:%S %p"</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">group_by</span><span class="paren">(</span><span class="identifier">Name</span>, <span class="identifier">LastUpdate</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">summarize</span><span class="paren">(</span><span class="identifier">FirstUpload</span> <span class="operator">=</span> <span class="identifier">min</span><span class="paren">(</span><span class="identifier">DateUploaded</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">Delay</span> <span class="operator">=</span> <span class="identifier">as.numeric</span><span class="paren">(</span><span class="identifier">FirstUpload</span> <span class="operator">-</span> <span class="identifier">LastUpdate</span><span class="paren">)</span><span class="paren">)</span>
+{% highlight r %}df4 <- df0 %>%
+    select(Name, LastUpdate, DateUploaded) %>%
+    filter(Name != "test car park") %>%
+    mutate(LastUpdate = as.POSIXct(LastUpdate, tz = "UTC",
+                                   format = "%d/%m/%Y %I:%M:%S %p"),
+           DateUploaded = as.POSIXct(DateUploaded, tz = "UTC",
+                                     format = "%d/%m/%Y %I:%M:%S %p")) %>%
+    group_by(Name, LastUpdate) %>%
+    summarize(FirstUpload = min(DateUploaded)) %>%
+    mutate(Delay = as.numeric(FirstUpload - LastUpdate))
 
-<span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df4</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">Delay</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">geom_histogram</span><span class="paren">(</span><span class="identifier">colour</span> <span class="operator">=</span> <span class="string">"black"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">facet_wrap</span><span class="paren">(</span><span class="operator">~</span> <span class="identifier">Name</span>, <span class="identifier">nrow</span> <span class="operator">=</span> <span class="number">2</span>, <span class="identifier">scales</span> <span class="operator">=</span> <span class="string">"free"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">ggtitle</span><span class="paren">(</span><span class="string">"Delay between update and first upload"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">xlab</span><span class="paren">(</span><span class="string">"Seconds"</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">ylab</span><span class="paren">(</span><span class="string">"Number of records"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">theme</span><span class="paren">(</span><span class="identifier">plot.title</span> <span class="operator">=</span> <span class="identifier">element_text</span><span class="paren">(</span><span class="identifier">size</span> <span class="operator">=</span> <span class="identifier">rel</span><span class="paren">(</span><span class="number">1.5</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">scale_y_log10</span><span class="paren">(</span><span class="paren">)</span>
+p <- ggplot(df4, aes(x = Delay)) + geom_histogram(colour = "black") +
+    facet_wrap(~ Name, nrow = 2, scales = "free") +
+    ggtitle("Delay between update and first upload") +
+    xlab("Seconds") + ylab("Number of records") +
+    theme(plot.title = element_text(size = rel(1.5))) +
+    scale_y_log10()
 
-<span class="identifier">p</span></code></pre>
-<p><img class="alignnone size-full wp-image-679" src="{{ site.baseurl }}/assets/day21.jpeg" alt="day21" width="1000" height="600" /></p>
+p{% endhighlight %}
+<img class="cimg" src="{{ site.baseurl }}/assets/tdtvod/day21.jpeg" />
 <p>Note that wherever the histogram displays a bar below the axis, this shows zero records in that bin, since we are using a log scale (and the value shown is therefore log<sub>10</sub>(0) = -Inf); and by similar logic, wherever the histogram shows 0 there is 1 record in that bin (for example, at the extreme right of the Avon Street CP plot).</p>
 <p>We can see that for most of the car parks, there is a single record at any extreme values (e.g. that 1 record from Avon Street - the largest delay by a huge margin). However, there are multiple dodgy records at Podium CP and the SouthGate CPs.</p>
-<hr />
-<p>&nbsp;</p>
+<hr>
+
 <h3>Day 22 (03/12/16): Minute and second of upload</h3>
 <p>Let’s have a look at when records are uploaded to the online database.</p>
-<pre class="r"><code class="r"><span class="identifier">df3</span> <span class="operator">&lt;-</span> <span class="identifier">select</span><span class="paren">(</span><span class="identifier">df0</span>, <span class="identifier">Name</span>, <span class="identifier">DateUploaded</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">DateUploaded</span> <span class="operator">=</span> <span class="identifier">as.POSIXct</span><span class="paren">(</span><span class="identifier">DateUploaded</span>, <span class="identifier">tz</span> <span class="operator">=</span> <span class="string">"UTC"</span>,
-                                     <span class="identifier">format</span> <span class="operator">=</span> <span class="string">"%d/%m/%Y %I:%M:%S %p"</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">Minute</span> <span class="operator">=</span> <span class="identifier">minute</span><span class="paren">(</span><span class="identifier">DateUploaded</span><span class="paren">)</span>, <span class="identifier">Second</span> <span class="operator">=</span> <span class="identifier">second</span><span class="paren">(</span><span class="identifier">DateUploaded</span><span class="paren">)</span><span class="paren">)</span>
+{% highlight r %}df3 <- select(df0, Name, DateUploaded) %>%
+    mutate(DateUploaded = as.POSIXct(DateUploaded, tz = "UTC",
+                                     format = "%d/%m/%Y %I:%M:%S %p")) %>%
+    mutate(Minute = minute(DateUploaded), Second = second(DateUploaded))
 
-<span class="identifier">p1</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df3</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">Minute</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">geom_histogram</span><span class="paren">(</span><span class="identifier">binwidth</span> <span class="operator">=</span> <span class="number">1</span><span class="paren">)</span>
-<span class="identifier">p2</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df3</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">Second</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">geom_histogram</span><span class="paren">(</span><span class="identifier">binwidth</span> <span class="operator">=</span> <span class="number">1</span><span class="paren">)</span></code></pre>
+p1 <- ggplot(df3, aes(x = Minute)) + geom_histogram(binwidth = 1)
+p2 <- ggplot(df3, aes(x = Second)) + geom_histogram(binwidth = 1){% endhighlight %}
 <p>I thought it was time to try out another new package! (Well, new to me…)</p>
-<pre class="r"><code class="r"><span class="keyword">library</span><span class="paren">(</span><span class="identifier">grid</span><span class="paren">)</span>
+{% highlight r %}library(grid)
 
-<span class="identifier">grid.newpage</span><span class="paren">(</span><span class="paren">)</span>
-<span class="identifier">pushViewport</span><span class="paren">(</span><span class="identifier">viewport</span><span class="paren">(</span><span class="identifier">layout</span> <span class="operator">=</span> <span class="identifier">grid.layout</span><span class="paren">(</span><span class="number">2</span>, <span class="number">2</span>, <span class="identifier">heights</span> <span class="operator">=</span> <span class="identifier">unit</span><span class="paren">(</span><span class="identifier">c</span><span class="paren">(</span><span class="number">0.5</span>, <span class="number">5</span><span class="paren">)</span>,
-                                                                <span class="string">"null"</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span>
+grid.newpage()
+pushViewport(viewport(layout = grid.layout(2, 2, heights = unit(c(0.5, 5),
+                                                                "null"))))
 
-<span class="identifier">grid.text</span><span class="paren">(</span><span class="string">"Minute and second of upload"</span>,
-          <span class="identifier">vp</span> <span class="operator">=</span> <span class="identifier">viewport</span><span class="paren">(</span><span class="identifier">layout.pos.row</span> <span class="operator">=</span> <span class="number">1</span>, <span class="identifier">layout.pos.col</span> <span class="operator">=</span> <span class="number">1</span><span class="operator">:</span><span class="number">2</span><span class="paren">)</span>,
-          <span class="identifier">gp</span> <span class="operator">=</span> <span class="identifier">gpar</span><span class="paren">(</span><span class="identifier">fontsize</span> <span class="operator">=</span> <span class="number">22</span>, <span class="identifier">fontface</span> <span class="operator">=</span> <span class="number">2</span><span class="paren">)</span><span class="paren">)</span>
+grid.text("Minute and second of upload",
+          vp = viewport(layout.pos.row = 1, layout.pos.col = 1:2),
+          gp = gpar(fontsize = 22, fontface = 2))
 
-<span class="identifier">print</span><span class="paren">(</span><span class="identifier">p1</span>, <span class="identifier">vp</span> <span class="operator">=</span> <span class="identifier">viewport</span><span class="paren">(</span><span class="identifier">layout.pos.row</span> <span class="operator">=</span> <span class="number">2</span>, <span class="identifier">layout.pos.col</span> <span class="operator">=</span> <span class="number">1</span><span class="paren">)</span><span class="paren">)</span>
-<span class="identifier">print</span><span class="paren">(</span><span class="identifier">p2</span>, <span class="identifier">vp</span> <span class="operator">=</span> <span class="identifier">viewport</span><span class="paren">(</span><span class="identifier">layout.pos.row</span> <span class="operator">=</span> <span class="number">2</span>, <span class="identifier">layout.pos.col</span> <span class="operator">=</span> <span class="number">2</span><span class="paren">)</span><span class="paren">)</span></code></pre>
-<p><img class="alignnone size-full wp-image-686" src="{{ site.baseurl }}/assets/day22.jpeg" alt="day22" width="1500" height="600" /></p>
+print(p1, vp = viewport(layout.pos.row = 2, layout.pos.col = 1))
+print(p2, vp = viewport(layout.pos.row = 2, layout.pos.col = 2)){% endhighlight %}
+<img class="cimg" src="{{ site.baseurl }}/assets/tdtvod/day22.jpeg" />
 <p>We can see that records are uploaded promptly every 5 minutes or so, as claimed by the documentation of the database; and that records tend to be uploaded ‘on the minute’.</p>
-<hr />
-<p>&nbsp;</p>
+<hr>
+
 <h3>Day 23 (04/12/16): Upload batch sizes and proportions</h3>
 <p>We saw yesterday that records are uploaded in batches roughly every 5 minutes. But how many records are usually uploaded in one of these batches? And which car parks, if any, “skip” updates?</p>
-<pre class="r"><code class="r"><span class="identifier">df2</span> <span class="operator">&lt;-</span> <span class="identifier">select</span><span class="paren">(</span><span class="identifier">df0</span>, <span class="identifier">Name</span>, <span class="identifier">DateUploaded</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">Name</span> <span class="operator">!=</span> <span class="string">"test car park"</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">group_by</span><span class="paren">(</span><span class="identifier">DateUploaded</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">batch_size</span> <span class="operator">=</span> <span class="identifier">n</span><span class="paren">(</span><span class="paren">)</span><span class="paren">)</span>
+{% highlight r %}df2 <- select(df0, Name, DateUploaded) %>%
+    filter(Name != "test car park") %>%
+    group_by(DateUploaded) %>%
+    mutate(batch_size = n())
 
-<span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df2</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">batch_size</span><span class="paren">)</span><span class="paren">)</span>
+p <- ggplot(df2, aes(x = batch_size))
 
-<span class="identifier">p1</span> <span class="operator">&lt;-</span> <span class="identifier">p</span> <span class="operator">+</span> <span class="identifier">geom_bar</span><span class="paren">(</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">xlab</span><span class="paren">(</span><span class="string">"Batch size"</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">ylab</span><span class="paren">(</span><span class="string">"Number of batches"</span><span class="paren">)</span>
-<span class="identifier">p2</span> <span class="operator">&lt;-</span> <span class="identifier">p</span> <span class="operator">+</span> <span class="identifier">geom_bar</span><span class="paren">(</span><span class="identifier">aes</span><span class="paren">(</span><span class="identifier">fill</span> <span class="operator">=</span> <span class="identifier">Name</span><span class="paren">)</span>, <span class="identifier">position</span> <span class="operator">=</span> <span class="string">"fill"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">xlab</span><span class="paren">(</span><span class="string">"Batch size"</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">ylab</span><span class="paren">(</span><span class="string">"Proportion of batches where present"</span><span class="paren">)</span>
+p1 <- p + geom_bar() + xlab("Batch size") + ylab("Number of batches")
+p2 <- p + geom_bar(aes(fill = Name), position = "fill") +
+    xlab("Batch size") + ylab("Proportion of batches where present")
 
-<span class="keyword">library</span><span class="paren">(</span><span class="identifier">grid</span><span class="paren">)</span>
-<span class="identifier">grid.newpage</span><span class="paren">(</span><span class="paren">)</span>
-<span class="identifier">pushViewport</span><span class="paren">(</span><span class="identifier">viewport</span><span class="paren">(</span><span class="identifier">layout</span> <span class="operator">=</span> <span class="identifier">grid.layout</span><span class="paren">(</span><span class="number">2</span>, <span class="number">2</span>,
-                                           <span class="identifier">heights</span> <span class="operator">=</span> <span class="identifier">unit</span><span class="paren">(</span><span class="identifier">c</span><span class="paren">(</span><span class="number">0.5</span>, <span class="number">5</span><span class="paren">)</span>,<span class="string">"null"</span><span class="paren">)</span>,
-                                           <span class="identifier">widths</span> <span class="operator">=</span> <span class="identifier">unit</span><span class="paren">(</span><span class="identifier">c</span><span class="paren">(</span><span class="number">1</span>, <span class="number">2</span><span class="paren">)</span>, <span class="string">"null"</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span>
-<span class="identifier">grid.text</span><span class="paren">(</span><span class="string">"Upload batch sizes and proportions"</span>,
-          <span class="identifier">vp</span> <span class="operator">=</span> <span class="identifier">viewport</span><span class="paren">(</span><span class="identifier">layout.pos.row</span> <span class="operator">=</span> <span class="number">1</span>, <span class="identifier">layout.pos.col</span> <span class="operator">=</span> <span class="number">1</span><span class="operator">:</span><span class="number">2</span><span class="paren">)</span>,
-          <span class="identifier">gp</span> <span class="operator">=</span> <span class="identifier">gpar</span><span class="paren">(</span><span class="identifier">fontsize</span> <span class="operator">=</span> <span class="number">25</span>, <span class="identifier">fontface</span> <span class="operator">=</span> <span class="number">2</span><span class="paren">)</span><span class="paren">)</span>
-<span class="identifier">print</span><span class="paren">(</span><span class="identifier">p1</span>, <span class="identifier">vp</span> <span class="operator">=</span> <span class="identifier">viewport</span><span class="paren">(</span><span class="identifier">layout.pos.row</span> <span class="operator">=</span> <span class="number">2</span>, <span class="identifier">layout.pos.col</span> <span class="operator">=</span> <span class="number">1</span><span class="paren">)</span><span class="paren">)</span>
-<span class="identifier">print</span><span class="paren">(</span><span class="identifier">p2</span>, <span class="identifier">vp</span> <span class="operator">=</span> <span class="identifier">viewport</span><span class="paren">(</span><span class="identifier">layout.pos.row</span> <span class="operator">=</span> <span class="number">2</span>, <span class="identifier">layout.pos.col</span> <span class="operator">=</span> <span class="number">2</span><span class="paren">)</span><span class="paren">)</span></code></pre>
-<p><img class="alignnone size-full wp-image-697" src="{{ site.baseurl }}/assets/day23.jpeg" alt="day23" width="1000" height="500" /></p>
+library(grid)
+grid.newpage()
+pushViewport(viewport(layout = grid.layout(2, 2,
+                                           heights = unit(c(0.5, 5),"null"),
+                                           widths = unit(c(1, 2), "null"))))
+grid.text("Upload batch sizes and proportions",
+          vp = viewport(layout.pos.row = 1, layout.pos.col = 1:2),
+          gp = gpar(fontsize = 25, fontface = 2))
+print(p1, vp = viewport(layout.pos.row = 2, layout.pos.col = 1))
+print(p2, vp = viewport(layout.pos.row = 2, layout.pos.col = 2)){% endhighlight %}
+<img class="cimg" src="{{ site.baseurl }}/assets/tdtvod/day23.jpeg" />
 <p>So we can see that most batches are of size 8, as expected (these presumably contain one record per car park for each of the 8 car parks), but there are also many smaller batches - some as small as 4 records.</p>
 <p>We can also see which car parks are contributiong to these smaller batches, and therefore work out which ones <em>aren’t</em> (i.e. the ones skipping updates).</p>
-<hr />
-<p>&nbsp;</p>
+<hr>
+
 <h3>Day 24 (05/12/16): Name == “test car park”</h3>
 <p>With a coursework deadline looming, I am struggling both for time and ideas - bear with me, the next few days may be a little rough…</p>
 <p>I’ve been filtering out the records from “test car park” for most of the last month. I think it’s high time we had a look at them.</p>
-<pre class="r"><code class="r"><span class="identifier">df2</span> <span class="operator">&lt;-</span> <span class="identifier">filter</span><span class="paren">(</span><span class="identifier">df</span>, <span class="identifier">Name</span> <span class="operator">==</span> <span class="string">"test car park"</span><span class="paren">)</span>
+{% highlight r %}df2 <- filter(df, Name == "test car park")
 
-<span class="keyword">library</span><span class="paren">(</span><span class="identifier">scales</span><span class="paren">)</span>
+library(scales)
 
-<span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df2</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">LastUpdate</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">geom_line</span><span class="paren">(</span><span class="identifier">aes</span><span class="paren">(</span><span class="identifier">y</span> <span class="operator">=</span> <span class="identifier">Occupancy</span>, <span class="identifier">colour</span> <span class="operator">=</span> <span class="string">"Occupancy"</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">geom_line</span><span class="paren">(</span><span class="identifier">aes</span><span class="paren">(</span><span class="identifier">y</span> <span class="operator">=</span> <span class="identifier">Capacity</span>, <span class="identifier">colour</span> <span class="operator">=</span> <span class="string">"Capacity"</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">ggtitle</span><span class="paren">(</span><span class="string">"Test car park records"</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">xlab</span><span class="paren">(</span><span class="string">"Time of update"</span><span class="paren">)</span> <span class="operator">+</span> <span class="identifier">ylab</span><span class="paren">(</span><span class="string">"Total"</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">scale_x_datetime</span><span class="paren">(</span><span class="identifier">labels</span> <span class="operator">=</span> <span class="identifier">date_format</span><span class="paren">(</span><span class="string">"%d/%m/%y"</span><span class="paren">)</span><span class="paren">)</span><span class="operator">+</span>
-    <span class="identifier">scale_colour_manual</span><span class="paren">(</span><span class="identifier">name</span> <span class="operator">=</span> <span class="string">""</span>, <span class="identifier">values</span> <span class="operator">=</span> <span class="identifier">c</span><span class="paren">(</span><span class="string">"black"</span>, <span class="string">"red"</span><span class="paren">)</span><span class="paren">)</span>
+p <- ggplot(df2, aes(x = LastUpdate)) +
+    geom_line(aes(y = Occupancy, colour = "Occupancy")) +
+    geom_line(aes(y = Capacity, colour = "Capacity")) +
+    ggtitle("Test car park records") + xlab("Time of update") + ylab("Total") +
+    scale_x_datetime(labels = date_format("%d/%m/%y"))+
+    scale_colour_manual(name = "", values = c("black", "red"))
 
-<span class="identifier">p</span></code></pre>
-<p><img class=" size-full wp-image-699 aligncenter" src="{{ site.baseurl }}/assets/day24.jpeg" alt="day24.jpeg" width="600" height="400" /></p>
+p{% endhighlight %}
+<img class="cimg" src="{{ site.baseurl }}/assets/tdtvod/day24.jpeg" />
 <p>Admittedly not particularly interesting or informative, but probably the cleanest and most error-free data we've seen so far.</p>
-<hr />
-<p>&nbsp;</p>
+<hr>
+
 <h3>Day 25: Calculation of Percentage</h3>
 <p>There is one more thing I can check about the data: how is the Percentage column calculated? Given that it contains integer values, there must be some rounding involved - perhaps we can see whether values are rounded up or down, or to the nearest integer.</p>
-<pre class="r"><code class="r"><span class="identifier">df4</span> <span class="operator">&lt;-</span> <span class="identifier">select</span><span class="paren">(</span><span class="identifier">df0</span>, <span class="identifier">LastUpdate</span>, <span class="identifier">Capacity</span>, <span class="identifier">Occupancy</span>, <span class="identifier">Percentage</span><span class="paren">)</span> <span class="operator">%&gt;%</span>
-    <span class="identifier">mutate</span><span class="paren">(</span><span class="identifier">newPercentage</span> <span class="operator">=</span> <span class="paren">(</span><span class="identifier">Occupancy</span> <span class="operator">/</span> <span class="identifier">Capacity</span><span class="paren">)</span>,
-           <span class="identifier">Difference</span> <span class="operator">=</span> <span class="paren">(</span><span class="identifier">newPercentage</span> <span class="operator">-</span> <span class="paren">(</span><span class="identifier">Percentage</span><span class="operator">/</span><span class="number">100</span><span class="paren">)</span><span class="paren">)</span><span class="paren">)</span>
+{% highlight r %}df4 <- select(df0, LastUpdate, Capacity, Occupancy, Percentage) %>%
+    mutate(newPercentage = (Occupancy / Capacity),
+           Difference = (newPercentage - (Percentage/100)))
 
     
-<span class="identifier">p</span> <span class="operator">&lt;-</span> <span class="identifier">ggplot</span><span class="paren">(</span><span class="identifier">df4</span>, <span class="identifier">aes</span><span class="paren">(</span><span class="identifier">x</span> <span class="operator">=</span> <span class="identifier">Difference</span><span class="paren">)</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">geom_histogram</span><span class="paren">(</span><span class="identifier">colour</span> <span class="operator">=</span> <span class="string">"black"</span>, <span class="identifier">bins</span> <span class="operator">=</span> <span class="number">30</span><span class="paren">)</span> <span class="operator">+</span>
-    <span class="identifier">ggtitle</span><span class="paren">(</span><span class="string">"Difference between (Occupancy/Capacity) and Percentage"</span><span class="paren">)</span>
+p <- ggplot(df4, aes(x = Difference)) +
+    geom_histogram(colour = "black", bins = 30) +
+    ggtitle("Difference between (Occupancy/Capacity) and Percentage")
 
-<span class="identifier">p</span></code></pre>
-<p><img class=" size-full wp-image-701 aligncenter" src="{{ site.baseurl }}/assets/day25.jpeg" alt="day25" width="700" height="400" /></p>
+p{% endhighlight %}
+<img class="cimg" src="{{ site.baseurl }}/assets/tdtvod/day25.jpeg" />
 <p>Although not entirely clear, the bulk of the observations lie to the right of zero. It seems, then, that the result of the (Occupancy/Capacity) calculation is rounded down to give the Percentage column.</p>
-<hr />
-<p>Owen Jones | December 2016</p>
+<hr>
+<a href="{{ site.baseurl }}/tdtvod-menu">
+    <div class="backbox">Back to menu</div>
+</a>
