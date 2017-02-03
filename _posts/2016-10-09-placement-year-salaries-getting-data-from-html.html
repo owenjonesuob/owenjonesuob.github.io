@@ -49,15 +49,15 @@ library(XML)
 <h4>‘Detective work’</h4>
 <p>To begin with, we need to have a look at our target website and work out exactly where the ‘interesting’ parts are located. I’m using Google Chrome, but many other web browsers will be equally suitable for carrying out the following steps.</p>
 <p>This is the page that initially loads:</p>
-<img class=" size-large wp-image-225 aligncenter" src="{{ site.baseurl }}/assets/site.png?w=1024" alt="site" width="1024" height="552" />
+<img class=" size-large wp-image-225 aligncenter" src="{{ site.baseurl }}/assets/site.PNG" />
 <p>It is clearly a list of search results, although we currently don’t exactly what form they are in - i.e. if they are laid out in an HTML table (which would simplify matters) or not (which is more likely!). We can find out using the developer console, which can be opened by pressing F12.</p>
 <p>The ‘Inspect element’ button at the top left of the console can be used to quickly locate the section of HTML code responsible for a given feature on the page. Let’s have a look at one of the search results.</p>
 
-<img class="cimg" src="{{ site.baseurl }}/assets/resultconsole.png"/>
+<img class="cimg" src="{{ site.baseurl }}/assets/resultconsole.PNG"/>
 
 <p>Each result is within a pair of <code>‹div›</code> tags (no tables in sight, unfortunately). Within each result there are several pieces of information. Only one of these is of interest to us (for this project at least): the salary. A little further inspection shows that this information is contained in one element of an unordered list, specifically - and rather confusingly - in the <code>‹li›</code> element which has <code>class=location</code>, presumably due to some previous website redesign.</p>
 
-<img class="cimg" src="{{ site.baseurl }}/assets/salaryconsole.png" />
+<img class="cimg" src="{{ site.baseurl }}/assets/salaryconsole.PNG" />
 
 <p>There is the option to refine the search results further, but for now we’ll use the unfiltered set of results. It is worth noting that we don’t need to filter by duration since the site uses pro rata annual salary figures for all listed placements.</p>
 </div>
@@ -181,7 +181,7 @@ mean(salaries, na.rm = TRUE)
 <p>Now that we can get the mean salary for one page, we can consider the fact that there are actually multiple pages of positions - and with positions being added and removed continuously, the number of pages we need to get data from could change.</p>
 <p>The first task is to find how many pages of results we need to look at. As before, we start by importing and parsing the first page of results, but this time we will use a different XPath query.</p>
 <p>First we must have another look at the webpage - but this time we are interested in the ‘pages’ bar at the bottom of the list of results:</p>
-<img class="cimg" src="{{ site.baseurl }}/assets/paginationconsole.png" />
+<img class="cimg" src="{{ site.baseurl }}/assets/paginationconsole.PNG" />
 <p>We want the page number that appears in the button immediately to the left of the ‘Next page’ button. We can construct the XPath query <code>//li[@class='pagination-last']/preceding::li[1]</code>:</p>
 <ul>
 <li><code>//li</code> finds all ‘list element’ nodes on the page</li>
