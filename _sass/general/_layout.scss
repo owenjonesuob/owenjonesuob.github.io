@@ -458,8 +458,25 @@ table {
 }
 
 .cimg {
-    max-width: 80%;
-    max-height: 80%;
+    max-width: 90%;
+    max-height: 90%;
     display: block;
     margin: 20px auto;
 }
+
+.highlight {
+    overflow-x: auto;
+    word-wrap: normal;
+    code {
+        background: none;
+        margin: 0;
+    }
+}
+
+code {
+    font-family: "Lucida Console";
+    font-size: 0.9em;
+    margin: auto 0.2em;
+    background: lighten($page-bg, 5%);
+}
+    
