@@ -8,7 +8,8 @@
 	<link rel="canonical" href="{{ page.url | replace:"index.html","" | prepend: site.baseurl | prepend: site.url }}">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800,600" rel="stylesheet" type="text/css">
 	<link href="https://fonts.googleapis.com/css?family=Muli:400,300" rel="stylesheet" type="text/css">
-    
+
+<!---- Favicons ---->
 <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png">
 <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png">
 <link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-icon-72x72.png">
@@ -26,4 +27,9 @@
 <meta name="msapplication-TileColor" content="#ffffff">
 <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 <meta name="theme-color" content="#ffffff">
+
+<!---- Google analytics ---->
+{% if site.google_analytics and jekyll.environment == "production" %}
+{% include analytics.html %}
+{% endif %}
 </head>

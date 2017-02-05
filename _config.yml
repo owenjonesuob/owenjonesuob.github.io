@@ -26,3 +26,6 @@ kramdown:
 exclude:
   - Gemfile
   - Gemfile.lock
+
+# Google analytics
+google_analytics: UA-91389971-1
