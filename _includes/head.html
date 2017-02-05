@@ -28,6 +28,70 @@
 <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 <meta name="theme-color" content="#ffffff">
 
+
+<!---- Social ---->
+<meta name="author" content="Owen Jones" />
+
+<meta property="og:title"
+    content="{% if page.title %}
+      {{ page.title | strip_html | strip_newlines | truncate: 160 }}
+    {% else %}
+      {{ site.title }}
+    {% endif %}">
+
+<meta property="og:description"
+    content="{% if page.excerpt %}
+        {{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}
+      {% else %}
+        {{ site.description }}
+      {% endif %}">
+
+
+<meta property="og:url"
+    content="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}" />
+
+<meta property="og:site_name" content="{{ site.title }}" />
+
+<meta property="og:locale" content="en_GB" />
+
+<meta name="twitter:site" content="@owenjonesuob" />
+<meta name="twitter:description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}" />
+
+
+{% if page.title %}
+  <!-- for posts -->
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="{{page.date}}" />
+  <meta property="article:author" content="{{ site.url }}" />
+  <meta property="article:publisher" content="{{ site.url }}" />
+  <meta property="article:section" content="{{page.vertical}}" />
+  {% for tag in page.tags %}
+    <meta property="article:tag" content="{{tag}}" />
+  {% endfor %}
+  {% for tag in page.categories %}
+    <meta property="article:tag" content="{{tag}}" />
+  {% endfor %}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:creator" content="@owenjonesuob" />
+  <meta name="twitter:title" content="{{page.title}}" />
+  {% if page.image %}
+    <meta property="og:image" content="{{page.image}}" />
+    <meta name="twitter:image" content="{{page.image}}" />
+  {% else %}
+    <meta property="og:image" content="{{ site.baseurl }}/assets/featured/neuronscrop.jpg" />
+    <meta name="twitter:image" content="{{ site.baseurl }}/assets/featured/neuronscrop.jpg" />
+  {% endif %}
+
+  {% else %}
+  <!-- for homepage -->
+  <meta property="og:image" content="{{ site.baseurl }}/assets/featured/neuronscrop.jpg" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="{{site.title}}" />
+  <meta name="twitter:image" content="{{ site.baseurl }}/assets/featured/neuronscrop.jpg" />
+
+{% endif %}
+
 <!---- Google analytics ---->
 {% if site.google_analytics and jekyll.environment == "production" %}
 {% include analytics.html %}
