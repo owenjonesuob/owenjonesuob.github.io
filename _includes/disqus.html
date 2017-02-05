@@ -2,9 +2,12 @@
 
 <script type="text/javascript">
 
-    var disqus_identifier = "{{ page.url }}";
+    var disqus_config = function () {
+        this.page.url = "http://owenjonesuob.github.io{{ page.url }}";
+        this.page.identifier = "owenjonesuob.github.io{{ page.title }}";
+    };
 
-    (function() {
+    (function() { // DON'T EDIT BELOW THIS LINE
     var d = document, s = d.createElement('script');
     s.src = '//owenjonesuob.disqus.com/embed.js';
     s.setAttribute('data-timestamp', +new Date());

@@ -125,24 +125,6 @@ footer {
 }
 
 
-.commentform {
-    display: block;
-    .newcomments {
-        display: block;
-        margin-bottom: 0;
-        text-align: left;
-        border-collapse: separate;
-        border-spacing: 30px 10px;
-        input, textarea {
-            width: 300px;
-        }
-    }
-    button {
-        position: absolute;
-        margin: 0 0 0 400px;
-    }
-}
-
 
 // Home
 
@@ -580,4 +562,10 @@ video {
     max-width: $media-maxw;
     text-align: center;
 }
+
+#comments {
+    padding: 0 20px;
+}
+
+
     

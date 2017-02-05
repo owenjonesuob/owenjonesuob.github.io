@@ -1,6 +1,5 @@
 ---
 layout: default
-comments: true
 ---
 
 <h2>{{ page.title }}</h2>
@@ -14,7 +13,9 @@ comments: true
 
 <hr>
 
-{% if page.comments %}
+<div class="container" id="comments">
+{% unless no-comments %}
     {% include disqus.html %}
-{% endif %}
+{% endunless %}
+</div>
 
