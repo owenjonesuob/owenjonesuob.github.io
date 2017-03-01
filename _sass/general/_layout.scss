@@ -132,6 +132,17 @@ footer {
     margin: 0px 20px 20px 20px;
 }
 
+#special {
+    padding: 0 0 20px 20px;
+    border: 3px outset lighten(#FFD644, 25%);
+    @include gradfill((#FFEDAD, #FFC700, #FFDD66));
+    
+    #txt {
+        display:inline-block;
+        margin-top: 22px;
+    }
+}
+
 .fdesc {
     margin-left: 20px;
     width: 40%;
@@ -248,6 +259,20 @@ footer {
     &:hover .flphoto, &:active .flphoto {
         opacity: 1;
         @include transform(scale(1.1));
+    }
+    
+    &#buildnn {
+        width: 200px;
+        float: right;
+        margin-right: 20px;
+        line-height: 300%;
+        &:hover, &:active {
+            box-shadow: 0px 0px 20px adjust-hue($lblu, 10%);
+        }
+    }
+    
+    #folderlogo {
+        @include photo-content("featured/folderlogo.png");
     }
 }
 
