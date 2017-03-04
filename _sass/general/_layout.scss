@@ -186,6 +186,7 @@ footer {
         .back {
             @include transform(rotateX(180deg));
             @include box-sizing(border-box);
+            @include backface-visibility;
             font-weight: bold;
             padding: 15px;
         
@@ -355,6 +356,7 @@ footer {
     .back {
         @include transform(rotateX(180deg));
         @include box-sizing(border-box);
+        @include backface-visibility;
         padding: 15px;
         
         .projectname {
