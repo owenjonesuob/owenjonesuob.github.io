@@ -35,7 +35,7 @@ df2 <- select(df, Name, LastUpdate, Occupancy) %>%
 <p>I can actually check whether my guess for k is reasonable fairly easily - I’ll find the largest changes in occupancy, and then average them.</p>
 {% highlight r %}rng <- range(diff(df2$Occupancy))
 mean(abs(rng)){% endhighlight %}
-{% highlight r %}## [1] 15219.5{% endhighlight %}
+{% highlight rout %}## [1] 15219.5{% endhighlight %}
 <p>It turns out my guess was actually very reasonable indeed!</p>
 <p>OK, let’s try plotting the corrected occupancies on top of the correct records.</p>
 {% highlight r %}p <- ggplot(df2, aes(x = LastUpdate, y = newOcc)) +
@@ -75,7 +75,7 @@ p{% endhighlight %}
     summarize(metacount = n(), proportion = metacount / nrow(.))
 
 head(df2){% endhighlight %}
-{% highlight r %}## # A tibble: 6 × 3
+{% highlight rout %}## # A tibble: 6 × 3
 ##   count metacount   proportion
 ##                
 ## 1     1   1041683 0.8290611487
@@ -85,7 +85,7 @@ head(df2){% endhighlight %}
 ## 5     5       217 0.0001727073
 ## 6     6       185 0.0001472390{% endhighlight %}
 {% highlight r %}tail(df2){% endhighlight %}
-{% highlight r %}## # A tibble: 6 × 3
+{% highlight rout %}## # A tibble: 6 × 3
 ##   count metacount   proportion
 ##                
 ## 1  1069         1 7.958862e-07
@@ -120,7 +120,7 @@ df4 <- filter(df, Name != "test car park") %>%
     filter(n() > 1)
     
 setdiff(df3, df4){% endhighlight %}
-{% highlight r %}## # A tibble: 0 × 0{% endhighlight %}
+{% highlight rout %}## # A tibble: 0 × 0{% endhighlight %}
 <p>So there are 0 rows identical in Name and LastUpdate but different in Occupancy. This is a good thing!</p>
 <p>We have a dataframe (well, 2 identical dataframes!) containing all the duplicate records. Let’s see if there’s any sort of pattern in the times when duplicates are recorded.</p>
 {% highlight r %}p <- ggplot(df3, aes(x = LastUpdate, y = "")) +

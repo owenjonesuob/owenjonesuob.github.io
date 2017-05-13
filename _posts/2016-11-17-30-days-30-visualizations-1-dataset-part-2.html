@@ -29,7 +29,7 @@ hours <- as.POSIXlt(times, format = "%d/%m/%Y %I:%M:%S %p", tz = "UTC")$hour
 # Check number of records each hour (shouldn't be any at 1AM i.e. 2nd entry)
 sapply(c(0:23), function(i) sum(hours == i))
 {% endhighlight %}
-{% highlight r %}#  [1] 96 12 86 94 96 96 96 96 96 96 97 95 96 96 96 96 96 96 96 96 96 98 95
+{% highlight rout %}##  [1] 96 12 86 94 96 96 96 96 96 96 97 95 96 96 96 96 96 96 96 96 96 98 95
 ## [24] 95{% endhighlight %}
 
 {% highlight r %}
@@ -38,7 +38,7 @@ sapply(c(0:23), function(i) sum(hours == i))
 names <- df$Name[grep("^27/03/2016", df$LastUpdate)]
 names[hours == 1]
 {% endhighlight %}
-{% highlight r %}##  [1] Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP
+{% highlight rout %}##  [1] Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP
 ##  [8] Podium CP Podium CP Podium CP Podium CP Podium CP
 ## 9 Levels: Avon Street CP Charlotte Street CP ... test car park{% endhighlight %}
 
@@ -52,11 +52,11 @@ n <- df$Name[grep("^29/03/2015", df$LastUpdate)]
 sapply(c(0:23), function(i) sum(h == i))
 {% endhighlight %}
 
-{% highlight r %}##  [1] 84 12 72 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84
+{% highlight rout %}##  [1] 84 12 72 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84
 ## [24] 84{% endhighlight %}
 
 {% highlight r %}n[h == 1]{% endhighlight %}
-{% highlight r %}##  [1] Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP
+{% highlight rout %}##  [1] Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP
 ##  [8] Podium CP Podium CP Podium CP Podium CP Podium CP
 ## 9 Levels: Avon Street CP Charlotte Street CP ... test car park{% endhighlight %}
 <p>Hmmm… let’s quickly try to see the effect of this error from one week to the next by comparing a day in a GMT week with the same weekday in a BST week. I’m going to use a couple of packages which are new to me - <code>dplyr</code> and <code>lubridate</code> - to manipulate the data.</p>
@@ -108,7 +108,7 @@ legend("topright", c("22/03/2016 (GMT)", "29/03/2016 (BST)"),
 sapply(c(0:23), function(i) sum(hours == i))
 {% endhighlight %}
 
-{% highlight r %}##  [1] 96 12 86 94 96 96 96 96 96 96 97 95 96 96 96 96 96 96 96 96 96 98 95
+{% highlight rout %}##  [1] 96 12 86 94 96 96 96 96 96 96 97 95 96 96 96 96 96 96 96 96 96 98 95
 ## [24] 95{% endhighlight %}
 <p>I was focusing so much on the suspicious 2nd element that I didn’t spot the also-somewhat-suspicious 3rd element - there are noticeably fewer records from 02:00 to 02:59 than from the other hours. This would be explained if Podium CP changes its clocks at 02:00, rather than 01:00... let’s see.</p>
 {% highlight r %}sum(names[hours == 2] == "Podium CP"){% endhighlight %}
@@ -133,11 +133,11 @@ write.csv(df, "df.csv")
 <p>On to today's work.</p>
 <p>There’s one column I haven’t really looked at so far: the <code>Status</code> column, which describes the change in occupancy of the car park compared to the previous record. Let’s have a look:</p>
 {% highlight r %}summary(df$Status){% endhighlight %}
-{% highlight r %}##          Emptying  Filling   Static 
+{% highlight rout %}##          Emptying  Filling   Static 
 ##     1333   474595   404339   647960{% endhighlight %}
 <p>There are a number of records without entries in the <code>Status</code> column - but remembering a discovery from a previous day, I have an idea of who the culprit might be…</p>
 {% highlight r %}summary(df[df$Name == "test car park", ]$Status){% endhighlight %}
-{% highlight r %}##          Emptying  Filling   Static 
+{% highlight rout %}##          Emptying  Filling   Static 
 ##     1333        0        0        0{% endhighlight %}
 <p>That accounts for the 1333 records with no <code>Status</code> entry, then.</p>
 <p>Onwards! We’ll remove the “test car park” records, and then for each car park and each weekday we’ll calculate the percentage of records that have each possible <code>Status</code>.</p>
@@ -156,7 +156,7 @@ df2 <-
 head(df2)
 {% endhighlight %}
 
-{% highlight r %}## Source: local data frame [6 x 5]
+{% highlight rout %}## Source: local data frame [6 x 5]
 ## Groups: Name [1]
 ## 
 ##             Name   Day   Filling    Static  Emptying
@@ -173,9 +173,9 @@ library(reshape2)
 
 df3 <- melt(df2)
 {% endhighlight %}
-{% highlight r %}## Using Name, Day as id variables{% endhighlight %}
+{% highlight rout %}## Using Name, Day as id variables{% endhighlight %}
 {% highlight r %}head(df3){% endhighlight %}>
-{% highlight r %}##             Name   Day variable     value
+{% highlight rout %}##             Name   Day variable     value
 ## 1 Avon Street CP   Sun  Filling 0.2601505
 ## 2 Avon Street CP   Mon  Filling 0.3163539
 ## 3 Avon Street CP  Tues  Filling 0.3585985
@@ -196,7 +196,7 @@ p{% endhighlight %}
 <p>Immediately we notice that our week has been extended with an eighth day - NAday.</p>
 <p>This extra day seems to have been provided by Podium CP, which is by this point getting a reputation as a bit of a rebel… and as well as giving us NAday, it seems that Podium CP never fills or empties either.</p>
 {% highlight r %}summary(df[df$Name == "Podium CP",]$Status){% endhighlight %}
-{% highlight r %}##          Emptying  Filling   Static 
+{% highlight rout %}##          Emptying  Filling   Static 
 ##        0        0        0   191022{% endhighlight %}
 <p>Maybe every car that enters perfectly synchronizes with an exiting car. Maybe no-one ever enters or exits. We may never know.</p>
 <p>Let’s remove the NAday records, just to tidy up the plot a little, and then re-plot.</p>
@@ -237,7 +237,7 @@ df <- read.csv("C:/Users/Owen/Documents/Coding/Parking/data/BANES_Historic_Car_P
                                    tz = "UTC"))
     
 str(df){% endhighlight %}
-{% highlight r %}## 'data.frame':    1528227 obs. of  6 variables:
+{% highlight rout %}## 'data.frame':    1528227 obs. of  6 variables:
 ##  $ Name      : Factor w/ 9 levels "Avon Street CP",..: 7 1 3 8 6 4 2 5 8 5 ...
 ##  $ LastUpdate: POSIXct, format: "2016-02-13 02:08:46" "2016-02-13 02:09:36" ...
 ##  $ Capacity  : int  720 630 827 140 521 698 1056 1252 140 1252 ...
@@ -250,7 +250,7 @@ str(df){% endhighlight %}
 {% highlight r %}df <- read.csv("C:/Users/Owen/Documents/Coding/Parking/df.csv")
 
 str(df){% endhighlight %}
-{% highlight r %}## 'data.frame':    1528227 obs. of  6 variables:
+{% highlight rout %}## 'data.frame':    1528227 obs. of  6 variables:
 ##  $ Name      : Factor w/ 9 levels "Avon Street CP",..: 7 1 3 8 6 4 2 5 8 5 ...
 ##  $ LastUpdate: Factor w/ 1004552 levels "2014-10-17 15:43:21",..: 659008 659009 659011 659008 659007 659010 659009 659012 659119 659123 ...
 ##  $ Capacity  : int  720 630 827 140 521 698 1056 1252 140 1252 ...
@@ -272,7 +272,7 @@ str(df){% endhighlight %}
 maxP <- summarize(df2, max(meanP))
 
 maxP{% endhighlight %}
-{% highlight r %}## # A tibble: 8 × 2
+{% highlight rout %}## # A tibble: 8 × 2
 ##                   Name `max(meanP)`
 ##                 <fctr>        <dbl>
 ## 1       Avon Street CP     82.59902
@@ -315,9 +315,9 @@ plot(newbridge$Week, newbridge$meanP,
     summarize(meanP = mean(meanP)){% endhighlight %}
 <p>Now let’s have another look at the maximum values per car park:</p>
 {% highlight r %}maxP <- top_n(df2, n = 1){% endhighlight %}
-{% highlight r %}## Selecting by meanP{% endhighlight %}
+{% highlight rout %}## Selecting by meanP{% endhighlight %}
 {% highlight r %}maxP</span>{% endhighlight %}
-{% highlight r %}## Source: local data frame [8 x 3]
+{% highlight rout %}## Source: local data frame [8 x 3]
 ## Groups: Name [8]
 ## 
 ##                   Name  Week    meanP
