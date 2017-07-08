@@ -8,7 +8,7 @@ published: true
 status: publish
 categories:
 - Misc
-image: https://owenjonesuob.github.io/assets/neuronscrop.jpg
+image: https://owenjonesuob.github.io/assets/featured/neuronscrop.jpg
 author:
   Owen Jones
 excerpt: It's been a while...
