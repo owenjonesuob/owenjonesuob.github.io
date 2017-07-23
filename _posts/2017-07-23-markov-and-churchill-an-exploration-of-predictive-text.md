@@ -55,18 +55,18 @@ The current "state" of the system is the last word that was typed. We get to the
 
 ![](/assets/markov/youarethey.jpg)
 
-Actually, because words usually *do* depend on the words that have come before them, predictive text uses the previous $n$ words (usually 2ish) as the current state.
+Actually, because words usually *do* depend on the words that have come before them, predictive text uses the previous $$n$$ words (usually 2ish) as the current state.
 
 
 ## Let's do some code already
 
 Okay okay. We're going to use Python to build a "MarkovGenerator" class: a MarkovGenerator object will take a bunch of text as input and set up the whole predictive-text-style Markov system we've just been talking about.
 
-First we need to build our "cache" of states and potential next-states. To do that, first we'll grab all the groups of $n$ consecutive words in our text. The first $n-1$ of these words are the "key", and the last word is the "value". For example, let's take the sentence:
+First we need to build our "cache" of states and potential next-states. To do that, first we'll grab all the groups of $$n$$ consecutive words in our text. The first $$n-1$$ of these words are the "key", and the last word is the "value". For example, let's take the sentence:
 
     Rain down rain down come on rain down on me
      
-Choosing $n=3$, this would give us
+Choosing $$n=3$$, this would give us
     
     rain down rain
     down rain down
