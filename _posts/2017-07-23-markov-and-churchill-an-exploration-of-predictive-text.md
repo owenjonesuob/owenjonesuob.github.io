@@ -8,6 +8,11 @@ published: true
 status: publish
 categories:
 - Projects
+tags:
+- Python
+- webscraping
+- text generation
+- markov
 image: https://owenjonesuob.github.io/assets/markov/churchill.jpg
 author:
   Owen Jones
@@ -40,7 +45,7 @@ This is an example of a **memoryless stochastic process** - a stochastic process
 
 ## Markov chains
 
-Formally, if it is given that a Markov system is currently in a certain state, then the next state of the system is independent of all previous states. We sometimes talk about "past" and "future" states, because often the series of random variables forming the Markov chain are indexed by timesteps - for example, if you took one step each second while going for your random walk, you would naturally index the first coin toss as "1", the second as "2". You'd also need to be seriously good at coin-tossing.
+Formally, if it is given that a Markov system is currently in a certain state, then the next state of the system is independent of all previous states. We sometimes talk about "past" and "future" states, because often the series of random variables forming the Markov chain are indexed by timesteps - for example, if you took one step each second while going for your random walk, you would naturally index the first coin toss as "1", the second as "2", and so on. You'd also need to be seriously good at coin-tossing.
 
 
 ## Predictive text
