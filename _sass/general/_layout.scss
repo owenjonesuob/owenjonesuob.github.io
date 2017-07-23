@@ -310,6 +310,11 @@ footer {
     
     .front {
         // Home
+        
+        #markov &{
+            @include photo-content("featured/churchill.jpg");
+        }
+        
         #digitrecognition &{
             @include photo-content("featured/digitrecognition.png");
         }
