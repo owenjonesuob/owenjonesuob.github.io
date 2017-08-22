@@ -8,7 +8,7 @@ published: true
 status: publish
 categories:
 - Mini-projects
-image: https://owenjonesuob.github.io/assets/featured/alias.png
+image: https://owenjonesuob.github.io/assets/featured/alias.PNG
 tags:
 - options
 - git
