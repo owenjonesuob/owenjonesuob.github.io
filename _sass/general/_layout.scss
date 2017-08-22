@@ -336,6 +336,9 @@ footer {
         #snippets &{
             @include photo-content("featured/snippetsopt.PNG");
         }
+        #alias &{
+            @include photo-content("featured/alias.png");
+        }
         
         // TDTVOD
         #d00-05 &{
