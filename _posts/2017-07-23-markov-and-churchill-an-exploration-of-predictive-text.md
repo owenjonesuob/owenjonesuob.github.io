@@ -38,7 +38,7 @@ Imagine you wake up in a massive field, and all you have with you is a single co
 
 You stand up, wait a moment for the pain behind your eyes to subside, take a step forwards and toss the coin. Tails. You turn right, take a step forwards, and toss the coin again. Heads, You turn left, take a step forwards, and toss the coin again...
 
-![](/assets/markov/randomwalk.jpg)
+![](/assets/markov/randomwalk.jpg){: .cimg }
 
 This is an example of a **memoryless stochastic process** - a stochastic process because your coin-toss results form a series of observations of a random variable, and memoryless because each toss is independent of all the tosses that came before it. "Memoryless stochastic process" is a bit of a mouthful though, so we call them **Markov chains** (after the mathematician Andrey Markov, who studied them in detail in the early 20th Century).
 
@@ -54,11 +54,11 @@ So, how do Markov chains fit in with predictive text?
 
 Well, in the simplest possible case, we set up the system by making a big dictionary which links every word to all the words which might come after it.
 
-![](/assets/markov/letsky.jpg)
+![](/assets/markov/letsky.jpg){: .cimg }
 
 The current "state" of the system is the last word that was typed. We get to the next state by picking one of the associated words at random. 
 
-![](/assets/markov/youarethey.jpg)
+![](/assets/markov/youarethey.jpg){: .cimg }
 
 Actually, because words usually *do* depend on the words that have come before them, predictive text uses the previous $$n$$ words (usually 2ish) as the current state.
 
@@ -185,7 +185,7 @@ We've got our generator, but before it can generate anything we need to give it 
 
 How about some material from the greatest Brit in history, as voted for by the Great British public in a [BBC television poll](https://en.wikipedia.org/wiki/100_Greatest_Britons) in 2002?
 
-![](/assets/markov/dog.jpg)
+![](/assets/markov/dog.jpg){: .cimg }
 
 Hmm.
 
@@ -197,7 +197,7 @@ Hmm.
     
 No. Let's not do that. Let's stick to the original plan.
 
-![](/assets/markov/churchill.jpg)
+![](/assets/markov/churchill.jpg){: .cimg }
 
 
 ## Soup and cigars
@@ -304,7 +304,7 @@ Marvellous.
 
 Now we turn our attention to the site's index page, and the links to the individual speech pages.
 
-![](/assets/markov/spchindx.jpg)
+![](/assets/markov/spchindx.jpg){: .cimg }
 
 The speech pages are all accessed by these "OPENSml.Jpeg" image buttons. So we need to get all the link (`<a>`) elements that contain one of these buttons, and then take the `href` attribute from each of these link elements.
 
@@ -451,7 +451,7 @@ At the top of this post, when I played the predictive text game, the phrase "loc
 
 When I tried to find an answer for that question, I found something interesting...
 
-![](/assets/markov/lockouts.jpg)
+![](/assets/markov/lockouts.jpg){: .cimg }
 
 It seems my "personal" predictive text suggestions aren't actually very personalised. I'm actually quite relieved, because this discovery has reassured me that if I am indeed really boring and repetitive then everyone else using an Android phone is too.
 
@@ -510,9 +510,3 @@ We can make a MarkovGenerator object with any text string we like. So I tried ou
     Etym: [L., silkworm.
 
     See Silkworm.
-
-
-
-```python
-
-```
