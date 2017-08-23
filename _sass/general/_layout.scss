@@ -314,7 +314,9 @@ footer {
         #markov &{
             @include photo-content("featured/churchill.jpg");
         }
-        
+        #h2o &{
+            @include photo-content("featured/paddle.jpg");
+        }
         #digitrecognition &{
             @include photo-content("featured/digitrecognition.png");
         }
