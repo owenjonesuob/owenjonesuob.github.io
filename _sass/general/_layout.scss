@@ -372,6 +372,7 @@ footer {
         .projectname {
             font-weight: bold;
             margin-bottom: 10px;
+            @include backface-visibility;
         }
         
         .linkbox {
