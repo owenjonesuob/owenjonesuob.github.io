@@ -4,6 +4,7 @@
     -ms-transform: $transformation;
     -o-transform: $transformation;
     transform: $transformation;
+    z-index: 1
 }
 
 @mixin box-sizing($size) {
