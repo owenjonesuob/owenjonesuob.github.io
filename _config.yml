@@ -12,7 +12,7 @@ email: olj23@bath.ac.uk
 description: >
   I'm a second-year mathematics undergraduate at the University of Bath, United Kingdom. This is a collection of projects I have spent time on while I was supposed to be doing other things.
 baseurl: ""
-url: "http://owenjonesuob.github.io"
+url: "https://owenjonesuob.github.io"
 
 # Build settings
 sass:
@@ -26,3 +26,7 @@ kramdown:
 exclude:
   - Gemfile
   - Gemfile.lock
+gems:
+  - jekyll-seo-tag
+# Google analytics
+google_analytics: UA-91389971-1

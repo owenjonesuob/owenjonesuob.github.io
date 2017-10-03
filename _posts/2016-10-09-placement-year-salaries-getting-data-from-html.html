@@ -7,7 +7,8 @@ type: post
 published: true
 status: publish
 categories:
-- Project
+- Projects
+image: https://owenjonesuob.github.io/assets/ratesofpay.png
 tags:
 - data science
 - HTML
@@ -96,7 +97,7 @@ salaries <-
     xpathApply("//li[@class='location']", xmlValue)
 {% endhighlight %}
     
-{% highlight r %}
+{% highlight rout %}
 ## [[1]]
 ## [1] "\n                                            Competitive\n                                    "
 ## 
@@ -127,7 +128,7 @@ salaries <-
 salaries[1:3]
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 ## [[1]]
 ## [[1]][[1]]
 ## [1] "Competitive"
@@ -157,14 +158,14 @@ salaries <-
         as.numeric()
 {% endhighlight %}
         
-{% highlight r %}
+{% highlight rout %}
 ## Warning in function_list[[k]](value): NAs introduced by coercion
 {% endhighlight %}
 
 {% highlight r %}
 salaries[1:10]
 {% endhighlight %}
-{% highlight r %}
+{% highlight rout %}
 ##  [1]    NA    NA 18000 19999    NA    NA    NA    NA 16000 17999
 {% endhighlight %}
 
@@ -172,7 +173,7 @@ salaries[1:10]
 mean(salaries, na.rm = TRUE)
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 ## [1] 17307.19
 {% endhighlight %}
 </div>
@@ -204,7 +205,7 @@ num_pages <-
 num_pages
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 ## [1] 10
 {% endhighlight %}
 
@@ -217,7 +218,7 @@ urls <- function(x) paste0("https://www.ratemyplacement.co.uk/search?page=",
 pages <- lapply(1:num_pages, urls)
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 >## [[1]]
 ## [1] "https://www.ratemyplacement.co.uk/search?page=1&amp;show=jobs"
 ## 
@@ -266,7 +267,7 @@ for (i in 1:num_pages) {
 mean(page_avg_salary)
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 ## [1] 17878.68
 {% endhighlight %}
 
@@ -297,7 +298,7 @@ text(p, y = summary(page_salaries), label = summary(page_salaries), pos = 3,
 mean(page_avg_salary_L)
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 ## [1] 19015.6
 {% endhighlight %}
 

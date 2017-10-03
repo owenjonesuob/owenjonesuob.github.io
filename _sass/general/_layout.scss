@@ -125,10 +125,22 @@ footer {
 }
 
 
+
 // Home
 
 #intro {
     margin: 0px 20px 20px 20px;
+}
+
+#special {
+    padding: 0 0 20px 20px;
+    border: 3px outset lighten(#FFD644, 25%);
+    @include gradfill((#FFEDAD, #FFC700, #FFDD66));
+    
+    #txt {
+        display:inline-block;
+        margin-top: 22px;
+    }
 }
 
 .fdesc {
@@ -174,6 +186,7 @@ footer {
         .back {
             @include transform(rotateX(180deg));
             @include box-sizing(border-box);
+            @include backface-visibility;
             font-weight: bold;
             padding: 15px;
         
@@ -248,6 +261,20 @@ footer {
         opacity: 1;
         @include transform(scale(1.1));
     }
+    
+    &#buildnn {
+        width: 200px;
+        float: right;
+        margin-right: 20px;
+        line-height: 300%;
+        &:hover, &:active {
+            box-shadow: 0px 0px 20px adjust-hue($lblu, 10%);
+        }
+    }
+    
+    #folderlogo {
+        @include photo-content("featured/folderlogo.png");
+    }
 }
 
 .cardbox {
@@ -283,6 +310,13 @@ footer {
     
     .front {
         // Home
+        
+        #markov &{
+            @include photo-content("featured/churchill.jpg");
+        }
+        #h2o &{
+            @include photo-content("featured/paddle.jpg");
+        }
         #digitrecognition &{
             @include photo-content("featured/digitrecognition.png");
         }
@@ -303,6 +337,9 @@ footer {
         }
         #snippets &{
             @include photo-content("featured/snippetsopt.PNG");
+        }
+        #alias &{
+            @include photo-content("featured/alias.PNG");
         }
         
         // TDTVOD
@@ -329,6 +366,7 @@ footer {
     .back {
         @include transform(rotateX(180deg));
         @include box-sizing(border-box);
+        @include backface-visibility;
         padding: 15px;
         
         .projectname {
@@ -368,7 +406,7 @@ footer {
 }
 
 
-// Posts
+// Postindex
 
 #postlist {
     li {
@@ -561,4 +599,8 @@ video {
     max-width: $media-maxw;
     text-align: center;
 }
-    
+
+#comments {
+    padding: 0 20px;
+}
+

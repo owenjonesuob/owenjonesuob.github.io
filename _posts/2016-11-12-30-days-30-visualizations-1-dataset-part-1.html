@@ -8,6 +8,7 @@ published: true
 status: publish
 categories:
 - Projects
+image: https://owenjonesuob.github.io/assets/tdtvod/day01.jpg
 tags:
 - Carto
 - data
@@ -32,7 +33,7 @@ excerpt: A challenge to exhaustively explore and analyse a single dataset
 length(count.fields("data/BANES_Historic_Car_Park_Occupancy.csv"))
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 ## [1] 1528228
 {% endhighlight %}
 
@@ -48,7 +49,7 @@ D <- read.csv("data/BANES_Historic_Car_Park_Occupancy.csv", nrow = 150000,
 str(D)
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 ## 'data.frame':    150000 obs. of  12 variables:
 ##  $ ID          : Factor w/ 150000 levels "000016ca6149d3f3bed350cf3b37f854",..: 51364 64067 64678 65738 69335 113228 134317 134563 4865 17729 ...
 ##  $ LastUpdate  : Factor w/ 88741 levels "01/01/2015 01:00:01 AM",..: 28126 28128 28131 28126 28124 28130 28128 28134 28346 28354 ...
@@ -68,7 +69,7 @@ str(D)
 head(D)
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 ##                                 ID             LastUpdate
 ## 1 577ffcf1cf17544c6030eef4ba85663e 13/02/2016 02:08:46 AM
 ## 2 6d383b77bce3b7c87153ccf141158140 13/02/2016 02:09:36 AM
@@ -138,7 +139,7 @@ carto_df <- cbind(carpark_df[, c("Name", "Description", "Capacity")],
 carto_df
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 ##                   Name
 ## 1 SouthGate General CP
 ## 2       Avon Street CP
@@ -214,7 +215,7 @@ names <- unique(df$Name)
 names
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 ## [1] SouthGate General CP Avon Street CP       Lansdown P+R        
 ## [4] SouthGate Rail CP    Podium CP            Newbridge P+R       
 ## [7] Charlotte Street CP  Odd Down P+R         test car park       
@@ -236,7 +237,7 @@ capacities <- lapply(names, function(name) unique(df$Capacity[df$Name == name]))
 locations
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 ## [[1]]
 ## [1] (51.3782901111, -2.35893376096)
 ## 9 Levels:  ... (51.4113171399, -2.38697144144)
@@ -275,7 +276,7 @@ locations
 {% endhighlight %}
 
 {% highlight r %}eastings{% endhighlight %}
-{% highlight r %}## [[1]]
+{% highlight rout %}## [[1]]
 ## [1] 375115
 ## 
 ## [[2]]
@@ -329,7 +330,7 @@ locations
 ## [[9]]
 ## [1] NA{% endhighlight %}
 {% highlight r %}capacities{% endhighlight %}
-{% highlight r %}
+{% highlight rout %}
 ## [[1]]
 ##  [1] 720 680 900 700 626 800 860 638 603 602 630 596 623 519 528 563 840
 ## 
@@ -420,7 +421,7 @@ df5 <- aggregate(df4$Percentage,
 {% endhighlight %}
 <p>Let’s have a quick look at what we’ve achieved:</p>
 {% highlight r %}head(df5){% endhighlight %}
-{% highlight r %}##        Time Day           Name        x
+{% highlight rout %}##        Time Day           Name        x
 ## 1 0.0000000 Fri Avon Street CP 7.366279
 ## 2 0.1666667 Fri Avon Street CP 6.670732
 ## 3 0.3333333 Fri Avon Street CP 6.456140
@@ -428,7 +429,7 @@ df5 <- aggregate(df4$Percentage,
 ## 5 0.6666667 Fri Avon Street CP 5.774566
 ## 6 0.8333333 Fri Avon Street CP 6.361963{% endhighlight %}
 {% highlight r %}nrow(df5){% endhighlight %}
-{% highlight r %}## [1] 8064{% endhighlight %}
+{% highlight rout %}## [1] 8064{% endhighlight %}
 <p>Reassuringly, df5 contains 8064 entries:</p>
 <p>6{10-min intervals per hour}*24{hours}*7{days}*8{car parks} = 8064</p>
 <p>Now let’s create the plot!</p>
@@ -479,13 +480,13 @@ hours <- as.POSIXlt(times, format = "%d/%m/%Y %I:%M:%S %p", tz = "UTC")$hour
 # Check number of records for a few hours, including 1AM (shouldn't be any!)
 c(sum(hours == 1), sum(hours == 2), sum(hours == 16), sum(hours == 21))
 {% endhighlight %}
-{% highlight r %}## [1] 12 86 96 98{% endhighlight %}
+{% highlight rout %}## [1] 12 86 96 98{% endhighlight %}
 <p>Suspiciously, there ARE records between 01:00 and 02:00 - and roughly 1/8 as many as for each other hour. The plot thickens when we remember that we have 8 car parks. Is one car park guilty?</p>
 {% highlight r %}
 names <- df$Name[grep("^27/03/2016", df$LastUpdate)]
 names[hours == 1]
 {% endhighlight %}
-{% highlight r %}##  [1] Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP
+{% highlight rout %}##  [1] Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP
 ##  [8] Podium CP Podium CP Podium CP Podium CP Podium CP
 ## 9 Levels: Avon Street CP Charlotte Street CP ... test car park{% endhighlight %}
 <p>Guilty as charged… I shall, for now, ignore any potential timeshift, and I will investigate this further tomorrow.</p>

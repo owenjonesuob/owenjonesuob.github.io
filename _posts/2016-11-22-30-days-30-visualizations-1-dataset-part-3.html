@@ -8,6 +8,7 @@ published: true
 status: publish
 categories:
 - Projects
+image: https://owenjonesuob.github.io/assets/tdtvod/day11.jpeg
 tags:
 - data
 - data science
@@ -78,22 +79,22 @@ p <- ggplot(df4, aes(y = "", x = Occupancy)) +
 p{% endhighlight %}
 <img class="cimg" src="{{ site.baseurl }}/assets/tdtvod/day13.jpeg" />
 <hr>
-<h3>Day 14: Massively negative occupancies</h3>
+<h3>Day 14 (25/11/16): Massively negative occupancies</h3>
 <p>Yesterday’s plot revealed a small cluster of points at around -15000. Let’s have a more detailed look at these points, and see if we can work out ‘how’ they are wrong - for example, if they are all the same value, which might suggest it is a deliberate ‘indicator’ value used by the council to denote a closed car park.</p>
 {% highlight r %}df4 <- filter(df3, Occupancy < -10000)
 
 summary(df4$Name){% endhighlight %}
-{% highlight r %}##       Avon Street CP  Charlotte Street CP         Lansdown P+R 
+{% highlight rout %}##       Avon Street CP  Charlotte Street CP         Lansdown P+R 
 ##                    0                    0                    0 
 ##        Newbridge P+R         Odd Down P+R            Podium CP 
 ##                    0                    0                    0 
 ## SouthGate General CP    SouthGate Rail CP        test car park 
 ##                   26                    0                    0{% endhighlight %}
 {% highlight r %}range(df4$Occupancy){% endhighlight %}
-{% highlight r %}## [1] -14787 -14638{% endhighlight %}
+{% highlight rout %}## [1] -14787 -14638{% endhighlight %}
 {% highlight r %}time_length(max(as.double(df4$LastUpdate)) - min(as.double(df4$LastUpdate)),
             unit = "hour"){% endhighlight %}
-{% highlight r %}## [1] 0.02361111{% endhighlight %}
+{% highlight rout %}## [1] 0.02361111{% endhighlight %}
 <p>So all of the points in this group are from SouthGate General CP, they span a range of values, and they were all recorded within a 2-hour period. Let’s have a look at the trend of these records.</p>
 {% highlight r %}p <- ggplot(df4, aes(x = LastUpdate, y = Occupancy)) +
     geom_line() +

@@ -1,13 +1,14 @@
 ---
+permalink: /:categories/:title/
 layout: post
 title: Digit Recognition - Building a neural network from scratch in R
 date: 2016-09-30 12:47:48.0000 +0000
 type: post
-permalink: /:categories/:title/
 published: true
 status: publish
 categories:
 - Projects
+image: https://owenjonesuob.github.io/assets/digitrecognition/5.png
 tags:
 - data
 - data science
@@ -15,11 +16,12 @@ tags:
 - package
 - R
 - RStudio
-author:
-  Owen Jones
-excerpt:
-    Notes from my very first project: building a simple neural network for handwritten digit recognition 
+excerpt: "Notes from my very first project: building a simple neural network for handwritten digit recognition"
 ---
+
+<p><em><b>Update:</b></em> &nbsp;On 3rd March 2017, I presented a workshop based on this project at the Bath Machine Learning Meetup. You can see the event page <a href=https://www.meetup.com/Bath-Machine-Learning-Meetup/events/237475341/>here</a>!</p>
+
+<hr>
 
 <div id="header" class="fluid-row">
 <h3 class="title toc-ignore">Motivation for this project</h3>
@@ -73,7 +75,7 @@ I will explain the purpose of each of them at the time that they are used in the
 <h4>Inspecting the data</h4>
 The data is provided in two <code>.csv</code> files. We will talk about <code>test.csv</code> later - for now we’ll focus on the first file, <code>train.csv</code>, which contains 42000 rows of data in 785 columns. Each row corresponds to one 28x28 pixel grayscale image of a handwritten digit from 0 to 9. The first column is a label indicating which digit is represented in the image. The next 784 columns are an ‘unrolled’ representation of the image: the first 28 entries represent the first row of the image, the next 28 represent the second row, and so on. Each entry has a value from 0 to 255 representing the ‘intensity’ of the pixel it represents. Let’s examine the first row of <code>train.csv</code>:
 
-{% highlight r %}
+{% highlight rout %}
 ##   label pixel0 pixel1 "..." pixel352 pixel353 "..." pixel782 pixel783
 ## 1     1      0      0   ...      240       81   ...        0        0
 {% endhighlight %}
@@ -151,7 +153,7 @@ loadData <- function(directory = "data", cutoff) {
 loadData()
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 ## [1] "Reading training examples..."
 ## [1] "Reading test examples..."
 ## [1] "Data loaded!"
@@ -253,14 +255,14 @@ s <- sample(1:dim(xtrain)[1], 25)
 visualizeMulti(xtrain[s, ])
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 ## [1] "Converting data type..."
 ## [1] "Plotting images..."
 {% endhighlight %}
 
 <img class="cimg" src="{{ site.url }}/assets/digitrecognition/2.png" />
 
-{% highlight r %}
+{% highlight rout %}
 ## [1] "Visualization complete!"
 {% endhighlight %}
 
@@ -634,7 +636,7 @@ We can now compare the predicted labels to the actual labels of each image, and 
 sprintf("Accuracy: %.1f%%", sum(preds == yval) * 100 / dim(xval)[1])
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 ## [1] "Accuracy: 93.1%"
 {% endhighlight %}
 
@@ -650,14 +652,14 @@ It would be interesting to see exactly what features the neurons in the hidden l
 visualizeMulti(Theta1[, -c(1)])
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 ## [1] "Converting data type..."
 ## [1] "Plotting images..."
 {% endhighlight %}
 
 <img class="cimg" src="{{ site.url }}/assets/digitrecognition/5.png" />
 
-{% highlight r %}
+{% highlight rout %}
 ## [1] "Visualization complete!"
 {% endhighlight %}
 
@@ -889,7 +891,7 @@ preds <- predict(Theta1, Theta2, xvalBW)
 sprintf("Accuracy: %.1f%%", sum(preds == yval) * 100 / dim(xvalBW)[1])
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 ## [1] "Accuracy: 92.2%"
 {% endhighlight %}
 
@@ -935,7 +937,7 @@ preds <- predict(Theta1, Theta2, xtest)
 sprintf("Accuracy: %.1f%%", sum(preds == ytest) * 100 / dim(xtest)[1])
 {% endhighlight %}
 
-{% highlight r %}
+{% highlight rout %}
 ## [1] "Accuracy: 95.0%"
 {% endhighlight %}
 
