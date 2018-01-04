@@ -310,6 +310,9 @@ footer {
     .front {
         // Home
         
+        #scaleup &{
+            @include photo-content("featured/sheet_music.jpg");
+        }        
         #markov &{
             @include photo-content("featured/churchill.jpg");
         }
