@@ -15,10 +15,13 @@ tags:
 - python
 - intro
 - piano
-excerpt: 
-- 'You have just encountered the term "data science" for the first time, and it sounds like it might be interesting but you don't have a clue what it is. Something to do with computers? Should you bring a lab coat, or a VR headset? Or both? What is a data and how does one science it?'
+excerpt: You have just encountered the term "data science" for the first time, and it sounds like it might be interesting but you don't have a clue what it is. Something to do with computers? Should you bring a lab coat, or a VR headset? Or both? What is a data and how does one science it?
 ---
 
+
+**Note:** I originally wrote this post for the Mango Solutions blog, and they have kindly allowed me to repost it here alongside the rest of my work. You can find the original post [here](https://www.mango-solutions.com/blog/scale-up-your-interest-key-steps-for-getting-into-data-science)!
+
+---
 
 ### Prelude
 
@@ -29,7 +32,7 @@ The fact of the matter is that you have just encountered the term "data science"
 Fear not. I am here to offer subjective, questionable and most importantly *FREE* advice from the perspective of someone who was in that very position not such a long time ago. Read on at your peril.
 
 
-![](assets/scaleup/start.png)
+![](/assets/scaleup/start.png){: .cimg }
 
 
 ### I. _Adagio_: Hear about data science
@@ -41,7 +44,7 @@ But the good news is that you're reading this, so you've already done it. Possib
 (By the way, you'll remember the person who told you about data science. When you grow in confidence yourself, be someone else's "person who told me about data science". It's a great thing to share. But all in good time...)
 
 
-![](assets/scaleup/adagio.png)
+![](/assets/scaleup/adagio.png){: .cimg }
 
 
 ### II. _Andante_: Find out more
@@ -59,7 +62,7 @@ Believe it or not, one of the best tools for keeping up to date with the latest 
 If you're super keen, you might even want to get yourself some data science books tackling a particular topic. Keep an eye out for free online/ebook versions too!
 
 
-![](assets/scaleup/andante.png)
+![](/assets/scaleup/andante.png){: .cimg }
 
 
 ### III. _Allegretto_: Get hands-on
@@ -89,7 +92,7 @@ By _writing_ about that project - which is often easier than deciding on one in 
 I'd really encourage you to get your work out there though. Which brings us smoothly to...
 
 
-![](assets/scaleup/allegretto.png)
+![](/assets/scaleup/allegretto.png){: .cimg }
 
 
 ### IV. _Allegro maestoso_: Get yourself out there
@@ -120,7 +123,7 @@ Get a [Meetup](https://www.meetup.com/) account, sign up to some local groups an
 
 (If you're in or near Bristol or London, [Bristol Data Scientists](https://www.meetup.com/Bristol-Data-Scientists/) and [LondonR](https://www.meetup.com/LondonR/) are both hosted by Mango and new members are always welcome!)
 
-![](assets/scaleup/allegro.png)
+![](/assets/scaleup/allegro.png){: .cimg }
 
 
 ### Postlude
@@ -136,4 +139,4 @@ Oh, why not:
 4. Find the parts of data science that you enjoy and arrange them so that they work for you.
 
 
-![](assets/scaleup/final.png)
+![](/assets/scaleup/final.png){: .cimg }
