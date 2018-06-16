@@ -8,6 +8,7 @@ published: true
 status: publish
 categories:
 - blog
+- project
 image: https://owenjonesuob.github.io/assets/featured/microphone.jpg
 tags:
 - neural network
