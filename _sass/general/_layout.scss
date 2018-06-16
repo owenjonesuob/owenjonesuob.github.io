@@ -177,43 +177,51 @@ footer {
         }
     
         .front {
-            @include photo-content("featured/libraryBANES.PNG");
+            @include photo-content("featured/bathml.jpg");
         }
-        #ftdtvod {
-            @include photo-content("tdtvod/day01.jpg");
-        }
-    
-        .back {
-            @include transform(rotateX(180deg));
-            @include box-sizing(border-box);
-            @include backface-visibility;
-            font-weight: bold;
-            padding: 15px;
         
-            .linkbox {
-                color: #CCC;
-                width: 90px;
-                height: 42px;
-                position: absolute;
-                right: 15px;
-                bottom: 15px;
-                text-align: center;
-                line-height: 250%;
+        // tdtvod featured box
+        &#ftdtvod {
+            
+            .front {
+            @include photo-content("tdtvod/day01.jpg");
+            }
+        
+            .back {
+                @include transform(rotateX(180deg));
                 @include box-sizing(border-box);
-                
-                @include gradfill((#999, #444, #000, #111, #333, #777));
-                
-                &:hover, &:active {
-					text-decoration: none;
-                    font-weight: bold;
-                    color: #FFF;
-                    box-shadow: 0px 0px 15px $sblu;
+                @include backface-visibility;
+                font-weight: bold;
+                padding: 15px;
+            
+                .linkbox {
+                    color: #CCC;
+                    width: 90px;
+                    height: 42px;
+                    position: absolute;
+                    right: 15px;
+                    bottom: 15px;
+                    text-align: center;
+                    line-height: 250%;
+                    @include box-sizing(border-box);
+                    
+                    @include gradfill((#999, #444, #000, #111, #333, #777));
+                    
+                    &:hover, &:active {
+                        text-decoration: none;
+                        font-weight: bold;
+                        color: #FFF;
+                        box-shadow: 0px 0px 15px $sblu;
+                    }
                 }
             }
         }
+        
+        
+        
     }
     
-    .fcardbox:hover .fphoto {
+    .fcardbox:hover #ftdtvod {
         @include transform(rotateX(180deg));
     }
     
@@ -310,6 +318,12 @@ footer {
     .front {
         // Home
         
+        #dataproc &{
+            @include photo-content("featured/dataproc.jpg");
+        }
+        #banescarparking &{
+            @include photo-content("featured/libraryBANES.jpg");
+        }
         #lovemachine &{
             @include photo-content("featured/microphone.jpg");
         } 
@@ -376,6 +390,13 @@ footer {
         
         .projectname {
             font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .projectdate {
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #555555;
             margin-bottom: 10px;
         }
         
