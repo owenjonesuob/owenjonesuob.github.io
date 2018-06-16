@@ -1,16 +1,16 @@
 ---
 layout: page
 title: Home
-date: 2016-09-30 13:28:15.000000000 +01:00
+date: 2018-06-16 21:00:00.000000000 +01:00
 type: page
 published: true
 status: publish
 author:
   Owen Jones
 excerpt:
-    I'm a second-year mathematics undergraduate at the 
-    University of Bath, United Kingdom. This is a collection of projects I have
-    spent time on while I was supposed to be doing other things.
+    I'm a mathematics undergraduate at the University of Bath, United Kingdom.
+    This is a collection of projects I have spent time on while I was supposed
+    to be doing other things.
 ---
 
 <div class="container" id="intro">I'm a mathematics undergraduate at the 
@@ -20,21 +20,28 @@ be doing other things.</div>
         
 
 <div class="container" id="featured">
-	<h3>Current</h3>
+	<h3>Recent</h3>
 
-    <div class="fdesc">I'm currently involved in a long-term project being carried out by the Bath Machine Learning Meetup group. The aim is to use various machine learning techniques and historic data in order to predict the future occupancies of Bath's car parks. This - my first attempt at an R package - is to help with importation and processing of data relevant to the project.</div>
+    <div class="fdesc">
+    Deep learning is cool. R is cool. Python is cool. Keras has got all of it covered.<br><br>
+    
+    Here's the material from the Deep Learning with Keras parallel R/Python workshop which I recently delivered at the Bath Machine Learning Meetup!
+    </div>
     <div class="fmedia">
         <div class="fcardbox">
             <div class="fphoto">
                 <div class="front"></div>
+                <!--
                 <div class="back">BANEScarparking - an R package
                     <a href="{% post_url 2017-01-13-banescarparking-an-r-package %}">
                         <div class="linkbox">View</div>
-                    </a></div>
+                    </a>
+                </div>
+                -->
             </div>
         </div>
         
-        <a href="https://github.com/owenjonesuob/BANEScarparking">
+        <a href="https://github.com/owenjonesuob/keras-workshop">
             <div class = "flbox" id="link1">
                 <div class="flphoto" id="githublogo"></div>GitHub repository
             </div>
@@ -52,14 +59,58 @@ be doing other things.</div>
 	
 	<h3>Projects</h3>
     
+    <div class="cardbox" id="dataproc">
+        <div class="projectcard">
+            <div class="front">
+            </div>
+            <div class="back">
+                <div class="projectname">
+                    <span>Running RStudio on a Google Cloud Dataproc cluster</span>
+                </div>
+                <div class="projectdate">
+                    <span>May 2018</span>
+                </div>
+                <div class="projectdesc">
+                    <span>Getting set up to use Spark with R on a Google Cloud computing cluster</span>
+                </div>
+                <a href="{% post_url 2018-05-16-rstudio-on-google-cloud-dataproc %}">
+                    <div class="linkbox">View</div>
+                </a>
+            </div>
+        </div>
+    </div>
     
-        <div class="cardbox" id="lovemachine">
+    <div class="cardbox" id="banescarparking">
+        <div class="projectcard">
+            <div class="front">
+            </div>
+            <div class="back">
+                <div class="projectname">
+                    <span>BANEScarparking: an R package</span>
+                </div>
+                <div class="projectdate">
+                    <span>January 2018</span>
+                </div>
+                <div class="projectdesc">
+                    <span>An accompaniment to BathML's long-term parking prediction project</span>
+                </div>
+                <a href="{% post_url 2017-01-13-banescarparking-an-r-package %}">
+                    <div class="linkbox">View</div>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="cardbox" id="lovemachine">
         <div class="projectcard">
             <div class="front">
             </div>
             <div class="back">
                 <div class="projectname">
                     <span>Love Machine: Automating the romantic songwriting process</span>
+                </div>
+                <div class="projectdate">
+                    <span>February 2018</span>
                 </div>
                 <div class="projectdesc">
                     <span>Because being creative is hard and machine learning is the answer to everything</span>
@@ -79,6 +130,9 @@ be doing other things.</div>
                 <div class="projectname">
                     <span>Scale up your interest</span>
                 </div>
+                <div class="projectdate">
+                    <span>January 2018</span>
+                </div>
                 <div class="projectdesc">
                     <span>Key steps for getting into data science</span>
                 </div>
@@ -96,6 +150,9 @@ be doing other things.</div>
             <div class="back">
                 <div class="projectname">
                     <span>H2O.ai: Going for a paddle</span>
+                </div>
+                <div class="projectdate">
+                    <span>August 2017</span>
                 </div>
                 <div class="projectdesc">
                     <span>A brief dive into the H2O machine learning framework</span>
@@ -115,6 +172,9 @@ be doing other things.</div>
                 <div class="projectname">
                     <span>Markov and Churchill: an exploration of predictive text</span>
                 </div>
+                <div class="projectdate">
+                    <span>July 2017</span>
+                </div>
                 <div class="projectdesc">
                     <span>A foray into memoryless stochastic processes</span>
                 </div>
@@ -131,8 +191,11 @@ be doing other things.</div>
             </div>
             <div class="back">
                 <div class="projectname">
-                    <span>Digit Recognition - Building a neural network from
+                    <span>Digit Recognition: Building a neural network from
                         scratch in R</span>
+                </div>
+                <div class="projectdate">
+                    <span>September 2016</span>
                 </div>
                 <div class="projectdesc">
                     <span>My very first project: building a simple neural network for handwritten digit recognition</span>
@@ -152,6 +215,9 @@ be doing other things.</div>
                 <div class="projectname">
                     <span>30 Days, 30 Visualizations, 1 Dataset</span>
                 </div>
+                <div class="projectdate">
+                    <span>October 2016</span>
+                </div>
                 <div class="projectdesc">
                     <span>A month-long challenge to exhaustively explore and analyse a single dataset</span>
                 </div>
@@ -170,6 +236,9 @@ be doing other things.</div>
                 <div class="projectname">
                     <span>Derivation of backpropagation, plus a network diagram</span>
                 </div>
+                <div class="projectdate">
+                    <span>October 2016</span>
+                </div>
                 <div class="projectdesc">
                     <span>Deriving the backpropagation formulae, and a network diagram for one of my previous projects</span>
                 </div>
@@ -186,7 +255,10 @@ be doing other things.</div>
             </div>
             <div class="back">
                 <div class="projectname">
-                    <span>Placement Year Salaries - Getting data from HTML</span>
+                    <span>Placement Year Salaries: Getting data from HTML</span>
+                </div>
+                <div class="projectdate">
+                    <span>September 2016</span>
                 </div>
                 <div class="projectdesc">
                     <span>Getting to grips with the basics of scraping data from the web</span>
@@ -213,6 +285,9 @@ be doing other things.</div>
                 <div class="projectname">
                     <span>IE Automation with VBA in Excel</span>
                 </div>
+                <div class="projectdate">
+                    <span>October 2016</span>
+                </div>
                 <a href="{% post_url 2016-10-02-ie-automation-with-vba-in-microsoft-excel %}">
                     <div class="linkbox">View</div>
                 </a>
@@ -228,6 +303,9 @@ be doing other things.</div>
                 <div class="projectname">
                     <span>Loading RStudio settings with Command Prompt</span>
                 </div>
+                <div class="projectdate">
+                    <span>October 2016</span>
+                </div>
                 <a href="{% post_url 2016-10-12-saving-loading-rstudio-settings-with-command-prompt %}">
                     <div class="linkbox">View</div>
                 </a>
@@ -242,6 +320,9 @@ be doing other things.</div>
             <div class="back">
                 <div class="projectname">
                     <span>Snippets in RStudio</span>
+                </div>
+                <div class="projectdate">
+                    <span>January 2017</span>
                 </div>
                 <a href="{% post_url 2017-01-21-snippets-in-rstudio %}">
                     <div class="linkbox">View</div>
@@ -259,6 +340,9 @@ be doing other things.</div>
                 <div class="projectname">
                     <span>Adding a Git Bash alias</span>
                 </div>
+                <div class="projectdate">
+                    <span>August 2017</span>
+                </div>
                 <a href="{% post_url 2017-08-22-adding-a-git-bash-alias %}">
                     <div class="linkbox">View</div>
                 </a>
@@ -269,6 +353,7 @@ be doing other things.</div>
 
 </div>
 
+<!--
 <div class="container" id="special">
     <h3>Bath ML Meetup: Build your own neural network</h3>
     <span id="txt">Slides and R files from the interactive BMLM session I ran on 1st March 2017!</span>
@@ -280,3 +365,4 @@ be doing other things.</div>
     </a>
     
 </div>
+-->
