@@ -41,6 +41,28 @@ main {
 }
 
 
+
+
+/* Image captions:
+Mark caption with <em> on line immediately following image, e.g.
+
+![](path/to/image.png)
+_Caption goes here_
+
+Continuation of writing...
+*/
+
+img + em {
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    max-width: $media-maxw;
+    color: #999;
+    font-style: italic;
+}
+
+
+
 #navmenu {
 	position: absolute;
 	top: 0;
@@ -318,6 +340,9 @@ footer {
     .front {
         // Home
         
+        #afk &{
+            @include photo-content("featured/feet.jpg");
+        }        
         #dataproc &{
             @include photo-content("featured/dataproc.jpg");
         }
