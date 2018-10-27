@@ -99,7 +99,7 @@ This means that if you speak any one of these languages, you can travel to any p
 
 Unless you're in Hungary, because Hungarian is very strange.
 
-… actually, someone will come running even in Hungary, because virtually everyone speaks English as a second language. They have to, because very few people choose to learn it as a second language - Hungarian is only really spoken in Hungary, and as previously mentioned, it really is _very_ strange. Nevertheless, it is the first language of around 12 million people, so there's a reasonable chance that at some point you'll need to find a friendly Hungarian to do some translation for you.
+… actually, someone will come running even in Hungary, because virtually everyone speaks English as a second language. They have to, because very few people choose to learn Hungarian as a second language - it's only really spoken in Hungary, and as previously mentioned, it really is _very_ strange. Nevertheless, it is the first language of around 13 million people, so there's a reasonable chance that at some point you'll need to find a friendly Hungarian to do some translation for you.
 
 I suppose there are two points to take from this little section. Firstly, if you call things by more or less the same name as everyone else does, then this will usually help to improve shared understanding and will aid communication. Secondly, people who can speak multiple languages - and especially less widely-spoken languages - are super super valuable!
 
