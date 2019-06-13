@@ -373,6 +373,9 @@ footer {
         #tdtvod &{
             @include photo-content("featured/day01.jpg");
         }
+        #fedoranvidia &{
+            @include photo-content("featured/fedora_nvidia.jpg");
+        }
         #ieautomation &{
             @include photo-content("featured/ieautomation.PNG");
         }
