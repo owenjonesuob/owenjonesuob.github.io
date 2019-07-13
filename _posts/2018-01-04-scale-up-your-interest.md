@@ -81,7 +81,7 @@ Online interactive coding tutorials are a great place to start if you want to le
 
 Data science is more than just coding though - it's all about taking a problem, understanding it, solving it and then communicating those ideas to other people. So Part 1 of my Number One Two-Part Top Tip for you today is:
 
-1. Pick a project and write about it
+> 1\. Pick a project and write about it
 
 How does one "pick a project"? Well, find something that interests you. For me it was neural networks (and later, car parks...) but it could be literally anything, so long as you're going to be able to find some data to work with. Maybe have a look at some of the [competitions hosted on Kaggle](https://www.kaggle.com/competitions) or see if there's [a group in your area which publishes open data](https://www.bathhacked.org/).
 
@@ -99,7 +99,7 @@ I'd really encourage you to get your work out there though. Which brings us smoo
 
 If you never play the piano for anyone else, no-one's ever going to find out how good you are! So Part 2 of my Number One Two-Part Top Tip is:
 
-2. Start a blog
+> 2\. Start a blog
 
 It's pretty easy to get going with [Wordpress](https://wordpress.com/) or similar, and it takes your writing to the next level because now you're writing for an audience. It may not be a very big audience, but if someone, somewhere finds your writing interesting or useful then surely it's worth it. And if you know you're potentially writing for someone other than yourself then you _need_ to explain everything properly, which means you need to _understand_ everything properly. I often learn more when I'm writing up a project than when I'm playing around with the code in the first place.
 
@@ -111,7 +111,7 @@ If you're feeling brave you can even put that Twitter account to good use and st
 
 Speaking of real people...
 
-3. Get involved in the community
+> 3\. Get involved in the community
 
 Yes, that was indeed Part 3 of my Number One Two-Part Top Tip, but it's so important that it needs to be in there.
 
@@ -136,7 +136,7 @@ Maybe you're interested in data visualisation. Maybe you're into webscraping. Or
 
 Oh, why not:
 
-4. Find the parts of data science that you enjoy and arrange them so that they work for you.
+> 4\. Find the parts of data science that you enjoy and arrange them so that they work for you.
 
 
 ![](/assets/scaleup/final.png){: .cimg }
