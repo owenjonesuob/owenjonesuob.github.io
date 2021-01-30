@@ -108,7 +108,7 @@ function(x, y) x+y
 {% endhighlight %}
 
 
-This can be really useful when you want to implement a piece of functionality in just one place, but then to allow the user to access the same functionality via more than one name. Here's an example from {tibble}: the "type check" function for tibble objects is named `is_tibble()`, in line with tidyverse naming conventions; but the authors also provide an alias, `is.tibble()`, which matches base R naming conventions (`is.numeric()`, `is.data.frame() etc) in anticipation of users trying that pattern first.
+This can be really useful when you want to implement a piece of functionality in just one place, but then to allow the user to access the same functionality via more than one name. Here's an example from {tibble}: the "type check" function for tibble objects is named `is_tibble()`, in line with tidyverse naming conventions; but the authors also provide an alias, `is.tibble()`, which matches base R naming conventions (`is.numeric()`, `is.data.frame()` etc) in anticipation of users trying that pattern first.
 
 ```r
 is.tibble <- function(x) {
@@ -205,7 +205,7 @@ already - and now
 
 is also going to be helpful, for getting hold of our already-saved data!
 
-Let's edit `data/diamantes.R` so that it contains jsut the following line:
+Let's edit `data/diamantes.R` so that it contains just the following line:
 
 ```r
 load("diamonds.rda")
@@ -259,7 +259,7 @@ diamantes <- local(get(load("diamonds.rda")))
 Working from the inside out:
 
 * `load("diamonds.rda")` loads `diamonds` into our environment, and returns a vector of names of all loaded objects, i.e. `c("diamonds")`
-* `get()` retrieves the object with a name of `"diamonds"` from the _current_ environment, since we didn't provide a different environment via the `pos` argument - i.e. we now have the actual data frame which lives in the `diamonds` variable
+* `get()` retrieves the object with a name of `"diamonds"` from the _current_ environment, since we didn't provide a different environment via the `pos` argument - i.e. we now have the actual data frame which the `diamonds` variable name refers to
 * `local()` means all of that happened in its own little throwaway environment - so we end up with the data frame object which was returned from `get()`, and everything else is just thrown away, including the `diamonds` object which had been created by `load()`
 * And finally, we assign that data frame into an object called `diamantes`, which is the only object we created in our main environment and therefore the only object which will be created when we call `data("diamantes", package = "datapkg")`
 
@@ -300,6 +300,6 @@ So far I've noticed **two** important things to bear in mind when using this app
 [^7]: And possibly resulting in two identically-named files, if you had e.g. `hello.rda` and `HeLLO.R`.
 
 
-I'd be keen to hear whether anyone else has success with this method too, or if there are better ways to achieve the same thing! We seemed to make it through the CRAN submission process for {mangoTraining} with no problems at all; but I'm curious as to how reproducible this is. In particular I would love to know whether the CRAN builds use `--resave-data` or not, and whether that would scupper this method for packages where resaving takes us over the limit!
+I'd be keen to hear whether anyone else has success with this method too, or if there are better ways to achieve the same thing! We seemed to make it through the CRAN submission process for {mangoTraining} with no problems at all; but I'm curious as to how reproducible this is. In particular I would love to know whether the CRAN builds use `--resave-data` or not, and whether that would scupper this method for packages where resaving takes us over the package size limit!
 
 ---
