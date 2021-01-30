@@ -182,7 +182,7 @@ Exited with status 1.
 
 Note the `object 'diamonds' not found`!
 
-This is because datasets aren't like other R objects; as [r-pkgs](https://r-pkgs.org/data.html#documenting-data) puts it,
+This is because datasets aren't like other R objects: as [r-pkgs](https://r-pkgs.org/data.html#documenting-data) puts it,
 
 > Objects in data/ are always effectively exported (**they use a slightly different mechanism than NAMESPACE but the details are not important**).
 
@@ -205,7 +205,7 @@ already - and now
 
 is also going to be helpful, for getting hold of our already-saved data!
 
-Let's edit `data/diamantes.R`:
+Let's edit `data/diamantes.R` so that it contains jsut the following line:
 
 ```r
 load("diamonds.rda")
