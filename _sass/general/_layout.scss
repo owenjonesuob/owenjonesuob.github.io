@@ -340,6 +340,9 @@ footer {
     .front {
         // Home
         
+        #datasetnames &{
+            @include photo-content("featured/spiderman.jpg");
+        } 
         #afk &{
             @include photo-content("featured/feet.jpg");
         }        
