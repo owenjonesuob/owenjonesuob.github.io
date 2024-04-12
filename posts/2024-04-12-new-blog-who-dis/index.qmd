@@ -1,10 +1,18 @@
 ---
-title: "Multiple Names for Datasets in R Packages"
+title: "New blog, who dis?"
 date: 2024-04-12
-image: spiderman.jpg
-categories:
-- r
-- package
-- data
-description: "Can we use multiple names to refer to the same dataset, without including multiple copies of it in the package?"
+image: surprised_pikachu.jpg
+description: I honestly did intend to just write a blog post... I guess this is the post?
 ---
+
+Hey folks, it's been a while!
+
+I did the thing from the meme and, having logged on intending to write a short blog post, ended up moving my entire blog to a new platform.
+
+I have zero regrets about this - the previous handcrafted site was fun to build in the first place (many years ago now...); but I couldn't face re-learning how to build & deploy with Jekyll _againnnn_ on yet another laptop. So instead, here's a shiny new [Quarto](https://quarto.org/)-built site, tada!!
+
+Particular thanks go to [Rob J Hyndman](https://robjhyndman.com/hyndsight/disqus2giscus.html) and [Maëlle Salmon](https://masalmon.eu/2019/10/02/disqus/) for their super handy posts about migrating comments from Disqus.
+
+There are probably some rough edges that I've missed - dead links, dodgy formatting... please point me towards anything particularly ugly and I'll get it patched up.
+
+And I promise that more actual gloriously content-filled blog posts _will_ actually happen now. Stay tuned!
