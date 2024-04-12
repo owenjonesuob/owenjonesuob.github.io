@@ -6,34 +6,39 @@
       version="2.0">
 <channel>
 <title>Products of Procrastination</title>
-<link>https://owenjonesuob.github.io/index.html</link>
+<link>https://owenjonesuob.github.io/</link>
 <atom:link href="https://owenjonesuob.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>I&#39;m a data scientist/engineer living in Cardiff, United Kingdom. This is a collection of projects I have spent time on while I was supposed to be doing other things.</description>
-<generator>quarto-1.3.450</generator>
-<lastBuildDate>Thu, 11 Apr 2024 23:00:00 GMT</lastBuildDate>
+<generator>quarto-1.4.553</generator>
+<lastBuildDate>Fri, 12 Apr 2024 00:00:00 GMT</lastBuildDate>
 <item>
-  <title>Multiple Names for Datasets in R Packages</title>
-  <link>https://owenjonesuob.github.io/posts/2024-04-12-new-blog-who-dis/index.html</link>
+  <title>New blog, who dis?</title>
+  <link>https://owenjonesuob.github.io/posts/2024-04-12-new-blog-who-dis/</link>
   <description><![CDATA[ 
 
 
 
 
+
+<p>Hey folks, it’s been a while!</p>
+<p>I did the thing from the meme and, having logged on intending to write a short blog post, ended up moving my entire blog to a new platform.</p>
+<p>I have zero regrets about this - the previous handcrafted site was fun to build in the first place (many years ago now…); but I couldn’t face re-learning how to build &amp; deploy with Jekyll <em>againnnn</em> on yet another laptop. So instead, here’s a shiny new <a href="https://quarto.org/">Quarto</a>-built site, tada!!</p>
+<p>Particular thanks go to <a href="https://robjhyndman.com/hyndsight/disqus2giscus.html">Rob J Hyndman</a> and <a href="https://masalmon.eu/2019/10/02/disqus/">Maëlle Salmon</a> for their super handy posts about migrating comments from Disqus.</p>
+<p>There are probably some rough edges that I’ve missed - dead links, dodgy formatting… please point me towards anything particularly ugly and I’ll get it patched up.</p>
+<p>And I promise that more actual gloriously content-filled blog posts <em>will</em> actually happen now. Stay tuned!</p>
 
 
 
  ]]></description>
-  <category>r</category>
-  <category>package</category>
-  <category>data</category>
-  <guid>https://owenjonesuob.github.io/posts/2024-04-12-new-blog-who-dis/index.html</guid>
-  <pubDate>Thu, 11 Apr 2024 23:00:00 GMT</pubDate>
-  <media:content url="https://owenjonesuob.github.io/posts/2024-04-12-new-blog-who-dis/spiderman.jpg" medium="image" type="image/jpeg"/>
+  <guid>https://owenjonesuob.github.io/posts/2024-04-12-new-blog-who-dis/</guid>
+  <pubDate>Fri, 12 Apr 2024 00:00:00 GMT</pubDate>
+  <media:content url="https://owenjonesuob.github.io/posts/2024-04-12-new-blog-who-dis/surprised_pikachu.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>Multiple Names for Datasets in R Packages</title>
-  <link>https://owenjonesuob.github.io/posts/2021-01-30-multiple-names-for-datasets-in-r-packages/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2021-01-30-multiple-names-for-datasets-in-r-packages/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -345,14 +350,15 @@ font-style: inherit;">"diamantes"</span></span></code></pre></div>
   <category>r</category>
   <category>package</category>
   <category>data</category>
-  <guid>https://owenjonesuob.github.io/posts/2021-01-30-multiple-names-for-datasets-in-r-packages/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2021-01-30-multiple-names-for-datasets-in-r-packages/</guid>
   <pubDate>Sat, 30 Jan 2021 15:00:00 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2021-01-30-multiple-names-for-datasets-in-r-packages/spiderman.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>Debugging: Installing NVIDIA Drivers on Fedora</title>
-  <link>https://owenjonesuob.github.io/posts/2019-06-13-nvidia-drivers-on-fedora/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2019-06-13-nvidia-drivers-on-fedora/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -433,14 +439,15 @@ sudo dnf install xorg-x11-drv-nvidia akmod-nvidia</code></pre>
   <category>fedora</category>
   <category>nvidia</category>
   <category>debugging</category>
-  <guid>https://owenjonesuob.github.io/posts/2019-06-13-nvidia-drivers-on-fedora/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2019-06-13-nvidia-drivers-on-fedora/</guid>
   <pubDate>Thu, 13 Jun 2019 11:00:00 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2019-06-13-nvidia-drivers-on-fedora/fedora_nvidia.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>AFK, back in 2 months</title>
-  <link>https://owenjonesuob.github.io/posts/2018-09-29-afk-back-in-2-months/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2018-09-29-afk-back-in-2-months/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -519,14 +526,15 @@ sudo dnf install xorg-x11-drv-nvidia akmod-nvidia</code></pre>
 
  ]]></description>
   <category>data science</category>
-  <guid>https://owenjonesuob.github.io/posts/2018-09-29-afk-back-in-2-months/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2018-09-29-afk-back-in-2-months/</guid>
   <pubDate>Sat, 29 Sep 2018 18:00:00 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2018-09-29-afk-back-in-2-months/feet.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>Using RStudio on a Google Cloud Dataproc cluster</title>
-  <link>https://owenjonesuob.github.io/posts/2018-05-16-rstudio-on-google-cloud-dataproc/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2018-05-16-rstudio-on-google-cloud-dataproc/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -556,14 +564,15 @@ sudo dnf install xorg-x11-drv-nvidia akmod-nvidia</code></pre>
   <category>cloud</category>
   <category>dataproc</category>
   <category>sparklyr</category>
-  <guid>https://owenjonesuob.github.io/posts/2018-05-16-rstudio-on-google-cloud-dataproc/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2018-05-16-rstudio-on-google-cloud-dataproc/</guid>
   <pubDate>Wed, 16 May 2018 12:00:00 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2018-05-16-rstudio-on-google-cloud-dataproc/dataproc.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>Love Machine: Automating the romantic songwriting process</title>
-  <link>https://owenjonesuob.github.io/posts/2018-02-14-love-machine/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2018-02-14-love-machine/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -740,14 +749,15 @@ So hold me to you
   <category>r</category>
   <category>keras</category>
   <category>valentines</category>
-  <guid>https://owenjonesuob.github.io/posts/2018-02-14-love-machine/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2018-02-14-love-machine/</guid>
   <pubDate>Wed, 14 Feb 2018 12:00:00 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2018-02-14-love-machine/microphone.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>Scale up your interest: key steps for getting into data science</title>
-  <link>https://owenjonesuob.github.io/posts/2018-01-04-scale-up-your-interest/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2018-01-04-scale-up-your-interest/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -837,14 +847,15 @@ So hold me to you
   <category>python</category>
   <category>intro</category>
   <category>piano</category>
-  <guid>https://owenjonesuob.github.io/posts/2018-01-04-scale-up-your-interest/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2018-01-04-scale-up-your-interest/</guid>
   <pubDate>Thu, 04 Jan 2018 12:00:00 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2018-01-04-scale-up-your-interest/sheet_music.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>H2O.ai: Going for a paddle</title>
-  <link>https://owenjonesuob.github.io/posts/2017-08-23-h2o-ai-going-for-a-paddle/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2017-08-23-h2o-ai-going-for-a-paddle/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -871,14 +882,15 @@ This post isn’t called <em>H2O.ai: Going for the 100m freestyle world record</
   <category>sparklyr</category>
   <category>package</category>
   <category>R</category>
-  <guid>https://owenjonesuob.github.io/posts/2017-08-23-h2o-ai-going-for-a-paddle/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2017-08-23-h2o-ai-going-for-a-paddle/</guid>
   <pubDate>Wed, 23 Aug 2017 11:00:00 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2017-08-23-h2o-ai-going-for-a-paddle/paddle.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>Adding a Git Bash alias</title>
-  <link>https://owenjonesuob.github.io/posts/2017-08-22-adding-a-git-bash-alias/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2017-08-22-adding-a-git-bash-alias/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -939,14 +951,15 @@ alias doggo="printf $'
   <category>git</category>
   <category>git bash</category>
   <category>alias</category>
-  <guid>https://owenjonesuob.github.io/posts/2017-08-22-adding-a-git-bash-alias/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2017-08-22-adding-a-git-bash-alias/</guid>
   <pubDate>Tue, 22 Aug 2017 12:00:00 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2017-08-22-adding-a-git-bash-alias/alias.PNG" medium="image"/>
 </item>
 <item>
   <title>Markov and Churchill: an exploration of predictive text</title>
-  <link>https://owenjonesuob.github.io/posts/2017-07-23-markov-and-churchill-an-exploration-of-predictive-text/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2017-07-23-markov-and-churchill-an-exploration-of-predictive-text/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1690,14 +1703,15 @@ font-style: inherit;">300</span>)</span>
   <category>webscraping</category>
   <category>text generation</category>
   <category>markov</category>
-  <guid>https://owenjonesuob.github.io/posts/2017-07-23-markov-and-churchill-an-exploration-of-predictive-text/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2017-07-23-markov-and-churchill-an-exploration-of-predictive-text/</guid>
   <pubDate>Sun, 23 Jul 2017 18:00:00 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2017-07-23-markov-and-churchill-an-exploration-of-predictive-text/churchill.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>A Token Update</title>
-  <link>https://owenjonesuob.github.io/posts/2017-07-08-a-token-update/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2017-07-08-a-token-update/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1711,14 +1725,15 @@ font-style: inherit;">300</span>)</span>
 
 
  ]]></description>
-  <guid>https://owenjonesuob.github.io/posts/2017-07-08-a-token-update/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2017-07-08-a-token-update/</guid>
   <pubDate>Sat, 08 Jul 2017 11:00:00 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2017-07-08-a-token-update/neuronscrop.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>Summary of 30 Days, 30 Visualizations, 1 Dataset</title>
-  <link>https://owenjonesuob.github.io/posts/2017-01-27-summary-of-30-days-30-visualizations-1-dataset/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2017-01-27-summary-of-30-days-30-visualizations-1-dataset/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1817,14 +1832,15 @@ I can also now confess that the plots which appear in the first section of this 
   <category>data</category>
   <category>R</category>
   <category>visualization</category>
-  <guid>https://owenjonesuob.github.io/posts/2017-01-27-summary-of-30-days-30-visualizations-1-dataset/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2017-01-27-summary-of-30-days-30-visualizations-1-dataset/</guid>
   <pubDate>Fri, 27 Jan 2017 01:52:00 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2017-01-27-summary-of-30-days-30-visualizations-1-dataset/day01.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>Snippets in RStudio</title>
-  <link>https://owenjonesuob.github.io/posts/2017-01-21-snippets-in-rstudio/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2017-01-21-snippets-in-rstudio/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1861,14 +1877,15 @@ Type two letters, hit TAB. Much quicker than holding down the equals key!
   <category>R</category>
   <category>RStudio</category>
   <category>snippets</category>
-  <guid>https://owenjonesuob.github.io/posts/2017-01-21-snippets-in-rstudio/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2017-01-21-snippets-in-rstudio/</guid>
   <pubDate>Sat, 21 Jan 2017 12:36:59 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2017-01-21-snippets-in-rstudio/snippetsopt.PNG" medium="image"/>
 </item>
 <item>
   <title>BANEScarparking - an R package</title>
-  <link>https://owenjonesuob.github.io/posts/2017-01-13-banescarparking-an-r-package/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2017-01-13-banescarparking-an-r-package/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -1922,14 +1939,15 @@ So if you ever feel an urgent desire to analyse Bath &amp; North East Somerset�
   <category>package</category>
   <category>R</category>
   <category>RStudio</category>
-  <guid>https://owenjonesuob.github.io/posts/2017-01-13-banescarparking-an-r-package/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2017-01-13-banescarparking-an-r-package/</guid>
   <pubDate>Fri, 13 Jan 2017 10:53:25 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2017-01-13-banescarparking-an-r-package/libraryBANES.PNG" medium="image"/>
 </item>
 <item>
   <title>30 Days, 30 Visualizations, 1 Dataset: Days 26-30</title>
-  <link>https://owenjonesuob.github.io/posts/2016-12-07-30-days-30-visualizations-1-dataset-part-6/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2016-12-07-30-days-30-visualizations-1-dataset-part-6/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -2030,14 +2048,15 @@ I’m now facing a busy month or two of revision and exams, so I can’t say for
   <category>R</category>
   <category>RStudio</category>
   <category>visualization</category>
-  <guid>https://owenjonesuob.github.io/posts/2016-12-07-30-days-30-visualizations-1-dataset-part-6/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2016-12-07-30-days-30-visualizations-1-dataset-part-6/</guid>
   <pubDate>Wed, 07 Dec 2016 23:05:34 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2016-12-07-30-days-30-visualizations-1-dataset-part-6/day27.jpeg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>30 Days, 30 Visualizations, 1 Dataset: Days 21-25</title>
-  <link>https://owenjonesuob.github.io/posts/2016-12-02-30-days-30-visualizations-1-dataset-part-5/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2016-12-02-30-days-30-visualizations-1-dataset-part-5/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -2133,14 +2152,15 @@ Although not entirely clear, the bulk of the observations lie to the right of ze
   <category>R</category>
   <category>RStudio</category>
   <category>visualization</category>
-  <guid>https://owenjonesuob.github.io/posts/2016-12-02-30-days-30-visualizations-1-dataset-part-5/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2016-12-02-30-days-30-visualizations-1-dataset-part-5/</guid>
   <pubDate>Fri, 02 Dec 2016 19:45:10 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2016-12-02-30-days-30-visualizations-1-dataset-part-5/day23.jpeg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>30 Days, 30 Visualizations, 1 Dataset: Days 16-20</title>
-  <link>https://owenjonesuob.github.io/posts/2016-11-27-30-days-30-visualizations-1-dataset-part-4/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2016-11-27-30-days-30-visualizations-1-dataset-part-4/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -2205,14 +2225,15 @@ So we actually have quite a lot of records where the delay between update and up
   <category>R</category>
   <category>RStudio</category>
   <category>visualization</category>
-  <guid>https://owenjonesuob.github.io/posts/2016-11-27-30-days-30-visualizations-1-dataset-part-4/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2016-11-27-30-days-30-visualizations-1-dataset-part-4/</guid>
   <pubDate>Sun, 27 Nov 2016 17:59:45 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2016-11-27-30-days-30-visualizations-1-dataset-part-4/day17.jpeg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>30 Days, 30 Visualizations, 1 Dataset: Days 11-15</title>
-  <link>https://owenjonesuob.github.io/posts/2016-11-22-30-days-30-visualizations-1-dataset-part-3/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2016-11-22-30-days-30-visualizations-1-dataset-part-3/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -2224,7 +2245,7 @@ Day 11 (22/11/16): Type of “strange” occupancies
 Looking at the dataframe of unusual occupancies from yesterday, I’ll put each record into one of four categories, in order to more easily see which records are definitely wrong, which are questionable, etc.
 </p>
 <p>```rtype &lt;- vector(“character”, nrow(df3))</p>
-<p>type[df3<img src="https://latex.codecogs.com/png.latex?Occupancy%20==%200%5D%20%3C-%20%22Zero%22%20type%5Bdf3">Occupancy &lt; 0] &lt;- “Negative” type[df3<img src="https://latex.codecogs.com/png.latex?Occupancy%20==%20df3">Capacity] &lt;- “Full” type[df3<img src="https://latex.codecogs.com/png.latex?Occupancy%20%3E%20df3">Capacity] &lt;- “Overfilled”</p>
+<p>type[df3<img src="https://latex.codecogs.com/png.latex?Occupancy%20==%200%5D%20%3C-%20%22Zero%22%0Atype%5Bdf3">Occupancy &lt; 0] &lt;- “Negative” type[df3<img src="https://latex.codecogs.com/png.latex?Occupancy%20==%20df3">Capacity] &lt;- “Full” type[df3<img src="https://latex.codecogs.com/png.latex?Occupancy%20%3E%20df3">Capacity] &lt;- “Overfilled”</p>
 <p>df3$Type &lt;- factor(type, levels = c(“Overfilled”, “Full”, “Zero”, “Negative”))</p>
 <p>p &lt;- ggplot(df3, aes(x = LastUpdate, y = ““)) + geom_point(aes(colour = Type)) + facet_wrap(~ Name, nrow = 4) + scale_colour_manual(values = rev(c(”red”, “black”, “green”, “blue”))) + ylab(““) + ggtitle(”Type of "Strange" Occupancies”) + theme(plot.title = element_text(size = rel(1.5)))</p>
 <p>p<code>&lt;img src="day11.jpeg" /&gt; &lt;p&gt;We can see, for example, that all the definitely-wrong negative-occupancy records are from SouthGate General - maybe the council should look into upgrading the sensors there…&lt;/p&gt; &lt;hr&gt; &lt;h3&gt;Day 12 (23/11/16): Hours of over- and negative occupancy&lt;/h3&gt; &lt;p&gt;We had another Bath ML Meetup tonight - we didn’t have too long to talk about the project, but plans are being made…&lt;/p&gt; &lt;p&gt;Using the dataframe from yesterday, I’ll have a quick look at when the particularly dubious records - the overfilled and negative records, that is - are generally recorded. I’m curious as to whether, for example, overfilled records are more common at lunchtime than overnight.&lt;/p&gt;</code>rdf4 &lt;- filter(df3, Type == “Overfilled” | Type == “Negative”) %&gt;% mutate(Time = hour(LastUpdate) + minute(LastUpdate)/60)</p>
@@ -2235,7 +2256,7 @@ Looking at the dataframe of unusual occupancies from yesterday, I’ll put each 
 <p>counts &lt;- c(tally(filter(df4, Occupancy &lt; -10000))[2], tally(filter(df4, Occupancy &gt;= -10000, Occupancy &lt;= -1000))[2], tally(filter(df4, Occupancy &gt; -1000))[2]) %&gt;% sapply(sum)</p>
 <p>p &lt;- ggplot(df4, aes(y = ““, x = Occupancy)) + geom_point() + ggtitle(”Spread of negative occupancies”) + ylab(““) + annotate(”text”, x = c(-14500, -2000, -100), y = c(rep(1.2, 3)), label = counts)</p>
 <p>p<code>&lt;img src="day13.jpeg" /&gt; &lt;hr&gt; &lt;h3&gt;Day 14 (25/11/16): Massively negative occupancies&lt;/h3&gt; &lt;p&gt;Yesterday’s plot revealed a small cluster of points at around -15000. Let’s have a more detailed look at these points, and see if we can work out ‘how’ they are wrong - for example, if they are all the same value, which might suggest it is a deliberate ‘indicator’ value used by the council to denote a closed car park.&lt;/p&gt;</code>rdf4 &lt;- filter(df3, Occupancy &lt; -10000)</p>
-<p>summary(df4<img src="https://latex.codecogs.com/png.latex?Name)%60%60%60%20%60%60%60rconsole##%20Avon%20Street%20CP%20Charlotte%20Street%20CP%20Lansdown%20P+R%20##%200%200%200%20##%20Newbridge%20P+R%20Odd%20Down%20P+R%20Podium%20CP%20##%200%200%200%20##%20SouthGate%20General%20CP%20SouthGate%20Rail%20CP%20test%20car%20park%20##%2026%200%200%60%60%60%20%60%60%60rrange(df4">Occupancy)<code></code>rconsole## [1] -14787 -14638<code></code>rtime_length(max(as.double(df4<img src="https://latex.codecogs.com/png.latex?LastUpdate))%20-%20min(as.double(df4">LastUpdate)), unit = “hour”)<code></code>rconsole## [1] 0.02361111<code>&lt;p&gt;So all of the points in this group are from SouthGate General CP, they span a range of values, and they were all recorded within a 2-hour period. Let’s have a look at the trend of these records.&lt;/p&gt;</code>rp &lt;- ggplot(df4, aes(x = LastUpdate, y = Occupancy)) + geom_line() + ggtitle(“SouthGate General CP: Occupancy on 05/01/2015”) + xlab(“Time”)</p>
+<p>summary(df4<img src="https://latex.codecogs.com/png.latex?Name)%60%60%60%0A%60%60%60rconsole##%20%20%20%20%20%20%20Avon%20Street%20CP%20%20Charlotte%20Street%20CP%20%20%20%20%20%20%20%20%20Lansdown%20P+R%0A##%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%200%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%200%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%200%0A##%20%20%20%20%20%20%20%20Newbridge%20P+R%20%20%20%20%20%20%20%20%20Odd%20Down%20P+R%20%20%20%20%20%20%20%20%20%20%20%20Podium%20CP%0A##%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%200%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%200%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%200%0A##%20SouthGate%20General%20CP%20%20%20%20SouthGate%20Rail%20CP%20%20%20%20%20%20%20%20test%20car%20park%0A##%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%2026%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%200%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%200%60%60%60%0A%60%60%60rrange(df4">Occupancy)<code></code>rconsole## [1] -14787 -14638<code></code>rtime_length(max(as.double(df4<img src="https://latex.codecogs.com/png.latex?LastUpdate))%20-%20min(as.double(df4">LastUpdate)), unit = “hour”)<code></code>rconsole## [1] 0.02361111<code>&lt;p&gt;So all of the points in this group are from SouthGate General CP, they span a range of values, and they were all recorded within a 2-hour period. Let’s have a look at the trend of these records.&lt;/p&gt;</code>rp &lt;- ggplot(df4, aes(x = LastUpdate, y = Occupancy)) + geom_line() + ggtitle(“SouthGate General CP: Occupancy on 05/01/2015”) + xlab(“Time”)</p>
 <p>p<code>&lt;img src="day14.jpeg" /&gt; &lt;p&gt;According to the records, the car park is emptying over this period - but the difference between 13:30 and 15:30 is only around 150 cars, which is a reasonable change over that period of time.&lt;/p&gt; &lt;p&gt;Perhaps there was an unexplained, but precise, shift of -15000ish in the Occupancy records for this brief 2-hour period - in which case the data might be salvageable…&lt;/p&gt; &lt;hr&gt; &lt;h3&gt;Day 15 (26/11/16): Trend of massively negative occupancies&lt;/h3&gt; &lt;p&gt;Let’s see whether the records from that strange Monday afternoon last January follow the trend of records from a typical Monday afternoon.&lt;/p&gt; &lt;p&gt;First I’ll take all the records from Mondays &lt;em&gt;except&lt;/em&gt; for 05/01/2015 between 13:00 and 15:59, and average them out.&lt;/p&gt;</code>rdf2 &lt;- select(df, Name, LastUpdate, Occupancy) %&gt;% filter(Name == “SouthGate General CP”, Occupancy &gt;= 0) %&gt;% filter(wday(LastUpdate) == 2) %&gt;% mutate(Time = update(LastUpdate, year = 1970, month = 1, day = 1)) %&gt;% mutate(Time = round_date(Time, “10 minute”)) %&gt;% filter(hour(Time) == 13 | hour(Time) == 15) %&gt;% group_by(Time) %&gt;% summarize(newOcc = mean(Occupancy)) %&gt;% mutate(Period = “Average”)<code>&lt;p&gt;Now I’ll get the dodgy records from 05/01/2015, shift them by adding a constant to each (initially 15000 - an educated guess), and combine these in a dataframe with the averaged records.&lt;/p&gt;</code>rk &lt;- 15000</p>
 <p>df3 &lt;- select(df, LastUpdate, Occupancy) %&gt;% filter(Occupancy &lt; -10000) %&gt;% mutate(Time = update(LastUpdate, year = 1970, month = 1, day = 1)) %&gt;% mutate(newOcc = Occupancy + k) %&gt;% select(Time, newOcc) %&gt;% mutate(Period = “05/01/2015”)</p>
 <p>df4 &lt;- rbind(df2, df3)<code>&lt;p&gt;Now let’s plot!&lt;/p&gt;</code>rp &lt;- ggplot(df4, aes(x = Time, y = newOcc)) + geom_line(aes(colour = Period)) + scale_fill_discrete(guide = guide_legend()) + ggtitle(“SouthGate General CP: Adjusted”) + ylab(“Occupancy”) + annotate(“text”, x = (max(df4<img src="https://latex.codecogs.com/png.latex?Time)%20-%201500),%20y%20=%20(min(df4">newOcc) + 80), label = paste0(“Shift: +”, k))</p>
@@ -2268,14 +2289,15 @@ To be completely honest, when I started this project just over 2 weeks ago I did
   <category>R</category>
   <category>RStudio</category>
   <category>visualization</category>
-  <guid>https://owenjonesuob.github.io/posts/2016-11-22-30-days-30-visualizations-1-dataset-part-3/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2016-11-22-30-days-30-visualizations-1-dataset-part-3/</guid>
   <pubDate>Tue, 22 Nov 2016 20:53:53 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2016-11-22-30-days-30-visualizations-1-dataset-part-3/day11.jpeg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>30 Days, 30 Visualizations, 1 Dataset: Days 06-10</title>
-  <link>https://owenjonesuob.github.io/posts/2016-11-17-30-days-30-visualizations-1-dataset-part-2/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2016-11-17-30-days-30-visualizations-1-dataset-part-2/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -2366,7 +2388,7 @@ font-style: inherit;">1</span>]</span></code></pre></div>
 <p>```r# It seems Podium CP’s clock is not changing!</p>
 <section id="lets-check-previous-year-too---clocks-changed-on-29032015" class="level1">
 <h1>Let’s check previous year too - clocks changed on 29/03/2015</h1>
-<p>t &lt;- df<img src="https://latex.codecogs.com/png.latex?LastUpdate%5Bgrep(%22%5E29/03/2015%22,%20df">LastUpdate)] h &lt;- as.POSIXlt(t, format = “%d/%m/%Y %I:%M:%S %p”, tz = “UTC”)<img src="https://latex.codecogs.com/png.latex?hour%20n%20%3C-%20df">Name[grep(“^29/03/2015”, df$LastUpdate)]</p>
+<p>t &lt;- df<img src="https://latex.codecogs.com/png.latex?LastUpdate%5Bgrep(%22%5E29/03/2015%22,%20df">LastUpdate)] h &lt;- as.POSIXlt(t, format = “%d/%m/%Y %I:%M:%S %p”, tz = “UTC”)<img src="https://latex.codecogs.com/png.latex?hour%0An%20%3C-%20df">Name[grep(“^29/03/2015”, df$LastUpdate)]</p>
 <p>sapply(c(0:23), function(i) sum(h == i))</p>
 <pre><code>
 ```rconsole##  [1] 84 12 72 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84
@@ -2717,14 +2739,15 @@ Of particular note are the times when Newbridge P+R contained 4 times as many ca
   <category>ggplot2</category>
   <category>R</category>
   <category>visualization</category>
-  <guid>https://owenjonesuob.github.io/posts/2016-11-17-30-days-30-visualizations-1-dataset-part-2/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2016-11-17-30-days-30-visualizations-1-dataset-part-2/</guid>
   <pubDate>Thu, 17 Nov 2016 21:32:25 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2016-11-17-30-days-30-visualizations-1-dataset-part-2/day07final.jpeg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>30 Days, 30 Visualizations, 1 Dataset</title>
-  <link>https://owenjonesuob.github.io/posts/2016-11-12-30-days-30-visualizations-1-dataset-part-1/index.html</link>
+  <link>https://owenjonesuob.github.io/posts/2016-11-12-30-days-30-visualizations-1-dataset-part-1/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -4008,7 +4031,7 @@ And regarding yesterday’s plot… good news! I am indebted to <a href="http://
   <category>data science</category>
   <category>R</category>
   <category>visualization</category>
-  <guid>https://owenjonesuob.github.io/posts/2016-11-12-30-days-30-visualizations-1-dataset-part-1/index.html</guid>
+  <guid>https://owenjonesuob.github.io/posts/2016-11-12-30-days-30-visualizations-1-dataset-part-1/</guid>
   <pubDate>Fri, 11 Nov 2016 11:49:15 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2016-11-12-30-days-30-visualizations-1-dataset-part-1/day01.jpg" medium="image" type="image/jpeg"/>
 </item>
