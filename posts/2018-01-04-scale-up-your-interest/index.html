@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2018-01-04">
+<meta name="description" content="You have just encountered the term “data science” for the first time, and it sounds like it might be interesting but you don’t have a clue what it is. Something to do with computers? Should you bring a lab coat, or a VR headset? Or both? What is a data and how does one science it?">
+
+<title>Products of Procrastination - Scale up your interest: key steps for getting into data science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+<script type="text/javascript">
+
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-91389971-1', 'auto');
+
+ga('send', {
+  hitType: 'pageview',
+  'anonymizeIp': true,
+});
+</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta name="twitter:title" content="Products of Procrastination - Scale up your interest: key steps for getting into data science">
+<meta name="twitter:description" content="You have just encountered the term “data science” for the first time, and it sounds like it might be interesting but you don’t have a clue what it is. Something to do with computers? Should you bring a lab coat, or a VR headset? Or both? What is a data and how does one science it?">
+<meta name="twitter:image" content="https://owenjonesuob.github.io/posts/2018-01-04-scale-up-your-interest/sheet_music.jpg">
+<meta name="twitter:creator" content="@owenjonesuob">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Products of Procrastination</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/owenjonesuob" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Scale up your interest: key steps for getting into data science</h1>
+                  <div>
+        <div class="description">
+          You have just encountered the term “data science” for the first time, and it sounds like it might be interesting but you don’t have a clue what it is. Something to do with computers? Should you bring a lab coat, or a VR headset? Or both? What is a data and how does one science it?
+        </div>
+      </div>
+                              </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 4, 2018</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><strong>Note:</strong> I originally wrote this post for the Mango Solutions blog, and they have kindly allowed me to repost it here alongside the rest of my work. You can find the original post <a href="https://www.mango-solutions.com/blog/scale-up-your-interest-key-steps-for-getting-into-data-science">here</a>!</p>
+<hr>
+<section id="prelude" class="level3">
+<h3 class="anchored" data-anchor-id="prelude">Prelude</h3>
+<p>Maybe you’re looking for a change of scene. Maybe you’re looking for your first job. Maybe you’re stuck in conversation with a relative who you haven’t spoken to since last Christmas and who has astonishingly strong opinions on whether cells ought to be merged or not in Excel spreadsheets.</p>
+<p>The fact of the matter is that you have just encountered the term “data science” for the first time, and it sounds like it might be interesting but you don’t have a clue what it is. Something to do with computers? Should you bring a lab coat, or a VR headset? Or both? What is a data and how does one science it?</p>
+<p>Fear not. I am here to offer subjective, questionable and most importantly <em>FREE</em> advice from the perspective of someone who was in that very position not such a long time ago. Read on at your peril.</p>
+<p><img src="start.png" class="img-fluid"></p>
+</section>
+<section id="i.-adagio-hear-about-data-science" class="level3">
+<h3 class="anchored" data-anchor-id="i.-adagio-hear-about-data-science">I. <em>Adagio</em>: Hear about data science</h3>
+<p>This is the hard bit. It’s surprisingly difficult to stumble upon data science unless someone tells you about it.</p>
+<p>But the good news is that you’re reading this, so you’ve already done it. Possibly a while ago, or possibly just now; either way, put a big tick next to Step 1. Congratulations!</p>
+<p>(By the way, you’ll remember the person who told you about data science. When you grow in confidence yourself, be someone else’s “person who told me about data science”. It’s a great thing to share. But all in good time…)</p>
+<p><img src="adagio.png" class="img-fluid"></p>
+</section>
+<section id="ii.-andante-find-out-more" class="level3">
+<h3 class="anchored" data-anchor-id="ii.-andante-find-out-more">II. <em>Andante</em>: Find out more</h3>
+<p>But what actually <em>is</em> data science?</p>
+<p>To be honest, it’s a fairly loosely-defined term. There are plenty of articles out there that try to give an overview, but most descend into extended discussions about the <a href="https://www.google.co.uk/search?num=20&amp;q=data+science+unicorns">existence of unicorns</a> or resort to arranging countless combinations of potentially relevant acronyms in <a href="https://www.kdnuggets.com/2016/10/battle-data-science-venn-diagrams.html">hideous indecipherable Venn diagrams</a>.</p>
+<p>You’re much better off finding examples of people “doing” data science. Find some blogs (<a href="http://varianceexplained.org/">here</a> <a href="http://www.sumsar.net/">are</a> <a href="http://blog.otoro.net/">a</a> <a href="https://medium.com/@kierisi">few</a> <a href="https://juliasilge.com/blog/">awesome</a> <a href="https://hilarymason.com/blog/">ones</a> <a href="http://www.randalolson.com/blog/">to</a> <a href="http://blog.kaggle.com/">get</a> <a href="https://www.mango-solutions.com/blog/">you</a> <a href="https://github.com/rushter/data-science-blogs">started</a>) and read about what people are up to in the real world.</p>
+<p>Don’t be afraid to narrow down and focus on a specific topic that interests you - there’s so much variety out there that you’re bound to find something that inspires you to keep reading and learning. But equally, explore as many new areas as you can, because the more context you can get about the sector the better your understanding will be and you’ll start to see how different subjects and different roles relate to each other.</p>
+<p>Believe it or not, one of the best tools for keeping up to date with the latest developments in the field is <a href="https://twitter.com/">Twitter</a>. If you follow all your blog-writing heroes, not only will you be informed whenever they publish a new article but you’ll also get an <a href="https://twitter.com/SwindleApe/status/938025492103524352">invaluable glimpse</a> into their <a href="https://speakerdeck.com/jennybc/workflow-you-should-have-one?slide=5">day-to-day jobs</a> and <a href="https://twitter.com/kierisi/status/940265482162143234">working habits</a>, as well as all the cool industry-related stuff they share. Even if you never tweet anything yourself you’ll be exposed to much more than you’d be able to find on your own. If you want to get involved there’s no need to be original - you could just use it to share content you’ve found interesting yourself.</p>
+<p>If you’re super keen, you might even want to get yourself some data science books tackling a particular topic. Keep an eye out for free online/ebook versions too!</p>
+<p><img src="andante.png" class="img-fluid"></p>
+</section>
+<section id="iii.-allegretto-get-hands-on" class="level3">
+<h3 class="anchored" data-anchor-id="iii.-allegretto-get-hands-on">III. <em>Allegretto</em>: Get hands-on</h3>
+<p>Observing is great, but it will only get you so far.</p>
+<p>Imagine that you’ve just heard about an amazing new thing called “piano”. It sounds great. No, it sounds INCREDIBLE. It’s the sort of thing you really want to be good at.</p>
+<p>So you get online and read more about it. Descriptions, analyses, painstaking breakdowns of manual anatomy and contrapuntal textures. You watch videos of people playing pianos, talking about pianos, <a href="https://youtu.be/F92FQdnLlSc?t=35s">setting pianos on fire and hurling them across dark fields</a>. You download reams of free sheet music and maybe even buy a book of pieces you really want to learn.</p>
+<p>But at some point… you need to play a piano.</p>
+<p>The good news is that with data science, you don’t need to buy a piano, or find somewhere to keep it, or worry about bothering your family/friends/neighbours/pets with your late-night composing sessions.</p>
+<p>Online interactive coding tutorials are a great place to start if you want to learn a new programming language. Sites like <a href="https://noamross.github.io/datacamp-sexual-assault/">DataCamp</a> and <a href="https://www.codecademy.com/">Codecademy</a> offer a number of free courses to get yourself started with data science languages like R and Python. If you are feeling brave enough, take the plunge and run things on your own machine! (I’d strongly recommend using R with <a href="https://www.rstudio.com/products/rstudio/">RStudio</a> and using <a href="https://www.anaconda.com/what-is-anaconda/">Anaconda</a> for Python.) Language-specific “native-format” resources such as <a href="">SWIRL</a> for R or <a href="https://github.com/jupyter/jupyter/wiki/A-gallery-of-interesting-Jupyter-Notebooks">this set of Jupyter notebooks</a> for Python are a great way to learn more advanced skills. Take advantage of the exercises in any books you have - don’t just skip them all!</p>
+<p>Data science is more than just coding though - it’s all about taking a problem, understanding it, solving it and then communicating those ideas to other people. So Part 1 of my Number One Two-Part Top Tip for you today is:</p>
+<blockquote class="blockquote">
+<p>1. Pick a project and write about it</p>
+</blockquote>
+<p>How does one “pick a project”? Well, find something that interests you. For me it was neural networks (and later, car parks…) but it could be literally anything, so long as you’re going to be able to find some data to work with. Maybe have a look at some of the <a href="https://www.kaggle.com/competitions">competitions hosted on Kaggle</a> or see if there’s <a href="https://www.bathhacked.org/">a group in your area which publishes open data</a>.</p>
+<p>Then once you’ve picked something, go for it! Try out that cool package you saw someone else using. Figure out <em>why</em> there are so many missing values in that dataset. Take risks, explore, try new things and push yourself out of your comfort zone. And don’t be afraid to take inspiration from something that someone else has already done: regardless of whether you follow the same process or reach the same outcome, your take on it is going to be different to theirs.</p>
+<p>By <em>writing</em> about that project - which is often easier than deciding on one in the first place - you’re developing your skills as a communicator by presenting your work in a coherent manner, rather than as a patchwork of dodgy scripts interspersed with the occasional hasty comment. And even if you don’t want to make your writing public, you’ll be amazed how often you go back and read something you wrote before because it’s come up again in something else you’re working on and you’ve forgotten how to do it.</p>
+<p>I’d really encourage you to get your work out there though. Which brings us smoothly to…</p>
+<p><img src="allegretto.png" class="img-fluid"></p>
+</section>
+<section id="iv.-allegro-maestoso-get-yourself-out-there" class="level3">
+<h3 class="anchored" data-anchor-id="iv.-allegro-maestoso-get-yourself-out-there">IV. <em>Allegro maestoso</em>: Get yourself out there</h3>
+<p>If you never play the piano for anyone else, no-one’s ever going to find out how good you are! So Part 2 of my Number One Two-Part Top Tip is:</p>
+<blockquote class="blockquote">
+<p>2. Start a blog</p>
+</blockquote>
+<p>It’s pretty easy to get going with <a href="https://wordpress.com/">Wordpress</a> or similar, and it takes your writing to the next level because now you’re writing for an audience. It may not be a very big audience, but if someone, somewhere finds your writing interesting or useful then surely it’s worth it. And if you know you’re potentially writing for someone other than yourself then you <em>need</em> to explain everything properly, which means you need to <em>understand</em> everything properly. I often learn more when I’m writing up a project than when I’m playing around with the code in the first place.</p>
+<p>Also, a blog is a <em>really</em> good thing to have on your CV and to talk about at interviews, because it gives you some physical (well, virtual) evidence which you can point at as you say “look at this thing wot I’ve done”.</p>
+<p>(Don’t actually say those exact words. Remember that you’re a Good Communicator.)</p>
+<p>If you’re feeling brave you can even put that Twitter account to good use and start shouting about all the amazing things you’re doing. You’ll build up a loyal following amazingly quickly. Yes, half of them will probably be bots, but half of them will be real people who enjoy reading your work and who can give you valuable feedback.</p>
+<p>Speaking of real people…</p>
+<blockquote class="blockquote">
+<p>3. Get involved in the community</p>
+</blockquote>
+<p>Yes, that was indeed Part 3 of my Number One Two-Part Top Tip, but it’s so important that it needs to be in there.</p>
+<p>The online data science community is one of the best out there. The R community in particular is super friendly and supportive (check out forums like <a href="https://community.rstudio.com/">RStudio Community</a>, community groups like <a href="https://medium.com/@kierisi/r4ds-the-next-iteration-d51e0a1b0b82">R4DS</a>, and the <a href="https://twitter.com/hashtag/rstats?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Ehashtag">#rstats</a> tag on Twitter). Get involved in conversations, learn from people already working in the sector, share your own knowledge and <em>make friends</em>.</p>
+<p>Want to go one better than online?</p>
+<p>Get a <a href="https://www.meetup.com/">Meetup</a> account, sign up to some local groups and go out to some events. It might be difficult to force yourself to go for the first time, but pluck up the courage and do it. Believe me when I say there’s no substitute for meeting up and chatting to people. Many good friends are people I met for the first time at meetups. And of course, it’s the perfect opportunity to network - I met 5 or 6 of my current colleagues through <a href="https://www.meetup.com/Bath-Machine-Learning-Meetup/">BathML</a> before I even knew about Mango!</p>
+<p>(If you’re in or near Bristol or London, <a href="https://www.meetup.com/Bristol-Data-Scientists/">Bristol Data Scientists</a> and <a href="https://www.meetup.com/LondonR/">LondonR</a> are both hosted by Mango and new members are always welcome!)</p>
+<p><img src="allegro.png" class="img-fluid"></p>
+</section>
+<section id="postlude" class="level3">
+<h3 class="anchored" data-anchor-id="postlude">Postlude</h3>
+<p>Of course, everything I’ve just said is coming from my point of view and is entirely based on my own experiences.</p>
+<p>For example, I’ve talked about coding quite a lot because I personally code quite a lot; and I code quite a lot because I enjoy it. That might not be the case for you. That’s fine. In fact it’s more than “fine”; the huge diversity in people’s backgrounds and interests is what makes data science such a fantastic field to be working in right now.</p>
+<p>Maybe you’re interested in data visualisation. Maybe you’re into webscraping. Or stats. Or <a href="https://en.wikipedia.org/wiki/Financial_technology">fintech</a>, or <a href="https://en.wikipedia.org/wiki/Natural_language_processing">NLP</a>, or <a href="https://en.wikipedia.org/wiki/Artificial_intelligence">AI</a>, or <a href="https://en.wikipedia.org/wiki/Business_intelligence">BI</a>, or <a href="https://en.wikipedia.org/wiki/Continuous_integration">CI</a>. Maybe <em>you</em> are the relative at Christmas dinner who won’t stop banging on about why you should NEVER, under ANY circumstances, merge cells in an Excel spreadsheet (UNLESS it is PURELY for purposes of presentation).</p>
+<p>Oh, why not:</p>
+<blockquote class="blockquote">
+<p>4. Find the parts of data science that you enjoy and arrange them so that they work for you.</p>
+</blockquote>
+<p><img src="final.png" class="img-fluid"></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="owenjonesuob/owenjonesuob.github.io" data-repo-id="R_kgDOH5G3UwMDEwOlJlcG9zaXRvcnk4MDQzMDQ5NA==" data-category="Announcements" data-category-id="DIC_kwDOBMtFns4Cepsj" data-mapping="pathname" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="light" data-lang="en" crossorigin="anonymous" data-loading="lazy" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center"><img src="../../neuronsbanner.png"> <br> <span>Copyright © 2024 <a href="https://owenjonesuob.github.io/">Owen Jones</a></span></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>
