@@ -1,0 +1,30 @@
+---
+title: Derivation of backpropagation, plus a network diagram
+date: 2016-10-21 22:37:16.000000000 +01:00
+image: netdiag1jpg.jpg
+categories:
+- backpropagation
+- machine learning
+- Maths
+- neural network
+description: Deriving the backpropagation formulae, and a network diagram for one of my
+  previous projects
+---
+<p>By creating a <a href="../2016-09-30-digit-recognition-building-a-neural-network-from-scratch-in-r/index.qmd">digit-recognizing neural network</a> - and then writing up the process I followed in order to do so - I was aiming not just to create a working net, but to solidify my understanding of the concepts and calculations involved. Generally speaking, I would say I achieved this.</p>
+<p>However, there was one particular step which I found a little mysterious: backpropagation. To quote myself:</p>
+<blockquote><p>The aim of backpropagation is to assess how much of an effect each individual parameter has on the cost function. This is done by calculating the partial derivative of the cost function with respect to each parameter in turn, by feeding back the error from each unit in each layer.</p></blockquote>
+<p>Although I understood the overall principle, at that point I was keen to carry on coding the rest of the network, and I didn't have the patience or inclination to dive into the underlying maths. In my code I simply used formulae from the internet (cross-checking multiple sources, of course, to establish the correctness of these formulae; during my A-levels, the term we often used for such things was 'proof by popular consensus').</p>
+<p>I was recently flicking through some notes and doodles I had made over the summer, and came across a page full of partial derivatives, or rather, attempts at them; and I decided it was about time I looked a little deeper into backpropagation.</p>
+<p><em>Note on notation: </em></p>
+<ul>
+<li><em>\(J(\theta)\) is the cost function \(J\) with respect to all parameters \(\theta\) in the net</em></li>
+<li><em>\(\theta^{(k-1)}\)</sup> is the set of parameters used to 'transition' from layer \((k-1)\) to layer \(k\)</em></li>
+<li><em>\(z^{(k)}\) is the 'raw' output from layer \(k\)</em></li>
+<li><em>\(a^{(k)}\) is the 'activated' version of \(z^{(k)}\)</em></li>
+</ul>
+<p><em>See the diagram at the bottom of the page for a visual representation of how these all relate to each other.</em></p>
+<img src="backpropjpg.jpg" />
+<p>Mission accomplished!</p>
+<hr>
+<p>While I had my tablet out, I also thought it might be useful to create a visual representation of the single-hidden-layer network from my earlier project, in order to help me see how the various vectors and matrices fit together:</p>
+<img src="netdiag1jpg.jpg" />

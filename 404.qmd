@@ -1,0 +1,11 @@
+---
+title: Page Not Found
+---
+
+## Odd's bodkins, it's a 404!
+    
+You seem to have found a project I haven't yet undertaken.</p>
+
+I'm guessing that you either made a typo (have a quick check) or followed a dud link (sorry!).
+
+I can provide you with directions to [the homepage](/), but after that you're on your own.
