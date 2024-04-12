@@ -1,0 +1,23 @@
+# options specified here will apply to all posts in this folder
+
+# freeze computational output
+# (see https://quarto.org/docs/projects/code-execution.html#freeze)
+freeze: true
+
+# Enable banner style title blocks
+title-block-banner: true
+title-block-categories: false # TODO re-enable?
+
+# Add comments with giscus
+comments:
+  giscus:
+    repo: owenjonesuob/owenjonesuob.github.io
+    repo-id: "R_kgDOH5G3UwMDEwOlJlcG9zaXRvcnk4MDQzMDQ5NA=="
+    category: "Announcements"
+    category-id: "DIC_kwDOBMtFns4Cepsj"
+    mapping: "pathname"
+    reactions-enabled: true
+    loading: lazy
+    input-position: "bottom"
+
+page-layout: article

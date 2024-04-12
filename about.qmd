@@ -1,0 +1,16 @@
+---
+title: "About"
+image: profile.jpg
+about:
+  template: jolla
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/owenjonesuob
+    - icon: linkedin
+      text: LinkedIn
+      href: https://linkedin.com/owenjonesuob
+
+---
+
+Hi, I'm Owen 👋 I'm a data scientist/engineer living in Cardiff, United Kingdom. This is a collection of projects I have spent time on while I was supposed to be doing other things.

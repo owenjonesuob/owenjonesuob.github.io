@@ -1,2 +1,2 @@
-My personal website: written in [Notepad++](https://notepad-plus-plus.org/), built with [Jekyll](https://jekyllrb.com/), and available for your perusal at https://owenjonesuob.github.io
+My personal website: built with [Quarto](https://quarto.org/) and available for your perusal at https://owenjonesuob.github.io
 
