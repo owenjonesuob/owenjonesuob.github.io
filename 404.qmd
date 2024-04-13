@@ -1,11 +1,11 @@
 ---
-title: Page Not Found
+title: "Odd's bodkins, it's a 404!"
+listing:
+  contents: posts
+  type: table
+  sort: title
+  fields: [title, date]
 ---
 
-## Odd's bodkins, it's a 404!
-    
-You seem to have found a project I haven't yet undertaken.</p>
+Sorry about that ☹️ you might be able to find what you're looking for here though...
 
-I'm guessing that you either made a typo (have a quick check) or followed a dud link (sorry!).
-
-I can provide you with directions to [the homepage](/), but after that you're on your own.
