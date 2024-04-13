@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Products of Procrastination - Page Not Found</title>
+<title>Products of Procrastination - Odd’s bodkins, it’s a 404!</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -31,6 +31,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="/site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="/">
 <link href="/./favicon.png" rel="icon" type="image/png">
+<script src="/site_libs/quarto-listing/list.min.js"></script>
+<script src="/site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="/site_libs/quarto-html/quarto.js"></script>
 <script src="/site_libs/quarto-html/popper.min.js"></script>
 <script src="/site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -69,6 +71,35 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-listing .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-title','listing-date',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
+      
+      searchColumns: ["listing-date","listing-title","listing-author"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
 
 <script type="text/javascript">
 
@@ -84,9 +115,38 @@ ga('send', {
 });
 </script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="/styles.css">
-<meta name="twitter:title" content="Products of Procrastination - Page Not Found">
+<meta name="twitter:title" content="Products of Procrastination - Odd’s bodkins, it’s a 404!">
 <meta name="twitter:description" content="I’m a data scientist/engineer living in Cardiff, United Kingdom. This is a collection of projects I have spent time on while I was supposed to be doing other things.">
 <meta name="twitter:creator" content="@owenjonesuob">
 <meta name="twitter:card" content="summary">
@@ -141,7 +201,7 @@ ga('send', {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Page Not Found</h1>
+<h1 class="title">Odd’s bodkins, it’s a 404!</h1>
 </div>
 
 
@@ -158,17 +218,252 @@ ga('send', {
 </header>
 
 
-<section id="odds-bodkins-its-a-404" class="level2">
-<h2 class="anchored" data-anchor-id="odds-bodkins-its-a-404">Odd’s bodkins, it’s a 404!</h2>
-You seem to have found a project I haven’t yet undertaken.
-<p></p>
-<p>I’m guessing that you either made a typo (have a quick check) or followed a dud link (sorry!).</p>
-<p>I can provide you with directions to <a href="/.">the homepage</a>, but after that you’re on your own.</p>
+<p>Sorry about that ☹️ you might be able to find what you’re looking for here though…</p>
 
 
-</section>
 
-</main> <!-- /main -->
+
+<div class="quarto-listing quarto-listing-container-table" id="listing-listing">
+<div class="listing-actions-group">
+   <div class="input-group input-group-sm quarto-listing-sort">
+     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
+     <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
+       <option value="" disabled="" selected="" hidden="">Order By</option>
+       <option value="index" data-direction="asc">Default</option>
+         <option value="listing-date-sort" data-direction="asc">
+          Date - Oldest
+        </option>
+         <option value="listing-date-sort" data-direction="desc">
+          Date - Newest
+        </option>
+         <option value="listing-title-sort" data-direction="asc">
+          Title
+        </option>
+     </select>
+  </div>
+    <div class="input-group input-group-sm quarto-listing-filter">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" class="search form-control" placeholder="Filter">
+    </div>
+</div>
+<table class="quarto-listing-table table">
+<thead>
+<tr>
+<th>
+<a class="sort" data-sort="listing-title-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Title</a>
+</th>
+<th>
+<a class="sort" data-sort="listing-date-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Date</a>
+</th>
+</tr>
+</thead>
+<tbody class="list">
+<tr data-index="0" data-categories="Carto,data,data science,R,visualization" data-listing-date-sort="1478864955000" data-listing-file-modified-sort="1713028536049" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="23" data-listing-word-count-sort="4441" data-listing-title-sort="30 Days, 30 Visualizations, 1 Dataset" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2016-11-12-30-days-30-visualizations-1-dataset-part-1/index.html" class="title listing-title">30 Days, 30 Visualizations, 1 Dataset</a>
+</td>
+<td>
+<span class="listing-date">Nov 11, 2016</span>
+</td>
+</tr>
+<tr data-index="1" data-categories="data,data science,ggplot2,R,visualization" data-listing-date-sort="1479418345000" data-listing-file-modified-sort="1713028536053" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="18" data-listing-word-count-sort="3567" data-listing-title-sort="30 Days, 30 Visualizations, 1 Dataset: Days 06-10" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2016-11-17-30-days-30-visualizations-1-dataset-part-2/index.html" class="title listing-title">30 Days, 30 Visualizations, 1 Dataset: Days 06-10</a>
+</td>
+<td>
+<span class="listing-date">Nov 17, 2016</span>
+</td>
+</tr>
+<tr data-index="2" data-categories="data,data science,ggplot2,R,RStudio,visualization" data-listing-date-sort="1479848033000" data-listing-file-modified-sort="1713028536057" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1431" data-listing-title-sort="30 Days, 30 Visualizations, 1 Dataset: Days 11-15" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2016-11-22-30-days-30-visualizations-1-dataset-part-3/index.html" class="title listing-title">30 Days, 30 Visualizations, 1 Dataset: Days 11-15</a>
+</td>
+<td>
+<span class="listing-date">Nov 22, 2016</span>
+</td>
+</tr>
+<tr data-index="3" data-categories="data,data science,ggplot2,R,RStudio,visualization" data-listing-date-sort="1480269585000" data-listing-file-modified-sort="1713028536061" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1491" data-listing-title-sort="30 Days, 30 Visualizations, 1 Dataset: Days 16-20" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2016-11-27-30-days-30-visualizations-1-dataset-part-4/index.html" class="title listing-title">30 Days, 30 Visualizations, 1 Dataset: Days 16-20</a>
+</td>
+<td>
+<span class="listing-date">Nov 27, 2016</span>
+</td>
+</tr>
+<tr data-index="4" data-categories="data,data science,ggplot2,R,RStudio,visualization" data-listing-date-sort="1480707910000" data-listing-file-modified-sort="1713028536065" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1333" data-listing-title-sort="30 Days, 30 Visualizations, 1 Dataset: Days 21-25" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2016-12-02-30-days-30-visualizations-1-dataset-part-5/index.html" class="title listing-title">30 Days, 30 Visualizations, 1 Dataset: Days 21-25</a>
+</td>
+<td>
+<span class="listing-date">Dec 2, 2016</span>
+</td>
+</tr>
+<tr data-index="5" data-categories="data,data science,ggplot2,R,RStudio,visualization" data-listing-date-sort="1481151934000" data-listing-file-modified-sort="1713028536077" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1175" data-listing-title-sort="30 Days, 30 Visualizations, 1 Dataset: Days 26-30" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2016-12-07-30-days-30-visualizations-1-dataset-part-6/index.html" class="title listing-title">30 Days, 30 Visualizations, 1 Dataset: Days 26-30</a>
+</td>
+<td>
+<span class="listing-date">Dec 7, 2016</span>
+</td>
+</tr>
+<tr data-index="6" data-listing-date-sort="1499511600000" data-listing-file-modified-sort="1713028536093" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="257" data-listing-title-sort="A Token Update" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2017-07-08-a-token-update/index.html" class="title listing-title">A Token Update</a>
+</td>
+<td>
+<span class="listing-date">Jul 8, 2017</span>
+</td>
+</tr>
+<tr data-index="7" data-categories="data science" data-listing-date-sort="1538244000000" data-listing-file-modified-sort="1713028536153" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1718" data-listing-title-sort="AFK, back in 2 months" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2018-09-29-afk-back-in-2-months/index.html" class="title listing-title">AFK, back in 2 months</a>
+</td>
+<td>
+<span class="listing-date">Sep 29, 2018</span>
+</td>
+</tr>
+<tr data-index="8" data-categories="git,git bash,alias" data-listing-date-sort="1503403200000" data-listing-file-modified-sort="1713028536097" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="942" data-listing-title-sort="Adding a Git Bash alias" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2017-08-22-adding-a-git-bash-alias/index.html" class="title listing-title">Adding a Git Bash alias</a>
+</td>
+<td>
+<span class="listing-date">Aug 22, 2017</span>
+</td>
+</tr>
+<tr data-index="9" data-categories="data,data science,GitHub,package,R,RStudio" data-listing-date-sort="1484304805000" data-listing-file-modified-sort="1713028536077" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="129" data-listing-title-sort="BANEScarparking - an R package" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2017-01-13-banescarparking-an-r-package/index.html" class="title listing-title">BANEScarparking - an R package</a>
+</td>
+<td>
+<span class="listing-date">Jan 13, 2017</span>
+</td>
+</tr>
+<tr data-index="10" data-categories="linux,fedora,nvidia,debugging" data-listing-date-sort="1560423600000" data-listing-file-modified-sort="1713028536177" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1224" data-listing-title-sort="Debugging: Installing NVIDIA Drivers on Fedora" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2019-06-13-nvidia-drivers-on-fedora/index.html" class="title listing-title">Debugging: Installing NVIDIA Drivers on Fedora</a>
+</td>
+<td>
+<span class="listing-date">Jun 13, 2019</span>
+</td>
+</tr>
+<tr data-index="11" data-categories="backpropagation,machine learning,Maths,neural network" data-listing-date-sort="1477085836000" data-listing-file-modified-sort="1713028536041" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="337" data-listing-title-sort="Derivation of backpropagation, plus a network diagram" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2016-10-21-derivation-of-backpropagation-plus-a-network-diagram/index.html" class="title listing-title">Derivation of backpropagation, plus a network diagram</a>
+</td>
+<td>
+<span class="listing-date">Oct 21, 2016</span>
+</td>
+</tr>
+<tr data-index="12" data-categories="data,data science,GitHub,package,R,RStudio" data-listing-date-sort="1475239668000" data-listing-file-modified-sort="1713028536025" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="46" data-listing-word-count-sort="9157" data-listing-title-sort="Digit Recognition - Building a neural network from scratch in R" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2016-09-30-digit-recognition-building-a-neural-network-from-scratch-in-r/index.html" class="title listing-title">Digit Recognition - Building a neural network from scratch in R</a>
+</td>
+<td>
+<span class="listing-date">Sep 30, 2016</span>
+</td>
+</tr>
+<tr data-index="13" data-categories="data,data science,H2O,H2O.ai,h2o,MNIST,sparklyr,package,R" data-listing-date-sort="1503486000000" data-listing-file-modified-sort="1713028536125" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="36" data-listing-word-count-sort="7033" data-listing-title-sort="H2O.ai: Going for a paddle" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2017-08-23-h2o-ai-going-for-a-paddle/index.html" class="title listing-title">H2O.ai: Going for a paddle</a>
+</td>
+<td>
+<span class="listing-date">Aug 23, 2017</span>
+</td>
+</tr>
+<tr data-index="14" data-categories="automation,Excel,VBA" data-listing-date-sort="1475418763000" data-listing-file-modified-sort="1713028536029" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="793" data-listing-title-sort="IE Automation with VBA in Excel" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2016-10-02-ie-automation-with-vba-in-microsoft-excel/index.html" class="title listing-title">IE Automation with VBA in Excel</a>
+</td>
+<td>
+<span class="listing-date">Oct 2, 2016</span>
+</td>
+</tr>
+<tr data-index="15" data-categories="neural network,r,keras,valentines" data-listing-date-sort="1518609600000" data-listing-file-modified-sort="1713028536141" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1960" data-listing-title-sort="Love Machine: Automating the romantic songwriting process" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2018-02-14-love-machine/index.html" class="title listing-title">Love Machine: Automating the romantic songwriting process</a>
+</td>
+<td>
+<span class="listing-date">Feb 14, 2018</span>
+</td>
+</tr>
+<tr data-index="16" data-categories="Python,webscraping,text generation,markov" data-listing-date-sort="1500832800000" data-listing-file-modified-sort="1713028536097" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="291" data-listing-word-count-sort="58128" data-listing-title-sort="Markov and Churchill: an exploration of predictive text" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2017-07-23-markov-and-churchill-an-exploration-of-predictive-text/index.html" class="title listing-title">Markov and Churchill: an exploration of predictive text</a>
+</td>
+<td>
+<span class="listing-date">Jul 23, 2017</span>
+</td>
+</tr>
+<tr data-index="17" data-categories="r,package,data" data-listing-date-sort="1612018800000" data-listing-file-modified-sort="1713028536177" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2256" data-listing-title-sort="Multiple Names for Datasets in R Packages" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2021-01-30-multiple-names-for-datasets-in-r-packages/index.html" class="title listing-title">Multiple Names for Datasets in R Packages</a>
+</td>
+<td>
+<span class="listing-date">Jan 30, 2021</span>
+</td>
+</tr>
+<tr data-index="18" data-listing-date-sort="1712880000000" data-listing-file-modified-sort="1713028536181" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="141" data-listing-title-sort="New blog, who dis?" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2024-04-12-new-blog-who-dis/index.html" class="title listing-title">New blog, who dis?</a>
+</td>
+<td>
+<span class="listing-date">Apr 12, 2024</span>
+</td>
+</tr>
+<tr data-index="19" data-categories="data science,HTML,R,web data,web scraping" data-listing-date-sort="1476032417000" data-listing-file-modified-sort="1713028536033" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2629" data-listing-title-sort="Placement Year Salaries - Getting data from HTML" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2016-10-09-placement-year-salaries-getting-data-from-html/index.html" class="title listing-title">Placement Year Salaries - Getting data from HTML</a>
+</td>
+<td>
+<span class="listing-date">Oct 9, 2016</span>
+</td>
+</tr>
+<tr data-index="20" data-categories="command prompt,RStudio" data-listing-date-sort="1476292535000" data-listing-file-modified-sort="1713028536033" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="345" data-listing-title-sort="Saving/loading RStudio settings with Command Prompt" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2016-10-12-saving-loading-rstudio-settings-with-command-prompt/index.html" class="title listing-title">Saving/loading RStudio settings with Command Prompt</a>
+</td>
+<td>
+<span class="listing-date">Oct 12, 2016</span>
+</td>
+</tr>
+<tr data-index="21" data-categories="data science,r,python,intro,piano" data-listing-date-sort="1515067200000" data-listing-file-modified-sort="1713028536141" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1753" data-listing-title-sort="Scale up your interest: key steps for getting into data science" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2018-01-04-scale-up-your-interest/index.html" class="title listing-title">Scale up your interest: key steps for getting into data science</a>
+</td>
+<td>
+<span class="listing-date">Jan 4, 2018</span>
+</td>
+</tr>
+<tr data-index="22" data-categories="options,R,RStudio,snippets" data-listing-date-sort="1485002219000" data-listing-file-modified-sort="1713028536081" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="196" data-listing-title-sort="Snippets in RStudio" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2017-01-21-snippets-in-rstudio/index.html" class="title listing-title">Snippets in RStudio</a>
+</td>
+<td>
+<span class="listing-date">Jan 21, 2017</span>
+</td>
+</tr>
+<tr data-index="23" data-categories="data,R,visualization" data-listing-date-sort="1485481920000" data-listing-file-modified-sort="1713028536093" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1877" data-listing-title-sort="Summary of 30 Days, 30 Visualizations, 1 Dataset" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2017-01-27-summary-of-30-days-30-visualizations-1-dataset/index.html" class="title listing-title">Summary of 30 Days, 30 Visualizations, 1 Dataset</a>
+</td>
+<td>
+<span class="listing-date">Jan 27, 2017</span>
+</td>
+</tr>
+<tr data-index="24" data-categories="r,rstudio,cluster,google,cloud,dataproc,sparklyr" data-listing-date-sort="1526472000000" data-listing-file-modified-sort="1713028536145" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="318" data-listing-title-sort="Using RStudio on a Google Cloud Dataproc cluster" data-listing-filename-sort="index.qmd">
+<td>
+<a href="/./posts/2018-05-16-rstudio-on-google-cloud-dataproc/index.html" class="title listing-title">Using RStudio on a Google Cloud Dataproc cluster</a>
+</td>
+<td>
+<span class="listing-date">May 16, 2018</span>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="listing-no-matching d-none">
+No matching items
+</div>
+</div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
