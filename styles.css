@@ -1,1 +1,6 @@
 /* css styles */
+
+/* TODO can I really get away with this? */
+img {
+  max-width: 100%;
+}
