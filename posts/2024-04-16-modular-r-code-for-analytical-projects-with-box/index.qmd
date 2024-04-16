@@ -1,0 +1,130 @@
+---
+title: "Modular R code for analytical projects with {box}"
+date: 2024-04-16
+image: box_logo.png
+description: How we create modular code and use it across multiple projects
+---
+
+## Introduction
+
+I work with a team of data scientists and statistical modellers, and we do pretty much everything in R.
+
+We work on all sorts of projects; I wanted to share a really useful pattern that we've developed to help us write better code across all of those projects, and a little bit of the reasoning behind it!
+
+
+
+## Modular R code
+
+Plenty of code we write ends up being useful in multiple places. So ideally, we want to make sure our code is:
+
+* easy to **reproduce** - in particular, it should be clear when code depends on other code
+* easy to **maintain** - if we need to change how something works, we want to make changes in as few places as possible
+* easy to **find** - if we know a certain piece of functionality exists already, we shouldn't have to search too hard to find it
+
+Together, these concepts form the basis of **modular** code: that is, keeping related functionality grouped together, and having a sensible way of declaring dependencies in your code.
+
+One solution to this problem would be to turn any "modularisable" code within a project into an R package. And that is absolutely a good approach, and absolutely doable, but it does have a couple of drawbacks:
+
+* It requires a bit of additional knowledge, namely how to construct R packages - which actually isn't too tricky, this is barely a drawback
+* The package needs to be reinstalled after any updates - again, not arduous, but slight additional friction
+* We would need to choose a package name - this is _hard_
+
+I'm not joking. Choosing a package name can be really difficult - which actually is often a symptom of the potential package not having a well-defined scope. I think this is especially true of analytical projects, where there are often multiple "scopes" involved (e.g. importing data, processing, producing outputs...) - and, from bitter experience, where these scopes can change or expand quite dramatically as the project progresses.
+
+So ideally we want all the benefits of modular code, without the restrictions implied by having to fit our code into a formal package.
+
+Luckily, there's a package for that...
+
+
+
+## What is {box}?
+
+It's an R package providing a framework which makes it easier to write modular code. The `box::use()` function is used to declare when one piece of code is dependent on another - kind of like `source()`, but without dumping everything into the global environment.
+
+If you haven't come across {box} before, I'd really strongly encourage you to pause here and go take a quick look at the [package website](https://klmr.me/box/) to see how it works. It's awesome.
+
+On its own, it is already immensely useful within the context of a single project. But let me share a couple of additional ideas that revolutionised how we write modular code _across multiple projects_.
+
+
+
+## Defining module types
+
+As we began using {box} more and more to structure our code, we realised that we tended to end up three different "types" of module, distinguished by where they were being used...
+
+
+#### General modules - [box/*]
+
+These contain functionality which is useful across multiple projects. For example, we often need to work with our AWS Redshift data warehouse - so we have a general module called [box/redshift], which contains utility functions that make it easier to connect to & work with the data warehouse. We develop these modules in their own repo, and include them within other projects via a git submodule - I promise that's not as scary as it sounds, bear with me!
+
+
+#### Project modules - [prj/*]
+
+These are used within a single project, and are unique to that project's context. For example, a [prj/data] module might contain functions to fetch project-specific data from various places, and then a [prj/plots] module might contain functions to create certain project-specific graphs using that data. If anything ends up being more broadly useful, it might be "promoted" into a general module.
+
+
+#### Local modules - [./*]
+
+These are specific to the context of a particular set of files. They can be useful for keeping interdependent code neatly organised within a directory: code can be split into multiple files, with a "declaration of dependence" specified at the top of each file (via `box::use()`) which ensures it's easy to keep track of what depends on what. These can be handy while actively developing new code, but it's often worth upgrading local modules to project modules if possible.
+
+
+
+## Automatically setting the {box} search path for a project
+
+{box} finds modules by following a "search path", which we can set in one of the following ways:
+
+* `options("box.path")` - a vector of paths where modules can be found; like `.libPaths()` for R packages
+* `R_BOX_PATH` environment variable - a single string; like `$PATH` for system commands
+
+(There's more info about this in the [package docs](https://klmr.me/box/reference/use.html?q=path#search-path).)
+
+Let's assume that we're working on a project which lives in its own folder. In our case, each of our team's projects lives in its own git repo, and we work with those via [RStudio projects](https://support.posit.co/hc/en-us/articles/200526207-Using-RStudio-Projects).
+
+Then we can use the project's [`.Rprofile` file](https://support.posit.co/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf) to set the {box} search path when we start an R session in that directory (e.g. by opening the associated RStudio project).
+
+
+
+## Bringing it all together
+
+So with all of that in mind, here's the general approach we follow for setting up a new project which will use {box} modules:
+
+1. In the project repo where you would like to use modules, create a subdirectory to store them, e.g. `src/R/`:
+
+        $ # From the project's root directory
+        $ mkdir -p src/R/
+
+2. Add your "general modules" repo as a git submodule, in a `box/` directory within that new subdirectory:
+
+        $ git submodule add [general modules repo's URL] src/R/box
+
+3. Create a `prj/` directory alongside the `box/` directory, to store project modules:
+
+        $ mkdir src/R/prj/
+
+4. Update the project's `.Rprofile` file to set the `box.path` R option, and (optionally) to ensure that the general-modules submodule is updated to the appropriate point in its history when your project is opened:
+
+   ```r
+   local({
+     # Local box path
+     box_path <- file.path(getwd(), "src", "R")
+   
+     # Update existing box path (e.g. a path set by Rprofile.site)
+     options("box.path" = c(box_path, getOption("box.path")))
+   
+     # Make sure box submodule is pulled in at correct ref
+     system2("git", c("submodule", "update", "--init", "--recursive", "--", file.path(box_path, "box")))
+   })
+   ```
+
+5. If at any point you want to update the submodule to include the latest changes from the general repo, you'll need to run the following from within your project repo (amend the submodule path if necessary):
+
+       $ git submodule update --remote --recursive -- src/R/box
+   
+   This will update the reference which Git uses to fetch the submodule contents. You'll need to commit the updated reference to your project repo (i.e. add and commit your `src/R/box` "directory", which is actually just a small file containing that reference!).
+
+
+
+## Conclusion
+
+Please do borrow, adapt, and improve on these ideas - if you try using this same pattern, or if you come up with any additions/alternatives to it, I'd really love to hear about it!
+
+And if you enjoyed this, I promise I've got plenty more {box} content that I could find time to write about...
