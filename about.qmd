@@ -5,11 +5,14 @@ about:
   template: jolla
   links:
     - icon: github
-      text: Github
+      text: GitHub
       href: https://github.com/owenjonesuob
     - icon: linkedin
       text: LinkedIn
       href: https://linkedin.com/owenjonesuob
+    - icon: mastodon
+      text: Mastodon
+      href: https://fosstodon.org/@owenjonesuob
 
 ---
 
