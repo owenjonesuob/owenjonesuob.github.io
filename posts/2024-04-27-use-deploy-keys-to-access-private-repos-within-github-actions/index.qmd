@@ -1,0 +1,187 @@
+---
+title: "Use deploy keys to access private repos within GitHub Actions"
+date: 2024-04-27
+image: key.webp
+description: My preferred workflow for accessing non-public repos from within GitHub Actions
+---
+
+## Motivation
+
+Suppose you have a GitHub Actions [workflow](https://docs.github.com/en/actions/using-workflows/about-workflows) called `your-workflow`, within a repository called `your-repo`.
+
+Then suppose that for some reason (see [Why would I ever need to do this?](#why-would-i-ever-need-to-do-this)), within that workflow, you need to get hold of _another_ repo - let's call it `your-extra-repo`.
+
+That's easy enough if `your-extra-repo` is a public repo: you can "just" use the GitHub-provided [`actions/checkout`](https://github.com/actions/checkout) action multiple times within your workflow.
+
+But what if it's _not_ a public repo?
+
+There are a few possible approaches[^approaches] - I'm going to explain my preferred one here.
+
+[^approaches]: At the time of writing, this mammoth GitHub issue contains an ongoing discussion: <https://github.com/actions/checkout/issues/287>
+
+
+## Deploy keys
+
+A [deploy key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys) is an SSH key that you can attach to a single GitHub repository, and which provides access to just that repository.
+
+We can use a deploy key as the core part of our solution. It's an ideal choice here because it allows us to create a very specific access route:
+
+* From the GitHub Actions runner which executes `your-workflow`
+* To the non-public `your-extra-repo`
+* With read-only permissions (you _can_ add write permissions, but we shouldn't for this particular purpose)
+
+Here's how I usually set things up:
+
+1. Create a new SSH keypair - it doesn't matter what method you use to create it. I'd suggest using the following command in a terminal (a Linux terminal, or the RStudio Terminal, or Windows PowerShell...):
+   ```console
+   ssh-keygen -t ed25519 -f deploy
+   ```
+   If you're prompted, don't set a passphrase. This will create two files in your current working called `deploy.pub` and `deploy`, containing the public and private parts respectively of a new SSH key.
+   
+2. In GitHub, navigate to `your-extra-repo`. In the `Settings` tab, find `Security > Deploy keys`. Create a new deploy key:
+   * `Title` - up to you, but I tend to call it something like `your-repo-your-workflow`[^name_pattern]
+   * `Key` - this must be the **public** part of the SSH key you just created (you can open `deploy.pub` and copy the entire contents)
+
+3. Now navigate to the GitHub page for `your-repo`. In the `Settings` tab, find `Security > Secrets and variables > Actions`. Add a repository secret:
+   * `Name` - again up to you, but I tend to use the pattern `YOUR_EXTRA_REPO_DEPLOY_KEY`
+   * `Value` - this must be the **private** part of the SSH key you just created (you can open `deploy` and copy the entire contents)
+
+4. Delete both parts of the key from wherever you created it (e.g. delete `deploy.pub` and `deploy`) - we don't need these any more!
+
+
+[^name_pattern]: This naming pattern helps to make it clear, if you are ever tidying up your deploy keys, which key was used where.
+
+
+You can follow these same steps to make more than one private repo accessible from `your-workflow` - if you do, you should create & use a different deploy key for each one.
+
+
+
+## Why would I ever need to do this?
+
+So far, I've come across two different cases where this trick can be handy!
+
+
+### Case 1: git submodules
+
+Suppose `your-repo` contains a git submodule which lives in a private repo `your-extra-repo`, and that you need to get to something provided by that submodule within `your-workflow`.
+
+(For a concrete example of this, see my previous post about [modular R code with {box}](../2024-04-16-modular-r-code-for-analytical-projects-with-box/index.qmd).)
+
+The GitHub-provided [`actions/checkout`](https://github.com/actions/checkout) action is typically used to check out the current repo within a GitHub Actions workflow. And at first glance, the solution looks simple.
+
+The `actions/checkout` action takes some optional parameters:
+
+  * `submodules` - whether to check out submodules (default `false`)
+
+So can we just specify `submodules: true`?
+
+Unfortunately not, because the submodule we want is in a private repo; we'll need to provide some way of verifying that we're allowed to access it.
+
+Ah-ha! we say, look, here's another handy optional parameter:
+
+  * `ssh-key` - if provided, it is used to fetch the specified repository (instead of fetching via HTTPS with the `github.token` generated for the workflow run)
+
+So can we just pass our shiny new deploy key to this parameter via a GitHub secret?
+
+Again, we quickly hit a problem: it seems that if you provide `ssh-key`, it is used for _all_ git operations within the checkout action. So if we pass in a deploy key, we end up trying to use that deploy key to clone `your-repo` too, leading to failure (remember the whole point of a deploy key is that it allows access to one single repo, `your-extra-repo` in this case).
+
+So ideally, we'd like to do a "normal" checkout for `your-repo`, but a special SSH checkout for `your-extra-repo`...
+
+The trick isn't too complicated - in fact, it's adapted from a scenario anticipated by the `actions/checkout` repo's [README file](https://github.com/actions/checkout/blob/main/README.md#Checkout-multiple-repos-private):
+
+1. Use an `actions/checkout` step to check out `your-repo` as usual
+2. Use _another_ `actions/checkout` step to check out the `your-extra-repo` submodule, taking advantage of some more optional parameters:
+   * `repository` - which repository to check out (default is the repo which the workflow belongs to, but we'll ask for `your-extra-repo` instead)
+   * `path` - the location to check out to within `your-repo` (the default is `.`, but a submodule typically lives within a subdirectory, i.e. you probably don't want to check out `your-extra-repo` right on top of `your-repo`)
+   * `ssh-key` - we've met this already! We'll use it here to pass through the private half of the deploy key we set up previously
+
+
+```yaml
+jobs:
+  some-job-name:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Checkout your-extra-repo submodule
+        uses: actions/checkout@v4
+        with:
+          repository: your-user-or-org/your-extra-repo
+          ssh-key: ${{ secrets.YOUR_EXTRA_REPO_DEPLOY_KEY }}
+          path: ./path/to/submodule
+          
+      # More steps...
+```
+
+Note: the explicit `submodules: false` isn't required since `false` is the default, but I think it suggests to the casual reader that there's _something_ funky and submodule-related going on...)
+
+
+
+### Case 2: pre-commit hooks
+
+We use [pre-commit](https://pre-commit.com/) in several of our team's repos. For these repos, we also set up a GitHub Actions workflow to run pre-commit whenever a pull request is opened or updated. I won't go into too much detail here, as that's probably worthy of its own post sometime!
+
+As well as using some hooks from public repos, we have a handful of custom "team hooks" in an internal[^internal] repo within our GitHub organisation.
+
+[^internal]: You can interchange "private" and "internal" throughout this post - the key thing is that both are "non-public".
+
+The problem is that under the hood, pre-commit uses git to get hold of the various hook-supplying repos. So once again, we need some way of using a "regular" checkout for public repos, and then a "non-regular" checkout for our internal repo.
+
+This time, the trick is in two parts:
+
+1. In `your-repo`, in the `.pre-commit-config.yaml` file, use HTTPS-format repo URLs for public repos, and an SSH-format URL for the internal repo:
+   ```yaml
+   repos:
+     - repo: https://github.com/pre-commit/pre-commit-hooks
+       rev: v4.5.0
+       hooks:
+         - id: trailing-whitespace
+         - id: end-of-file-fixer
+     - repo: https://github.com/lorenzwalthert/precommit
+       rev: v0.4.1
+       hooks:
+         - id: parsable-R
+     - repo: git@github.com:your-user-or-org/your-extra-repo
+       rev: v0.0.1
+       hooks:
+         - id: your-first-hook
+         - id: your-second-hook
+   ```
+   
+2. In your GitHub Actions workflow, copy the private half of the deploy key from the relevant GitHub secret into a keyfile, and then tell pre-commit to use that SSH key for all SSH operations executed by git:
+
+   ```yaml
+   jobs:
+     run:
+       runs-on: ubuntu-latest
+       steps:
+       
+       - uses: actions/checkout@v4
+         with:
+           fetch-depth: 0
+           
+       - uses: actions/setup-python@v5
+       
+       - name: Install dependencies
+         run: |
+           python -m pip install --upgrade pip pre-commit
+   
+           # Set up SSH access for some-private-repo
+           mkdir -p ~/.ssh/
+           echo "${{ secrets.SOME_PRIVATE_REPO_DEPLOY_KEY }}" > ~/.ssh/deploy-key
+           chmod 600 ~/.ssh/deploy-key
+           ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+           
+       - name: Run pre-commit
+         run: |
+           GIT_SSH_COMMAND='ssh -i ~/.ssh/deploy-key -o IdentitiesOnly=yes' \
+             pre-commit run \
+             --from-ref ${{ github.event.pull_request.base.sha }} \
+             --to-ref ${{ github.event.pull_request.head.sha }}
+   ```
+
