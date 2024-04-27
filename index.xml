@@ -10,7 +10,530 @@
 <atom:link href="https://owenjonesuob.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>I&#39;m a data scientist/engineer living in Cardiff, United Kingdom. This is a collection of projects I have spent time on while I was supposed to be doing other things.</description>
 <generator>quarto-1.4.553</generator>
-<lastBuildDate>Tue, 16 Apr 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 27 Apr 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Use deploy keys to access private repos within GitHub Actions</title>
+  <link>https://owenjonesuob.github.io/posts/2024-04-27-use-deploy-keys-to-access-private-repos-within-github-actions/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<section id="motivation" class="level2">
+<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
+<p>Suppose you have a GitHub Actions <a href="https://docs.github.com/en/actions/using-workflows/about-workflows">workflow</a> called <code>your-workflow</code>, within a repository called <code>your-repo</code>.</p>
+<p>Then suppose that for some reason (see Why would I ever need to do this?), within that workflow, you need to get hold of <em>another</em> repo - let’s call it <code>your-extra-repo</code>.</p>
+<p>That’s easy enough if <code>your-extra-repo</code> is a public repo: you can “just” use the GitHub-provided <a href="https://github.com/actions/checkout"><code>actions/checkout</code></a> action multiple times within your workflow.</p>
+<p>But what if it’s <em>not</em> a public repo?</p>
+<p>There are a few possible approaches<sup>1</sup> - I’m going to explain my preferred one here.</p>
+</section>
+<section id="deploy-keys" class="level2">
+<h2 class="anchored" data-anchor-id="deploy-keys">Deploy keys</h2>
+<p>A <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys">deploy key</a> is an SSH key that you can attach to a single GitHub repository, and which provides access to just that repository.</p>
+<p>We can use a deploy key as the core part of our solution. It’s an ideal choice here because it allows us to create a very specific access route:</p>
+<ul>
+<li>From the GitHub Actions runner which executes <code>your-workflow</code></li>
+<li>To the non-public <code>your-extra-repo</code></li>
+<li>With read-only permissions (you <em>can</em> add write permissions, but we shouldn’t for this particular purpose)</li>
+</ul>
+<p>Here’s how I usually set things up:</p>
+<ol type="1">
+<li><p>Create a new SSH keypair - it doesn’t matter what method you use to create it. I’d suggest using the following command in a terminal (a Linux terminal, or the RStudio Terminal, or Windows PowerShell…):</p>
+<pre class="console"><code>ssh-keygen -t ed25519 -f deploy</code></pre>
+<p>If you’re prompted, don’t set a passphrase. This will create two files in your current working called <code>deploy.pub</code> and <code>deploy</code>, containing the public and private parts respectively of a new SSH key.</p></li>
+<li><p>In GitHub, navigate to <code>your-extra-repo</code>. In the <code>Settings</code> tab, find <code>Security &gt; Deploy keys</code>. Create a new deploy key:</p>
+<ul>
+<li><code>Title</code> - up to you, but I tend to call it something like <code>your-repo-your-workflow</code><sup>2</sup></li>
+<li><code>Key</code> - this must be the <strong>public</strong> part of the SSH key you just created (you can open <code>deploy.pub</code> and copy the entire contents)</li>
+</ul></li>
+<li><p>Now navigate to the GitHub page for <code>your-repo</code>. In the <code>Settings</code> tab, find <code>Security &gt; Secrets and variables &gt; Actions</code>. Add a repository secret:</p>
+<ul>
+<li><code>Name</code> - again up to you, but I tend to use the pattern <code>YOUR_EXTRA_REPO_DEPLOY_KEY</code></li>
+<li><code>Value</code> - this must be the <strong>private</strong> part of the SSH key you just created (you can open <code>deploy</code> and copy the entire contents)</li>
+</ul></li>
+<li><p>Delete both parts of the key from wherever you created it (e.g.&nbsp;delete <code>deploy.pub</code> and <code>deploy</code>) - we don’t need these any more!</p></li>
+</ol>
+<p>You can follow these same steps to make more than one private repo accessible from <code>your-workflow</code> - if you do, you should create &amp; use a different deploy key for each one.</p>
+</section>
+<section id="why-would-i-ever-need-to-do-this" class="level2">
+<h2 class="anchored" data-anchor-id="why-would-i-ever-need-to-do-this">Why would I ever need to do this?</h2>
+<p>So far, I’ve come across two different cases where this trick can be handy!</p>
+<section id="case-1-git-submodules" class="level3">
+<h3 class="anchored" data-anchor-id="case-1-git-submodules">Case 1: git submodules</h3>
+<p>Suppose <code>your-repo</code> contains a git submodule which lives in a private repo <code>your-extra-repo</code>, and that you need to get to something provided by that submodule within <code>your-workflow</code>.</p>
+<p>(For a concrete example of this, see my previous post about <a href="../../posts/2024-04-16-modular-r-code-for-analytical-projects-with-box/index.html">modular R code with {box}</a>.)</p>
+<p>The GitHub-provided <a href="https://github.com/actions/checkout"><code>actions/checkout</code></a> action is typically used to check out the current repo within a GitHub Actions workflow. And at first glance, the solution looks simple.</p>
+<p>The <code>actions/checkout</code> action takes some optional parameters:</p>
+<ul>
+<li><code>submodules</code> - whether to check out submodules (default <code>false</code>)</li>
+</ul>
+<p>So can we just specify <code>submodules: true</code>?</p>
+<p>Unfortunately not, because the submodule we want is in a private repo; we’ll need to provide some way of verifying that we’re allowed to access it.</p>
+<p>Ah-ha! we say, look, here’s another handy optional parameter:</p>
+<ul>
+<li><code>ssh-key</code> - if provided, it is used to fetch the specified repository (instead of fetching via HTTPS with the <code>github.token</code> generated for the workflow run)</li>
+</ul>
+<p>So can we just pass our shiny new deploy key to this parameter via a GitHub secret?</p>
+<p>Again, we quickly hit a problem: it seems that if you provide <code>ssh-key</code>, it is used for <em>all</em> git operations within the checkout action. So if we pass in a deploy key, we end up trying to use that deploy key to clone <code>your-repo</code> too, leading to failure (remember the whole point of a deploy key is that it allows access to one single repo, <code>your-extra-repo</code> in this case).</p>
+<p>So ideally, we’d like to do a “normal” checkout for <code>your-repo</code>, but a special SSH checkout for <code>your-extra-repo</code>…</p>
+<p>The trick isn’t too complicated - in fact, it’s adapted from a scenario anticipated by the <code>actions/checkout</code> repo’s <a href="https://github.com/actions/checkout/blob/main/README.md#Checkout-multiple-repos-private">README file</a>:</p>
+<ol type="1">
+<li>Use an <code>actions/checkout</code> step to check out <code>your-repo</code> as usual</li>
+<li>Use <em>another</em> <code>actions/checkout</code> step to check out the <code>your-extra-repo</code> submodule, taking advantage of some more optional parameters:
+<ul>
+<li><code>repository</code> - which repository to check out (default is the repo which the workflow belongs to, but we’ll ask for <code>your-extra-repo</code> instead)</li>
+<li><code>path</code> - the location to check out to within <code>your-repo</code> (the default is <code>.</code>, but a submodule typically lives within a subdirectory, i.e.&nbsp;you probably don’t want to check out <code>your-extra-repo</code> right on top of <code>your-repo</code>)</li>
+<li><code>ssh-key</code> - we’ve met this already! We’ll use it here to pass through the private half of the deploy key we set up previously</li>
+</ul></li>
+</ol>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">jobs</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span></span>
+<span id="cb2-2"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">some-job-name</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span></span>
+<span id="cb2-3"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">runs-on</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> ubuntu-latest</span></span>
+<span id="cb2-4"></span>
+<span id="cb2-5"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">steps</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span></span>
+<span id="cb2-6"></span>
+<span id="cb2-7"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> Checkout this repo</span></span>
+<span id="cb2-8"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">uses</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> actions/checkout@v4</span></span>
+<span id="cb2-9"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">with</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span></span>
+<span id="cb2-10"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">          </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">submodules</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">false</span></span>
+<span id="cb2-11"></span>
+<span id="cb2-12"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> Checkout your-extra-repo submodule</span></span>
+<span id="cb2-13"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">uses</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> actions/checkout@v4</span></span>
+<span id="cb2-14"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">with</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span></span>
+<span id="cb2-15"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">          </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">repository</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> your-user-or-org/your-extra-repo</span></span>
+<span id="cb2-16"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">          </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ssh-key</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> ${{ secrets.YOUR_EXTRA_REPO_DEPLOY_KEY }}</span></span>
+<span id="cb2-17"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">          </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">path</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> ./path/to/submodule</span></span>
+<span id="cb2-18"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">          </span></span>
+<span id="cb2-19"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">      # More steps...</span></span></code></pre></div>
+<p>Note: the explicit <code>submodules: false</code> isn’t required since <code>false</code> is the default, but I think it suggests to the casual reader that there’s <em>something</em> funky and submodule-related going on…)</p>
+</section>
+<section id="case-2-pre-commit-hooks" class="level3">
+<h3 class="anchored" data-anchor-id="case-2-pre-commit-hooks">Case 2: pre-commit hooks</h3>
+<p>We use <a href="https://pre-commit.com/">pre-commit</a> in several of our team’s repos. For these repos, we also set up a GitHub Actions workflow to run pre-commit whenever a pull request is opened or updated. I won’t go into too much detail here, as that’s probably worthy of its own post sometime!</p>
+<p>As well as using some hooks from public repos, we have a handful of custom “team hooks” in an internal<sup>3</sup> repo within our GitHub organisation.</p>
+<p>The problem is that under the hood, pre-commit uses git to get hold of the various hook-supplying repos. So once again, we need some way of using a “regular” checkout for public repos, and then a “non-regular” checkout for our internal repo.</p>
+<p>This time, the trick is in two parts:</p>
+<ol type="1">
+<li><p>In <code>your-repo</code>, in the <code>.pre-commit-config.yaml</code> file, use HTTPS-format repo URLs for public repos, and an SSH-format URL for the internal repo:</p>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">repos</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span></span>
+<span id="cb3-2"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">  </span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">repo</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> https://github.com/pre-commit/pre-commit-hooks</span></span>
+<span id="cb3-3"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rev</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> v4.5.0</span></span>
+<span id="cb3-4"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">hooks</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span></span>
+<span id="cb3-5"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">id</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> trailing-whitespace</span></span>
+<span id="cb3-6"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">id</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> end-of-file-fixer</span></span>
+<span id="cb3-7"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">  </span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">repo</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> https://github.com/lorenzwalthert/precommit</span></span>
+<span id="cb3-8"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rev</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> v0.4.1</span></span>
+<span id="cb3-9"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">hooks</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span></span>
+<span id="cb3-10"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">id</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> parsable-R</span></span>
+<span id="cb3-11"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">  </span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">repo</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> git@github.com:your-user-or-org/your-extra-repo</span></span>
+<span id="cb3-12"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rev</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> v0.0.1</span></span>
+<span id="cb3-13"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">hooks</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span></span>
+<span id="cb3-14"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">id</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> your-first-hook</span></span>
+<span id="cb3-15"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">id</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> your-second-hook</span></span></code></pre></div></li>
+<li><p>In your GitHub Actions workflow, copy the private half of the deploy key from the relevant GitHub secret into a keyfile, and then tell pre-commit to use that SSH key for all SSH operations executed by git:</p>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">jobs</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span></span>
+<span id="cb4-2"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">run</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span></span>
+<span id="cb4-3"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">runs-on</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> ubuntu-latest</span></span>
+<span id="cb4-4"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">steps</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span></span>
+<span id="cb4-5"></span>
+<span id="cb4-6"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">    </span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">uses</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> actions/checkout@v4</span></span>
+<span id="cb4-7"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">      </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">with</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span></span>
+<span id="cb4-8"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fetch-depth</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span></span>
+<span id="cb4-9"></span>
+<span id="cb4-10"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">    </span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">uses</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> actions/setup-python@v5</span></span>
+<span id="cb4-11"></span>
+<span id="cb4-12"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">    </span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> Install dependencies</span></span>
+<span id="cb4-13"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">      run</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">: </span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">|</span></span>
+<span id="cb4-14">        python -m pip install --upgrade pip pre-commit</span>
+<span id="cb4-15"></span>
+<span id="cb4-16">        # Set up SSH access for some-private-repo</span>
+<span id="cb4-17">        mkdir -p ~/.ssh/</span>
+<span id="cb4-18">        echo "${{ secrets.SOME_PRIVATE_REPO_DEPLOY_KEY }}" &gt; ~/.ssh/deploy-key</span>
+<span id="cb4-19">        chmod 600 ~/.ssh/deploy-key</span>
+<span id="cb4-20">        ssh-keyscan -H github.com &gt;&gt; ~/.ssh/known_hosts</span>
+<span id="cb4-21"></span>
+<span id="cb4-22"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">    </span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> Run pre-commit</span></span>
+<span id="cb4-23"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">      run</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">: </span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">|</span></span>
+<span id="cb4-24">        GIT_SSH_COMMAND='ssh -i ~/.ssh/deploy-key -o IdentitiesOnly=yes' \</span>
+<span id="cb4-25">          pre-commit run \</span>
+<span id="cb4-26">          --from-ref ${{ github.event.pull_request.base.sha }} \</span>
+<span id="cb4-27">          --to-ref ${{ github.event.pull_request.head.sha }}</span></code></pre></div></li>
+</ol>
+
+
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>At the time of writing, this mammoth GitHub issue contains an ongoing discussion: <a href="https://github.com/actions/checkout/issues/287" class="uri">https://github.com/actions/checkout/issues/287</a>↩︎</p></li>
+<li id="fn2"><p>This naming pattern helps to make it clear, if you are ever tidying up your deploy keys, which key was used where.↩︎</p></li>
+<li id="fn3"><p>You can interchange “private” and “internal” throughout this post - the key thing is that both are “non-public”.↩︎</p></li>
+</ol>
+</section></div> ]]></description>
+  <guid>https://owenjonesuob.github.io/posts/2024-04-27-use-deploy-keys-to-access-private-repos-within-github-actions/</guid>
+  <pubDate>Sat, 27 Apr 2024 00:00:00 GMT</pubDate>
+  <media:content url="https://owenjonesuob.github.io/posts/2024-04-27-use-deploy-keys-to-access-private-repos-within-github-actions/key.webp" medium="image" type="image/webp"/>
+</item>
 <item>
   <title>Modular R code for analytical projects with {box}</title>
   <link>https://owenjonesuob.github.io/posts/2024-04-16-modular-r-code-for-analytical-projects-with-box/</link>
@@ -2448,456 +2971,6 @@ To be completely honest, when I started this project just over 2 weeks ago I did
   <guid>https://owenjonesuob.github.io/posts/2016-11-22-30-days-30-visualizations-1-dataset-part-3/</guid>
   <pubDate>Tue, 22 Nov 2016 20:53:53 GMT</pubDate>
   <media:content url="https://owenjonesuob.github.io/posts/2016-11-22-30-days-30-visualizations-1-dataset-part-3/day11.jpeg" medium="image" type="image/jpeg"/>
-</item>
-<item>
-  <title>30 Days, 30 Visualizations, 1 Dataset: Days 06-10</title>
-  <link>https://owenjonesuob.github.io/posts/2016-11-17-30-days-30-visualizations-1-dataset-part-2/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<h3 class="anchored">
-Day 06 (17/11/16): Podium CP timeshift check
-</h3>
-<p>
-As promised yesterday, I’m going to investigate the potential timeshift error in the data relating to one particular car park, caused by the changeover from GMT to BST.
-</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># I'll have a look at records from spring of 2016 - clocks changed on 27/03/2016</span></span>
-<span id="cb1-2"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># at 01:00</span></span>
-<span id="cb1-3">times <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> df<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>LastUpdate[<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">grep</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"^27/03/2016"</span>, df<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>LastUpdate)]</span>
-<span id="cb1-4">hours <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as.POSIXlt</span>(times, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">format =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"%d/%m/%Y %I:%M:%S %p"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">tz =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"UTC"</span>)<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>hour</span>
-<span id="cb1-5"></span>
-<span id="cb1-6"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Check number of records each hour (shouldn't be any at 1AM i.e. 2nd entry)</span></span>
-<span id="cb1-7"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sapply</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">23</span>), <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(i) <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sum</span>(hours <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> i))</span></code></pre></div>
-<p><code>rconsole##  [1] 96 12 86 94 96 96 96 96 96 96 97 95 96 96 96 96 96 96 96 96 96 98 95 ## [24] 95</code></p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Approximately 1/8 as many records at 01:00 as at other times - is just one of</span></span>
-<span id="cb2-2"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># the 8 car parks responsible?</span></span>
-<span id="cb2-3">names <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> df<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>Name[<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">grep</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"^27/03/2016"</span>, df<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>LastUpdate)]</span>
-<span id="cb2-4">names[hours <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>]</span></code></pre></div>
-<p><code>rconsole##  [1] Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP ##  [8] Podium CP Podium CP Podium CP Podium CP Podium CP ## 9 Levels: Avon Street CP Charlotte Street CP ... test car park</code></p>
-<p>```r# It seems Podium CP’s clock is not changing!</p>
-<section id="lets-check-previous-year-too---clocks-changed-on-29032015" class="level1">
-<h1>Let’s check previous year too - clocks changed on 29/03/2015</h1>
-<p>t &lt;- df<img src="https://latex.codecogs.com/png.latex?LastUpdate%5Bgrep(%22%5E29/03/2015%22,%20df">LastUpdate)] h &lt;- as.POSIXlt(t, format = “%d/%m/%Y %I:%M:%S %p”, tz = “UTC”)<img src="https://latex.codecogs.com/png.latex?hour%0An%20%3C-%20df">Name[grep(“^29/03/2015”, df$LastUpdate)]</p>
-<p>sapply(c(0:23), function(i) sum(h == i))</p>
-<pre><code>
-```rconsole##  [1] 84 12 72 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84 84
-## [24] 84```
-
-```rn[h == 1]```
-```rconsole##  [1] Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP
-##  [8] Podium CP Podium CP Podium CP Podium CP Podium CP
-## 9 Levels: Avon Street CP Charlotte Street CP ... test car park```
-&lt;p&gt;Hmmm… let’s quickly try to see the effect of this error from one week to the next by comparing a day in a GMT week with the same weekday in a BST week. I’m going to use a couple of packages which are new to me - &lt;code&gt;dplyr&lt;/code&gt; and &lt;code&gt;lubridate&lt;/code&gt; - to manipulate the data.&lt;/p&gt;
-
-```r
-library(dplyr)
-library(lubridate)
-
-# Get records for Podium CP from Tuesday, 22/03/2016 (arbitrary weekday!)
-weekgmt &lt;-
-    df %&gt;%
-    filter(grepl("^22/03/2016", LastUpdate)) %&gt;%
-    filter(grepl("Podium CP", Name))
-
-roundedgmt &lt;- round_date(as.POSIXct(weekgmt$LastUpdate,
-                                 format = "%d/%m/%Y %I:%M:%S %p", tz = "UTC"),
-                      unit = "10 min")
-
-weekgmt$Time &lt;- hour(roundedgmt) + minute(roundedgmt)/60
-    
-# Get records for Podium CP from exactly 1 week later, after clocks had changed
-weekbst &lt;- df %&gt;%
-    filter(grepl("^29/03/2016", LastUpdate)) %&gt;%
-    filter(grepl("Podium CP", Name))
-
-roundedbst &lt;- round_date(as.POSIXct(weekbst$LastUpdate,
-                                    format = "%d/%m/%Y %I:%M:%S %p",
-                                    tz = "UTC"),
-                         unit = "10 min")
-
-weekbst$Time &lt;- hour(roundedbst) + minute(roundedbst)/60
-
-
-# Nothing too fancy with the plotting today!
-plot(weekgmt$Time, weekgmt$Percentage, pch = 20, ylim = c(0, 100),
-     xlab = "Time", ylab = "Percentage", main = "Podium CP timeshift check")
-
-points(weekbst$Time, weekbst$Percentage, pch = 20, col = "blue")
-
-legend("topright", c("22/03/2016 (GMT)", "29/03/2016 (BST)"),
-       fill = c("black", "blue"))</code></pre>
-<img src="https://owenjonesuob.github.io/posts/2016-11-17-30-days-30-visualizations-1-dataset-part-2/day06.jpeg">
-<p>
-Oh… those curves look quite similar. There certainly isn’t an obvious one-hour shift from one week to the next.
-</p>
-<p>
-Let’s have another look at that vector from earlier of the number of records from each hour:
-</p>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sapply</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">23</span>), <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(i) <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sum</span>(hours <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> i))</span></code></pre></div>
-<code>rconsole##  [1] 96 12 86 94 96 96 96 96 96 96 97 95 96 96 96 96 96 96 96 96 96 98 95 ## [24] 95</code>
-<p>
-I was focusing so much on the suspicious 2nd element that I didn’t spot the also-somewhat-suspicious 3rd element - there are noticeably fewer records from 02:00 to 02:59 than from the other hours. This would be explained if Podium CP changes its clocks at 02:00, rather than 01:00… let’s see.
-</p>
-<code>rsum(names[hours == 2] == "Podium CP")</code> <code>r## [1] 0</code>
-<p>
-So none of the records taken between 02:00 and 03:00 were from Podium CP - confirming my theory.
-</p>
-<p>
-There is, then, as I suspected, some timeshift error in the data from Podium CP.
-</p>
-<p>
-However, the error is present for a grand total of 2 hours each year (one hour on a spring day, one on an autumn day), and records from these hours are between 01:00 and 03:00, when there is virtually no change in the occupancy of the car park. Therefore I think it is reasonable not to worry about it too much!
-</p>
-<hr>
-<h3 class="anchored" data-anchor-id="lets-check-previous-year-too---clocks-changed-on-29032015">
-Day 07 (18/11/16): Status by weekday
-</h3>
-<p>
-I seem to have been converting the <code>LastUpdate</code> column to various date formats fairly regularly. Right now, I can’t think of any good reason why I need to leave it in character format, so I’ll save myself a step in future and re-write the column in my CSV.
-</p>
-<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(dplyr)</span>
-<span id="cb5-2"></span>
-<span id="cb5-3">df <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">read.csv</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"df.csv"</span>)</span>
-<span id="cb5-4"></span>
-<span id="cb5-5">df <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mutate</span>(df, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">LastUpdate =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as.POSIXct</span>(LastUpdate,</span>
-<span id="cb5-6">                                         <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">format =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"%d/%m/%Y %I:%M:%S %p"</span>))</span>
-<span id="cb5-7"></span>
-<span id="cb5-8"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">write.csv</span>(df, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"df.csv"</span>)</span></code></pre></div>
-<p>
-On to today’s work.
-</p>
-<p>
-There’s one column I haven’t really looked at so far: the <code>Status</code> column, which describes the change in occupancy of the car park compared to the previous record. Let’s have a look:
-</p>
-<code>rsummary(df$Status)</code> <code>rconsole##          Emptying  Filling   Static  ##     1333   474595   404339   647960</code>
-<p>
-There are a number of records without entries in the <code>Status</code> column - but remembering a discovery from a previous day, I have an idea of who the culprit might be…
-</p>
-<code>rsummary(df[df$Name == "test car park", ]$Status)</code> <code>rconsole##          Emptying  Filling   Static  ##     1333        0        0        0</code>
-<p>
-That accounts for the 1333 records with no <code>Status</code> entry, then.
-</p>
-<p>
-Onwards! We’ll remove the “test car park” records, and then for each car park and each weekday we’ll calculate the percentage of records that have each possible <code>Status</code>.
-</p>
-<p><code>rlibrary(lubridate)</code></p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">df2 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span></span>
-<span id="cb6-2">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">select</span>(df, Name, LastUpdate, Status) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%&gt;%</span></span>
-<span id="cb6-3">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">filter</span>(Name <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"test car park"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%&gt;%</span></span>
-<span id="cb6-4">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mutate</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">Day =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">wday</span>(LastUpdate, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">label =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>)) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%&gt;%</span></span>
-<span id="cb6-5">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">group_by</span>(Name, Day) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%&gt;%</span></span>
-<span id="cb6-6">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">summarize</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">Filling =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sum</span>(Status <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Filling"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">n</span>(),</span>
-<span id="cb6-7">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">Static =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sum</span>(Status <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Static"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">n</span>(),</span>
-<span id="cb6-8">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">Emptying =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sum</span>(Status <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Emptying"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">n</span>())</span>
-<span id="cb6-9"></span>
-<span id="cb6-10"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">head</span>(df2)</span></code></pre></div>
-<code>rconsole## Source: local data frame [6 x 5] ## Groups: Name [1] ##  ##             Name   Day   Filling    Static  Emptying ##           &lt;fctr&gt; &lt;ord&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; ## 1 Avon Street CP   Sun 0.2601505 0.3397476 0.4001019 ## 2 Avon Street CP   Mon 0.3163539 0.3390450 0.3446012 ## 3 Avon Street CP  Tues 0.3585985 0.2763592 0.3650423 ## 4 Avon Street CP   Wed 0.3831001 0.2751629 0.3417370 ## 5 Avon Street CP Thurs 0.3306908 0.2689445 0.4003647 ## 6 Avon Street CP   Fri 0.3864523 0.2756433 0.3379044</code>
-<p>
-I’m aiming for a stacked-bar-type chart today, and it seems the most effective way to do this is to have the data in so-called ‘long’ format - so I’ll use another package I haven’t used much before, <code>reshape2</code>, to reformat the data:
-</p>
-<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(reshape2)</span>
-<span id="cb7-2"></span>
-<span id="cb7-3">df3 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">melt</span>(df2)</span></code></pre></div>
-<code>rconsole## Using Name, Day as id variables</code> <code>rhead(df3)</code>&gt; <code>rconsole##             Name   Day variable     value ## 1 Avon Street CP   Sun  Filling 0.2601505 ## 2 Avon Street CP   Mon  Filling 0.3163539 ## 3 Avon Street CP  Tues  Filling 0.3585985 ## 4 Avon Street CP   Wed  Filling 0.3831001 ## 5 Avon Street CP Thurs  Filling 0.3306908 ## 6 Avon Street CP   Fri  Filling 0.3864523</code>
-<p>
-Right, let’s plot!
-</p>
-<p>```rlibrary(ggplot2)</p>
-<p>p &lt;- ggplot(df3, aes(x = Day, y = value, fill = variable)) + geom_bar(stat = “identity”) + coord_flip() + facet_wrap(~ Name, nrow = 2) + scale_fill_manual(values = c(“#FF4444”, “#AAAAAA”, “#6666FF”))</p>
-<p>p<code>&lt;img src="day07odd.jpeg" /&gt; &lt;p&gt;Immediately we notice that our week has been extended with an eighth day - NAday.&lt;/p&gt; &lt;p&gt;This extra day seems to have been provided by Podium CP, which is by this point getting a reputation as a bit of a rebel… and as well as giving us NAday, it seems that Podium CP never fills or empties either.&lt;/p&gt;</code>rsummary(df[df<img src="https://latex.codecogs.com/png.latex?Name%20==%20%22Podium%20CP%22,%5D">Status)<code></code>rconsole## Emptying Filling Static ## 0 0 0 191022<code>&lt;p&gt;Maybe every car that enters perfectly synchronizes with an exiting car. Maybe no-one ever enters or exits. We may never know.&lt;/p&gt; &lt;p&gt;Let’s remove the NAday records, just to tidy up the plot a little, and then re-plot.&lt;/p&gt;</code>rdf &lt;- df[!is.na(df$LastUpdate), ] # Repeat all code for df2, df3</p>
-</section>
-<section id="ill-make-the-plot-a-bit-prettier-too" class="level1">
-<h1>I’ll make the plot a bit prettier too</h1>
-<p>library(scales)</p>
-<p>p &lt;- ggplot(df3, aes(x = Day, y = value, fill = variable)) + geom_bar(stat = “identity”) + coord_flip() + facet_wrap(~ Name, nrow = 2) + scale_fill_manual(values = c(“#FF4444”, “#AAAAAA”, “#6666FF”)) + scale_x_discrete(limits = rev(levels(df2$Day))) + scale_y_continuous(labels = percent) + ggtitle(“Status by weekday”) + labs(x = “Day”, y = “Percent of records”, fill = ““) + theme(plot.title = element_text(size = 22, face =”bold”))</p>
-p``` <img src="https://owenjonesuob.github.io/posts/2016-11-17-30-days-30-visualizations-1-dataset-part-2/day07final.jpeg">
-<p>
-This plot gives us some idea of the ‘turnaround’ of the different car parks. Looking, for example, at the two SouthGate car parks, we can see that SG General is rarely static, suggesting a near-constant flow of cars entering and exiting. In contrast, SG Rail is static more than half the time.
-</p>
-<p>
-This corresponds to the role of the two car parks: SG General is in the town centre near the main shopping area, and so is used by a lot of people for relatively short periods of time. On the other hand SG Rail is primarily used by rail commuters, so during the day there isn’t much change in its occupancy - it fills and empties rapidly each morning and evening. This behaviour can actually be seen on the plot from Day 04, where SG Rail’s occupancy is much ‘squarer’ than the other car parks, particularly during the working week.
-</p>
-<hr>
-<h3 class="anchored" data-anchor-id="ill-make-the-plot-a-bit-prettier-too">
-Day 08 (19/11/16): More dodgy data…
-</h3>
-<p>
-I just noticed a couple of things about my dataframe, <code>df</code>.
-</p>
-<p>
-Firstly, because I’ve re-written it to CSV a couple of times and forgotten to turn off <code>row.names</code>, it’s picked up a couple of extra unnecessary columns.
-</p>
-<p>
-Secondly, <code>LastUpdate</code> still isn’t in POSIXct form.
-</p>
-<p>
-I’m going to go back to the original huge dataframe and sort out these issues for hopefully the last time.
-</p>
-<p>```rlibrary(dplyr) library(lubridate)</p>
-<p>df &lt;- read.csv(“C:/Users/Owen/Documents/Coding/Parking/data/BANES_Historic_Car_Park_Occupancy.csv”) %&gt;% select(Name, LastUpdate, Capacity, Occupancy, Percentage, Status) %&gt;% mutate(LastUpdate = as.POSIXct(LastUpdate, format = “%d/%m/%Y %I:%M:%S %p”, tz = “UTC”))</p>
-<p>str(df)<code></code>rconsole## ‘data.frame’: 1528227 obs. of 6 variables: ## $ Name : Factor w/ 9 levels “Avon Street CP”,..: 7 1 3 8 6 4 2 5 8 5 … ## $ LastUpdate: POSIXct, format: “2016-02-13 02:08:46” “2016-02-13 02:09:36” … ## $ Capacity : int 720 630 827 140 521 698 1056 1252 140 1252 … ## $ Occupancy : int 28 32 8 15 75 21 124 0 15 0 … ## $ Percentage: int 3 5 1 10 14 3 12 0 10 0 … ## $ Status : Factor w/ 4 levels ““,”Emptying”,..: 4 3 4 4 4 4 3 4 4 4 …<code>&lt;p&gt;That’s more like it. Let’s write that to a file.&lt;/p&gt;</code>rwrite.csv(df, “df.csv”, row.names = FALSE)<code>&lt;p&gt;Now let’s load it in again, just to make sure:&lt;/p&gt;</code>rdf &lt;- read.csv(“C:/Users/Owen/Documents/Coding/Parking/df.csv”)</p>
-<p>str(df)<code></code>rconsole## ‘data.frame’: 1528227 obs. of 6 variables: ## $ Name : Factor w/ 9 levels “Avon Street CP”,..: 7 1 3 8 6 4 2 5 8 5 … ## $ LastUpdate: Factor w/ 1004552 levels “2014-10-17 15:43:21”,..: 659008 659009 659011 659008 659007 659010 659009 659012 659119 659123 … ## $ Capacity : int 720 630 827 140 521 698 1056 1252 140 1252 … ## $ Occupancy : int 28 32 8 15 75 21 124 0 15 0 … ## $ Percentage: int 3 5 1 10 14 3 12 0 10 0 … ## $ Status : Factor w/ 4 levels ““,”Emptying”,..: 4 3 4 4 4 4 3 4 4 4 …<code>&lt;p&gt;Oh. It seems that we lose the POSIXct date format when we write to and/or read from a CSV file. I suppose I will just have to convert it whenever I need to.&lt;/p&gt; &lt;p&gt;OK, on to today. The Christmas lights in Bath were switched on a couple of days ago in readiness for the Christmas market, which starts next week. Knowing that Bath gets particularly busy during this period, I thought I’d have a look at the mean occupancy of each car park per week, and see if there is some sort of increase in late November and early December - particularly in the park and ride (P+R) car parks, which the council advises visitors to use during the market period.&lt;/p&gt; &lt;p&gt;Let’s set up a dataframe and use &lt;code&gt;dplyr&lt;/code&gt; and &lt;code&gt;lubridate&lt;/code&gt; functions to calculate the mean occupancy per week, by car park.&lt;/p&gt;</code>rdf2 &lt;- df %&gt;% select(Name, LastUpdate, Percentage) %&gt;% na.omit() %&gt;% filter(Name != “test car park”) %&gt;% mutate(Week = week(ymd_hms(LastUpdate))) %&gt;% group_by(Name, Week) %&gt;% summarize(meanP = mean(Percentage))</p>
-</section>
-<section id="lets-have-a-look-at-the-max-values-of-these-percentages" class="level1">
-<h1>Let’s have a look at the max values of these percentages</h1>
-<p>maxP &lt;- summarize(df2, max(meanP))</p>
-<p>maxP<code></code>rconsole## # A tibble: 8 × 2 ## Name <code>max(meanP)</code> ## <fctr> <dbl> ## 1 Avon Street CP 82.59902 ## 2 Charlotte Street CP 46.39036 ## 3 Lansdown P+R 34.27553 ## 4 Newbridge P+R 112.53799 ## 5 Odd Down P+R 33.22015 ## 6 Podium CP 44.61979 ## 7 SouthGate General CP 53.13495 ## 8 SouthGate Rail CP 63.89707<code>&lt;p&gt;Hang on. At some point, Newbridge CP was apparently, on average, well above 100% full over the course of a week.&lt;/p&gt; &lt;p&gt;Let’s see how this has happened.&lt;/p&gt;</code>rnewbridge &lt;- df %&gt;% filter(Name == “Newbridge P+R”) %&gt;% mutate(Week = round_date(ymd_hms(LastUpdate), “week”)) %&gt;% group_by(Name, Week) %&gt;% summarize(meanP = mean(Percentage))</dbl></fctr></p>
-<p>plot(newbridge<img src="https://latex.codecogs.com/png.latex?Week,%20newbridge">meanP, main = “Newbridge P+R: Mean percentage per week”, pch = 20, xlab = “Week”, ylab = “Percentage”)```</p>
-<img src="https://owenjonesuob.github.io/posts/2016-11-17-30-days-30-visualizations-1-dataset-part-2/day08.jpg">
-<p>
-Well, it’s immediately obvious where the problem is! That point at above 300% can only be explained by a broken exit sensor.
-</p>
-<p>
-Tomorrow I’ll sort out this problem and carry on with my initial aim.
-</p>
-<hr>
-<h3 class="anchored" data-anchor-id="lets-have-a-look-at-the-max-values-of-these-percentages">
-Day 09 (20/11/16): Mean occupancy per week
-</h3>
-<p>
-Continuing from yesterday’s work, I’ll add a couple of steps to the pipeline to cut out any weeks with a mean occupancy greater than 100%, and then to average by week.
-</p>
-<code>rdf2 &lt;- df %&gt;%     select(Name, LastUpdate, Percentage) %&gt;%     na.omit() %&gt;%     filter(Name != "test car park") %&gt;%     mutate(Week = round_date(ymd_hms(LastUpdate), "week")) %&gt;%     group_by(Name, Week) %&gt;%     summarize(meanP = mean(Percentage)) %&gt;%     filter(meanP &lt;= 100) %&gt;%     mutate(Week = week(Week)) %&gt;%     group_by(Name, Week) %&gt;%     summarize(meanP = mean(meanP))</code>
-<p>
-Now let’s have another look at the maximum values per car park:
-</p>
-<code>rmaxP &lt;- top_n(df2, n = 1)</code> <code>rconsole## Selecting by meanP</code> <code>rmaxP&lt;/span&gt;</code> <code>rconsole## Source: local data frame [8 x 3] ## Groups: Name [8] ##  ##                   Name  Week    meanP ##                 &lt;fctr&gt; &lt;dbl&gt;    &lt;dbl&gt; ## 1       Avon Street CP    22 62.19749 ## 2  Charlotte Street CP    38 46.25655 ## 3         Lansdown P+R    49 35.03728 ## 4        Newbridge P+R    46 54.86416 ## 5         Odd Down P+R    49 31.49185 ## 6            Podium CP    50 44.81424 ## 7 SouthGate General CP    51 53.58644 ## 8    SouthGate Rail CP    46 65.25588</code>
-<p>
-That looks better!
-</p>
-<p>
-Let’s plot the data then. I’ll add a label with the week number for the week with the maximum mean percentage occupancy.
-</p>
-<p>```rlibrary(ggplot2)</p>
-<p>p &lt;- ggplot(df2, aes(x = Week, y = meanP)) + geom_line() + facet_wrap(~ Name, nrow = 2) + geom_label(data = maxP, aes(x = Week, y = meanP + 10, label = Week)) + ggtitle(“Mean percentage occupancy per week”) + ylab(“Percentage”)</p>
-p``` <img src="https://owenjonesuob.github.io/posts/2016-11-17-30-days-30-visualizations-1-dataset-part-2/day09.jpeg">
-<p>
-Other than Avon Street CP, which seems to fluctuate wildly over the course of the year, and Charlotte Street CP, which interestingly seems to drop slightly around November, the maximum values are - as I had expected - generally towards the end of the year.
-</p>
-<p>
-SouthGate General CP actually has a noticeable peak in Week 51 - potentially due to last-minute Christmas shopping/Boxing Day sales.
-</p>
-<p>
-And two of the P+Rs have their max average occupancy in Week 49 - approximately the first week of December, right in the middle of the market period (my prediction was spot on!).
-</p>
-<p>
-Also, for all car parks there is a noticeable tail-off in the last couple of weeks of the year, presumably due to most people preferring to be at home over the Christmas period than out and about in the town.
-</p>
-<hr>
-<h3 class="anchored">
-Day 10 (21/11/16): Strange occupancies
-</h3>
-<p>
-Today I received not one, but two pieces of coursework for two separate modules of my uni course - and as such I am going to be under serious time pressure for the next couple of weeks. So I will do my best to keep up with these posts but bear with me if they become a little sloppier or less detailed.
-</p>
-<p>
-I am going to start investigating some of the quirks of the dataset - to be honest, I probably should have done this earlier, before some of my other analyses, but I’ll see how serious any issues are and then I can always revisit and correct previous visualizations.
-</p>
-<p>
-Let’s see some of the stranger records in the dataset - the records where a car park has zero occupancy (possible), &gt;100% occupancy (possible if the car park is full and more cars are circulating waiting for spaces, but probably uncommon), and negative occupancy (not possible and definitely due to dodgy sensors!).
-</p>
-<p><code>rlibrary(dplyr) library(lubridate)</code> ```rdf3 &lt;- df %&gt;% filter(Occupancy &lt;= 0 | Occupancy &gt;= Capacity) %&gt;% group_by(Name)</p>
-<p>library(ggplot2)</p>
-ggplot(df3, aes(x = ymd_hms(LastUpdate), y = Percentage)) + geom_point() + facet_wrap(~ Name, scales = “free_y”, nrow = 2) + ggtitle(“Strange Occupancies”) + labs(x = “Time of record”, y = “Percentage occupancy”)``` <img src="https://owenjonesuob.github.io/posts/2016-11-17-30-days-30-visualizations-1-dataset-part-2/day10.jpeg">
-<p>
-Of particular note are the times when Newbridge P+R contained 4 times as many cars as its maximum capacity, and when SouthGate General CP contained about -20 times its maximum capacity (i.e.&nbsp;about -14400 cars).
-</p>
-
-
-</section>
-
- ]]></description>
-  <category>data</category>
-  <category>data science</category>
-  <category>ggplot2</category>
-  <category>R</category>
-  <category>visualization</category>
-  <guid>https://owenjonesuob.github.io/posts/2016-11-17-30-days-30-visualizations-1-dataset-part-2/</guid>
-  <pubDate>Thu, 17 Nov 2016 21:32:25 GMT</pubDate>
-  <media:content url="https://owenjonesuob.github.io/posts/2016-11-17-30-days-30-visualizations-1-dataset-part-2/day07final.jpeg" medium="image" type="image/jpeg"/>
 </item>
 </channel>
 </rss>
