@@ -10,27 +10,32 @@ categories:
 - web scraping
 description: Notes from my first web data project
 ---
-<div id="header" class="fluid-row">
-<h3 class="title toc-ignore">Context</h3>
-</div>
-<div id="context" class="section level2">
-<p>On this site’s homepage I allude to the fact that there are ‘other things’ I am generally supposed to be doing instead of putting together these projects. One such ‘other thing’ is the time-devouring task of researching work placements (I am hoping to complete a year-long placement from next summer as part of my degree).</p>
-<p>Several job descriptions which have caught my attention have something in common (other than generally being data science related): they don’t list a salary. At least, not explicitly. Instead they advertise a “competitive” salary or, on occasion, hint that applications to the position should include “salary expectations”.</p>
-<p>After seeing this for the third or fourth time, I realised I didn’t have any “salary expectations”. So once again abandoning the task I had planned on dedicating the weekend to, I set forth on this project.</p>
-<hr>
-</div>
-<div id="finding-the-average-placement-year-salary" class="section level2">
-<h3>Finding the average placement year salary</h3>
-<div id="source-of-information" class="section level3">
-<h4>Source of information</h4>
-<p>A quick Google search of ‘placement year uk’ brings up <a href="https://www.ratemyplacement.co.uk/search?show=jobs">RateMyPlacement</a> as the first result. This website claims to be “the TripAdvisor” for placements - the following paragraph can be found on their <a href="http://rmpenterprise.co.uk/services/ratemyplacement/">‘About’</a> page:</p>
-<blockquote><p>Our website is specifically targeted towards undergraduates, offering current university students the jobs they need to get their careers started. RateMyPlacement is the leader in this niche market, advertising more undergraduate placements, internships, vacation schemes and insights than any other website.</p></blockquote>
-<p>I decided to use this website, rather than a more general job-listing site such as Indeed, as my source since it guarantees that any jobs listed will be of the sort I am looking for - specifically, placement jobs, rather than full-time or the ambiguous ‘temporary’ or ‘contract’ jobs listed on many other sites.</p>
-</div>
-<div id="loading-packages-into-r" class="section level3">
-<h4>Loading packages into R</h4>
-<p>I have used the <code>magrittr</code> package’s ‘pipe’ operator (<code>%&gt;%</code>) rather extensively, since I find it greatly improves the readability of the code. It is particularly useful when performing many sequential operations on the same object, as will be seen shortly.</p>
-<p>The <code>RCurl</code> and <code>XML</code> packages are used to deal with the initially-overwhelming HTML code.</p>
+
+### Context
+
+On this site's homepage I allude to the fact that there are 'other things' I am generally supposed to be doing instead of putting together these projects. One such 'other thing' is the time-devouring task of researching work placements (I am hoping to complete a year-long placement from next summer as part of my degree).
+
+Several job descriptions which have caught my attention have something in common (other than generally being data science related): they don't list a salary. At least, not explicitly. Instead they advertise a “competitive” salary or, on occasion, hint that applications to the position should include “salary expectations”.
+
+After seeing this for the third or fourth time, I realised I didn't have any “salary expectations”. So once again abandoning the task I had planned on dedicating the weekend to, I set forth on this project.
+
+---
+
+### Finding the average placement year salary
+
+#### Source of information
+
+A quick Google search of 'placement year uk' brings up [RateMyPlacement](https://www.ratemyplacement.co.uk/search?show=jobs) as the first result. This website claims to be “the TripAdvisor” for placements - the following paragraph can be found on their ['About'](http://rmpenterprise.co.uk/services/ratemyplacement/) page:
+
+> Our website is specifically targeted towards undergraduates, offering current university students the jobs they need to get their careers started. RateMyPlacement is the leader in this niche market, advertising more undergraduate placements, internships, vacation schemes and insights than any other website.
+
+I decided to use this website, rather than a more general job-listing site such as Indeed, as my source since it guarantees that any jobs listed will be of the sort I am looking for - specifically, placement jobs, rather than full-time or the ambiguous 'temporary' or 'contract' jobs listed on many other sites.
+
+#### Loading packages into R
+
+I have used the `magrittr` package's 'pipe' operator (`%>%`) rather extensively, since I find it greatly improves the readability of the code. It is particularly useful when performing many sequential operations on the same object, as will be seen shortly.
+
+The `RCurl` and `XML` packages are used to deal with the initiall y-overwhelming HTML code.
 
 ```r
 library(magrittr)
@@ -38,27 +43,32 @@ library(RCurl)
 library(XML)
 ```
 
-</div>
-<div id="detective-work" class="section level3">
-<h4>‘Detective work’</h4>
-<p>To begin with, we need to have a look at our target website and work out exactly where the ‘interesting’ parts are located. I’m using Google Chrome, but many other web browsers will be equally suitable for carrying out the following steps.</p>
-<p>This is the page that initially loads:</p>
-<img src="site.PNG" />
-<p>It is clearly a list of search results, although we currently don’t exactly what form they are in - i.e. if they are laid out in an HTML table (which would simplify matters) or not (which is more likely!). We can find out using the developer console, which can be opened by pressing F12.</p>
-<p>The ‘Inspect element’ button at the top left of the console can be used to quickly locate the section of HTML code responsible for a given feature on the page. Let’s have a look at one of the search results.</p>
+#### 'Detective work'
 
-<img src="resultconsole.PNG"/>
+To begin with, we need to have a look at our target website and work out exactly where the 'interesting' parts are located. I'm using Google Chrome, but many other web browsers will be equally suitable for carrying out the following steps.
 
-<p>Each result is within a pair of <code>&lt;div&gt;</code> tags (no tables in sight, unfortunately). Within each result there are several pieces of information. Only one of these is of interest to us (for this project at least): the salary. A little further inspection shows that this information is contained in one element of an unordered list, specifically - and rather confusingly - in the <code>&lt;li&gt;</code> element which has <code>class=location</code>, presumably due to some previous website redesign.</p>
+This is the page that initially loads:
 
-<img src="salaryconsole.PNG" />
+![](site.PNG)
 
-<p>There is the option to refine the search results further, but for now we’ll use the unfiltered set of results. It is worth noting that we don’t need to filter by duration since the site uses pro rata annual salary figures for all listed placements.</p>
-</div>
-<div id="extracting-salaries" class="section level3">
-<h4>Extracting salaries</h4>
-<p>Now we know where the information we want is, we can begin the process of importing it into R and tidying it up. I will use the <code>%&gt;%</code> operator here, and eventually the aim is to end up with a numeric vector containing each job’s (mean) salary - so I will work with an object called <code>salaries</code>, even though initially it is very different to its final form.</p>
-<p>The first stage is to load the raw HTML file into R. The <code>getURL</code> function (from the <code>RCurl</code> package) imports the HTML document as a single character string - which needless to say is very long (<code>nchar(salaries)</code> reveals it is 205604 characters long, to be precise) and not particularly readable.</p>
+It is clearly a list of search results, although we currently don't exactly what form they are in - i.e. if they are laid out in an HTML table (which would simplify matters) or not (which is more likely!). We can find out using the developer console, which can be opened by pressing F12.
+
+The 'Inspect element' button at the top left of the console can be used to quickly locate the section of HTML code responsible for a given feature on the page. Let's have a look at one of the search results.
+
+![](resultconsole.PNG)
+
+Each result is within a pair of `<div>` tags (no tables in sight, unfortunately). Within each result there are several pieces of information. Only one of these is of interest to us (for this project at least): the salary. A little further inspection shows that this information is contained in one element of an unordered list, specifically - and rather confusingly - in the `<li>` element which has `class=location`, presumably due to some previous website redesign.
+
+![](salaryconsole.PNG)
+
+There is the option to refine the search results further, but for now we'll use the unfiltered set of results. It is worth noting that we don't need to filter by duration since the site uses pro rata annual salary figures for all listed placements.
+
+#### Extracting salaries
+
+Now we know where the information we want is, we can begin the process of importing it into R and tidying it up. I will use the `%>%` operator here, and eventually the aim is to end up with a numeric vector containing each job's (mean) salary - so I will work with an object called `salaries`, even though initially it is very different to its final form.
+
+The first stage is to load the raw HTML file into R. The `getURL` function (from the `RCurl` package) imports the HTML document as a single character string - which needless to say is very long (`nchar(salaries)` reveals it is 205604 characters long, to be precise) and not particularly readable.
+
 
 ```r
 salaries <-
@@ -66,22 +76,23 @@ salaries <-
         getURL()
 ```
 
+
 ```r
 substring(salaries, 100001, 101000)
 ```
-        
 
 ```r
 ## [1] "           &lt;h2 class=\"Job-titleHeader\"&gt;Engineering Coordinator Placement&lt;/h2&gt;\n            &lt;/a&gt;\n            &lt;p class=\"Search-industry\"&gt;&lt;i class=\"icon-company\"&gt;&lt;/i&gt;\n                Volvo Group UK&lt;/p&gt;\n            &lt;ul class=\"Search-labels\"&gt;\n                &lt;li class=\"deadline\"&gt;&lt;span\n                            class=\"icon-calendar\"&gt;&lt;/span&gt; 31st Oct 2016                &lt;/li&gt;\n                &lt;li class=\"location\"&gt;&lt;span class=\"icon-salary\"&gt;&lt;/span&gt;\n                                            Competitive\n                                    &lt;/li&gt;\n                &lt;li class=\"duration\"&gt;&lt;span class=\"icon-company\"&gt;&lt;/span&gt; Placement Year (10 Months+)&lt;/li&gt;\n                &lt;li class=\"company\"&gt;&lt;span class=\"icon-location\"&gt;&lt;/span&gt; West Midlands&lt;/li&gt;\n            &lt;/ul&gt;\n        &lt;/div&gt;\n        &lt;div class=\"icon-cta\"&gt;\n\n                        \n                &lt;a href=\"#\" class=\"circle-cta my-wishlist tracker login\"\n                   data-message=\"You need to be logged in to add a job to your tracker\"\n           "
 ```
 
-<p>Luckily, the <code>XML</code> package can be used to manipulate this awkward mass of text into something much easier to work with in R. First, <code>htmlParse</code> is used to parse the HTML code so that each set of tags is represented as a ‘node’. The result of this can then be used in <code>xpathApply</code> with two other arguments.</p>
-<p>The first is an XPath query <code>//li[@class='location']</code>, where:</p>
-<ul>
-<li><code>//li</code> finds all ‘list element’ (<code>&lt;li&gt;</code>) nodes</li>
-<li><code>[@class='location']</code> finds the subset of these nodes which have a <code>class</code> attribute of <code>location</code> (recall that this is where the salaries are stored)</li>
-</ul>
-<p>The second is what we want to return from each of these nodes, which in this case is its <code>xmlValue</code>. The values are returned by <code>xpathApply</code> in list form.</p>
+Luckily, the `XML` package can be used to manipulate this awkward mass of text into something much easier to work with in R. First, `htmlParse` is used to parse the HTML code so that each set of tags is represented as a 'node'. The result of this can then be used in `xpathApply` with two other arguments.
+
+The first is an XPath query `//li[@class='location']`, where:
+
+* `//li` finds all 'list element' (`<li>`) nodes
+* `[@class='location']` finds the subset of these nodes which have a `class` attribute of `location` (recall that this is where the salaries are stored)
+
+The second is what we want to return from each of these nodes, which in this case is its `xmlValue`. The values are returned by `xpathApply` in list form.
 
 ```r
 salaries <-
@@ -89,7 +100,7 @@ salaries <-
     htmlParse() %>%
     xpathApply("//li[@class='location']", xmlValue)
 ```
-    
+
 ```rconsole
 ## [[1]]
 ## [1] "\n                                            Competitive\n                                    "
@@ -101,14 +112,15 @@ salaries <-
 ## [1] "\n                                            £18,000 - £19,999                                    "
 ```
 
-<p>We now have the data we want - although each salary is still in an untidy character vector. To tidy each element we can first remove any of the following from the string:</p>
-<ul>
-<li><code>\n</code></li>
-<li>[space]</li>
-<li><code>£</code></li>
-<li><code>,</code></li>
-</ul>
-<p>Each salary is either not given (listed as “Competitive”) or is given as a range. We can split each character vector at the ‘<code>-</code>’ symbol (if it is present) to obtain separate character vectors containing the lower and upper values of the range.</p>
+We now have the data we want - although each salary is still in an untidy character vector. To tidy each element we can first remove any of the following from the string:
+
+* `\n`
+* [space]
+* `£`
+* `,`
+
+Each salary is either not given (listed as “Competitive”) or is given as a range. We can split each character vector at the '`-`' symbol (if it is present) to obtain separate character vectors containing the lower and upper values of the range.
+
 
 ```r
 salaries <-
@@ -116,7 +128,7 @@ salaries <-
     lapply(gsub, pattern = "\\n| |£|,", replacement = "") %>%
     lapply(strsplit, split = "-")
 ```
-    
+
 ```r
 salaries[1:3]
 ```
@@ -137,11 +149,13 @@ salaries[1:3]
 ## [1] "18000" "19999"
 ```
 
-<p>Initially I had planned on calculating the midway point for each range of salaries. However there is an easier option, given that the (eventual) vector of salaries will be averaged anyway. Averaging each pair of range values, and then averaging all of the resulting values, is equivalent to simply averaging all the range values:</p>
+
+Initially I had planned on calculating the midway point for each range of salaries. However there is an easier option, given that the (eventual) vector of salaries will be averaged anyway. Averaging each pair of range values, and then averaging all of the resulting values, is equivalent to simply averaging all the range values:
 
 $$\frac{\frac{(a^{(1)}_1 + a^{(1)}_2)}{2} + \frac{(a^{(2)}_1 + a^{(2)}_2)}{2} + \ldots + \frac{(a^{(n)}_1 + a^{(n)}_2)}{2}}{n} = \frac{(a^{(1)}_1 + a^{(1)}_2) + \ldots + (a^{(n)}_1 + a^{(n)}_2)}{2n}$$
 
-<p>So we can simply `unlist` each pair of range values and then `unlist` the whole salary list to obtain a character vector. Using `as.numeric` then changes this to a numeric vector, where all the "Competitive" (i.e. unlisted) salaries are coerced to `NA`. The mean of this vector (ignoring `NA`s) is the average salary for all the positions listed on the webpage.</p>
+<p>So we can simply `unlist` each pair of range values and then `unlist` the whole salary list to obtain a character vector. Using `as.numeric` then changes this to a numeric vector, where all the "Competitive" (i.e. unlisted) salaries are coerced to `NA`. The mean of this vector (ignoring `NA`s) is the average salary for all the positions listed on the webpage.
+
 
 ```r
 salaries <-
@@ -150,7 +164,7 @@ salaries <-
         unlist() %>%
         as.numeric()
 ```
-        
+
 ```rconsole
 ## Warning in function_list[[k]](value): NAs introduced by coercion
 ```
@@ -158,6 +172,7 @@ salaries <-
 ```r
 salaries[1:10]
 ```
+
 ```rconsole
 ##  [1]    NA    NA 18000 19999    NA    NA    NA    NA 16000 17999
 ```
@@ -169,20 +184,25 @@ mean(salaries, na.rm = TRUE)
 ```rconsole
 ## [1] 17307.19
 ```
-</div>
-<div id="multiple-pages-creating-urls" class="section level3">
-<h4>Multiple pages: creating URLs</h4>
-<p>Now that we can get the mean salary for one page, we can consider the fact that there are actually multiple pages of positions - and with positions being added and removed continuously, the number of pages we need to get data from could change.</p>
-<p>The first task is to find how many pages of results we need to look at. As before, we start by importing and parsing the first page of results, but this time we will use a different XPath query.</p>
-<p>First we must have another look at the webpage - but this time we are interested in the ‘pages’ bar at the bottom of the list of results:</p>
-<img src="paginationconsole.PNG" />
-<p>We want the page number that appears in the button immediately to the left of the ‘Next page’ button. We can construct the XPath query <code>//li[@class='pagination-last']/preceding::li[1]</code>:</p>
-<ul>
-<li><code>//li</code> finds all ‘list element’ nodes on the page</li>
-<li><code>[@class='pagination-last']</code> finds the subset of these nodes with <code>class</code> attribute <code>pagination-last</code> (there is only one such node, which is the ‘Next page’ button)</li>
-<li><code>/preceding::li[1]</code> finds, working backwards from the current node, the 1st ‘list element’ node</li>
-</ul>
-<p>The <code>xmlValue</code> of this node is the number appearing in the last numbered button - i.e. the number of results pages. It is currently in character vector form and inside a list (courtesy of <code>xpathApply</code>), but it can be extracted easily enough.</p>
+
+#### Multiple pages: creating URLs
+
+Now that we can get the mean salary for one page, we can consider the fact that there are actually multiple pages of positions - and with positions being added and removed continuously, the number of pages we need to get data from could change.
+
+The first task is to find how many pages of results we need to look at. As before, we start by importing and parsing the first page of results, but this time we will use a different XPath query.
+
+First we must have another look at the webpage - but this time we are interested in the 'pages' bar at the bottom of the list of results:
+
+![](paginationconsole.PNG)
+
+We want the page number that appears in the button immediately to the left of the 'Next page' button. We can construct the XPath query `//li[@class='pagination-last']/preceding::li[1]`:
+
+* `//li` finds all 'list element' nodes on the page
+* `[@class='pagination-last']` finds the subset of these nodes with `class` attribute `pagination-last` (there is only one such node, which is the 'Next page' button)
+* `/preceding::li[1]` finds, working backwards from the current node, the 1st 'list element' node
+
+The `xmlValue` of this node is the number appearing in the last numbered button - i.e. the number of results pages. It is currently in character vector form and inside a list (courtesy of `xpathApply`), but it can be extracted easily enough.
+
 
 ```r
 num_pages <-
@@ -193,7 +213,8 @@ num_pages <-
     unlist() %>%
     as.numeric()
 ```
-    
+
+
 ```r
 num_pages
 ```
@@ -202,7 +223,8 @@ num_pages
 ## [1] 10
 ```
 
-<p>To manually navigate to a different results page we simply need to add <code>page=[page number]&amp;</code> to the search string in the page address; so we can make a list of all the results pages as follows.</p>
+To manually navigate to a different results page we simply need to add `page=[page number]&` to the search string in the page address; so we can make a list of all the results pages as follows.
+
 
 ```r
 urls <- function(x) paste0("https://www.ratemyplacement.co.uk/search?page=",
@@ -221,11 +243,12 @@ pages <- lapply(1:num_pages, urls)
 ## [[3]]
 ## [1] "https://www.ratemyplacement.co.uk/search?page=3&amp;show=jobs
 ```
-</div>
-<div id="finding-the-mean-salary" class="section level3">
-<h4>Finding the mean salary</h4>
-<p>We can now run the salary-extracting code on each page in turn. We’ll store the full list salaries from each page for later analysis.</p>
-<p><em>Note: There are three sponsored results which appear at the top of each results page - these are the same on all pages, so are not counted for any pages except the first (i.e. for all but the first page, the first 4 elements of <code>salaries</code> are removed, corresponding to two “Competitive” listings and one numerical listing - the make-up of the sponsored listings at the time of writing).</em></p>
+
+#### Finding the mean salary
+
+We can now run the salary-extracting code on each page in turn. We'll store the full list salaries from each page for later analysis.
+
+_Note: There are three sponsored results which appear at the top of each results page - these are the same on all pages, so are not counted for any pages except the first (i.e. for all but the first page, the first 4 elements of `salaries` are removed, corresponding to two “Competitive” listings and one numerical listing - the make-up of the sponsored listings at the time of writing)._
 
 ```r
 page_salaries <- vector(mode = "list", length = 0)
@@ -255,7 +278,9 @@ for (i in 1:num_pages) {
 }
 ```
 
-<p>So now we have a list of all salaries, and vector of the average salaries of all the positions on each results page. If we calculate the mean of this vector then we will have the mean salary across all the positions.</p>
+So now we have a list of all salaries, and vector of the average salaries of all the positions on each results page. If we calculate the mean of this vector then we will have the mean salary across all the positions.
+
+
 ```r
 mean(page_avg_salary)
 ```
@@ -264,7 +289,7 @@ mean(page_avg_salary)
 ## [1] 17878.68
 ```
 
-<p>We can also visualize the proportions of different salaries being offered:</p>
+We can also visualize the proportions of different salaries being offered:
 
 ```r
 page_salaries <-
@@ -278,14 +303,16 @@ p <- plot(page_salaries, main = "Rates of pay", ylim = c(0, 400),
 text(p, y = summary(page_salaries), label = summary(page_salaries), pos = 3,
      cex = 0.7)
 ```
-     
-<img src="ratesofpay.png" />
 
-<p>This reveals how nearly twice as many positions are advertised <em>without</em> an explicit salary as those advertised with one. (It also reveals that one of the salaries coerced to <code>NA</code> earlier was in fact “Unpaid”, rather than “Competitive”. Although it shows I was a little careless earlier when I stated that all non-numeric elements were “Competitive”, it doesn’t have any effect on the calculations.)</p>
-</div>
-<div id="london-specific-salaries" class="section level3">
-<h4>London-specific salaries</h4>
-<p>Although I do have a general dislike for London, I am slowly coming to terms with the fact that many companies with data science positions are young start-ups, and the vast majority of them are located in the capital. As such, and knowing that London is more expensive than other areas of the country, I thought I would re-run the code on the placements listed with locations ‘Central London and City’ and ‘Greater London’ only. This extra filtering is done by adding <code>&amp;location=CTY,GTL</code> to the end of the HTTP address. The results are as follows:</p>
+     
+![](ratesofpay.png)
+
+This reveals how nearly twice as many positions are advertised _without_ an explicit salary as those advertised with one. (It also reveals that one of the salaries coerced to `NA` earlier was in fact “Unpaid”, rather than “Competitive”. Although it shows I was a little careless earlier when I stated that all non-numeric elements were “Competitive”, it doesn't have any effect on the calculations.)
+
+#### London-specific salaries
+
+Although I do have a general dislike for London, I am slowly coming to terms with the fact that many companies with data science positions are young start-ups, and the vast majority of them are located in the capital. As such, and knowing that London is more expensive than other areas of the country, I thought I would re-run the code on the placements listed with locations 'Central London and City' and 'Greater London' only. This extra filtering is done by adding `&location=CTY,GTL` to the end of the HTTP address. The results are as follows:
+
 
 ```r
 mean(page_avg_salary_L)
@@ -294,19 +321,20 @@ mean(page_avg_salary_L)
 ```rconsole
 ## [1] 19015.6
 ```
+This is, as expected, higher than the nationwide figure.
 
-<p>This is, as expected, higher than the nationwide figure.</p>
-<p>A quick look at the relevant plot reveals some more information:</p>
+A quick look at the relevant plot reveals some more information:
 
-<img src="ratesofpayl.png" />
+![](ratesofpayl.png)
 
-<p>Notice how the highest-paid positions are all in London (between the nationwide and London plots, there is no difference in the bars for the two highest salary bands). The significant decrease is in the number of lower-than-average-salary positions.</p>
-<hr>
-</div>
-</div>
-<div id="project-evaluation" class="section level2">
-<h3>Project evaluation</h3>
-<p>It turns out that the average annual placement position salary is just under £18,000, increasing to slightly over £19,000 for London-based placements.</p>
-<p>This was my first attempt at a project using non-tabluar web-based data. Moreover, I had no previous experience with the HTML-manipulating packages in R, and as per usual a large amount of reading and experimentation was necessary before I managed to achieve what I was aiming for. Perhaps it is a little ambitious to call this a ‘web scraping’ project, but I believe it has given me some of the fundamental knowledge needed to put together more complicated projects involving web data in the future. An added bonus was my discovery of the XPath language, which might have come in handy for <a href="../2016-10-02-ie-automation-with-vba-in-microsoft-excel/index.qmd">one of my previous projects</a>.</p>
-<p>All in all, I shall consider this a weekend well spent, although it has no doubt come at the cost of a few late-night maths sessions later in the week.</p>
-</div>
+Notice how the highest-paid positions are all in London (between the nationwide and London plots, there is no difference in the bars for the two highest salary bands). The significant decrease is in the number of lower-than-average-salary positions.
+
+---
+
+### Project evaluation
+
+It turns out that the average annual placement position salary is just under £18,000, increasing to slightly over £19,000 for London-based placements.
+
+This was my first attempt at a project using non-tabluar web-based data. Moreover, I had no previous experience with the HTML-manipulating packages in R, and as per usual a large amount of reading and experimentation was necessary before I managed to achieve what I was aiming for. Perhaps it is a little ambitious to call this a 'web scraping' project, but I believe it has given me some of the fundamental knowledge needed to put together more complicated projects involving web data in the future. An added bonus was my discovery of the XPath language, which might have come in handy for [one of my previous projects](../2016-10-02-ie-automation-with-vba-in-microsoft-excel/index.qmd).
+
+All in all, I shall consider this a weekend well spent, although it has no doubt come at the cost of a few late-night maths sessions later in the week.

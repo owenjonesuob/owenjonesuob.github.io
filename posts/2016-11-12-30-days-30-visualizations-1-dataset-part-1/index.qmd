@@ -10,17 +10,22 @@ categories:
 - visualization
 description: A challenge to exhaustively explore and analyse a single dataset
 ---
-<h2 id="header" class="fluid-row">Project overview</h2>
-<div id="motivation-for-this-project" class="section level2">
-<p>I am currently involved with a very exciting machine learning project being run within the <a href="https://www.meetup.com/Bath-Machine-Learning-Meetup/">Bath Machine Learning Meetup</a> group (I’m sure I’ll write a future post with more details on this project, but it is currently at a very early stage!). In collaboration with <a href="https://www.bathhacked.org/">Bath: Hacked</a> we are using <a href="https://data.bathhacked.org/Government-and-Society/BANES-Historic-Car-Park-Occupancy/x29s-cczc">this set of open data</a>, which contains information about the occupancy of car parks in the Bath &amp; North East Somerset (B&amp;NES) area from the last two years or so.</p>
-<p>While looking for something to listen to whilst making my daily bus commute to and from the university, I recently discovered the marvellous <a href="http://partiallyderivative.com">Partially Derivative</a> podcast. In one of the early episodes (S1E2, to be precise) one topic of conversation particularly caught my attention: Paul Downey’s blog post <a href="http://blog.whatfettle.com/2014/10/13/one-csv-thirty-stories/">“One CSV, thirty stories”</a>. The concept is simple: take a single dataset, and produce a different visualization of the data each day for 30 days.</p>
-<p>Seeing as we will be working with the car parking dataset a great deal in coming months, and inspired by Downey’s post, I thought I would try something similar. So, without further ado…</p>
-<hr>
-<div id="day-00-111116-sneak-preview" class="section level3">
-<h3></h3>
-<h3>Day 00 (11/11/16): Sneak preview</h3>
-<p>I thought it would be a good idea to have a quick look at the dataset before starting out. I will, of course, be using R (to start with at least!).</p>
-<p>I downloaded the dataset as a CSV file from the Bath: Hacked datastore (the link is above) - the file on the website is updated continuously with live data from sensors in the car parks. The version I downloaded (at 22:11 on 11/11/16) weighs in at a hefty 316MB, and contains a very large number of records:</p>
+
+## Project overview
+
+I am currently involved with a very exciting machine learning project being run within the [Bath Machine Learning Meetup](https://www.meetup.com/Bath-Machine-Learning-Meetup/) group (I'm sure I'll write a future post with more details on this project, but it is currently at a very early stage!). In collaboration with [Bath: Hacked](https://www.bathhacked.org/) we are using [this set of open data](https://data.bathhacked.org/Government-and-Society/BANES-Historic-Car-Park-Occupancy/x29s-cczc), which contains information about the occupancy of car parks in the Bath & North East Somerset (B&NES) area from the last two years or so.
+
+While looking for something to listen to whilst making my daily bus commute to and from the university, I recently discovered the marvellous [Partially Derivative](http://partiallyderivative.com) podcast. In one of the early episodes (S1E2, to be precise) one topic of conversation particularly caught my attention: Paul Downey's blog post [“One CSV, thirty stories”](http://blog.whatfettle.com/2014/10/13/one-csv-thirty-stories/). The concept is simple: take a single dataset, and produce a different visualization of the data each day for 30 days.
+
+Seeing as we will be working with the car parking dataset a great deal in coming months, and inspired by Downey's post, I thought I would try something similar. So, without further ado…
+
+---
+
+### Day 00 (11/11/16): Sneak preview
+
+I thought it would be a good idea to have a quick look at the dataset before starting out. I will, of course, be using R (to start with at least!).
+
+I downloaded the dataset as a CSV file from the Bath: Hacked datastore (the link is above) - the file on the website is updated continuously with live data from sensors in the car parks. The version I downloaded (at 22:11 on 11/11/16) weighs in at a hefty 316MB, and contains a very large number of records:
 
 ```r
 length(count.fields("data/BANES_Historic_Car_Park_Occupancy.csv"))
@@ -30,8 +35,9 @@ length(count.fields("data/BANES_Historic_Car_Park_Occupancy.csv"))
 ## [1] 1528228
 ```
 
-<p>To avoid converting my Pentium-core laptop into a puddle of molten plastic, for now I’ll only try to deal with about 10% of these records. Looking at <a href="https://github.com/BathHacked/documentation/wiki/Bath-Car-Park-Data">the dataset’s documentation</a> we see that “scripts are set up to query the B&amp;NES car park database every 5 minutes, the data is then pushed to the Bath: Hacked data store to… append to a historical set”. Therefore it shouldn’t be a problem to read in only the first 150000 rows of the CSV file, since these rows should contain an equal spread of data from each of the distinct car parks.</p>
-<p>Let’s have a quick first look at our data! <em>Note: a few records are empty in certain fields (future investigation may be necessary…) - I’ll fill these fields with NAs for now to make it more obvious when data is missing.</em></p>
+To avoid converting my Pentium-core laptop into a puddle of molten plastic, for now I'll only try to deal with about 10% of these records. Looking at [the dataset's documentation](https://github.com/BathHacked/documentation/wiki/Bath-Car-Park-Data) we see that “scripts are set up to query the B&NES car park database every 5 minutes, the data is then pushed to the Bath: Hacked data store to… append to a historical set”. Therefore it shouldn't be a problem to read in only the first 150000 rows of the CSV file, since these rows should contain an equal spread of data from each of the distinct car parks.
+
+Let's have a quick first look at our data! _Note: a few records are empty in certain fields (future investigation may be necessary…) - I'll fill these fields with NAs for now to make it more obvious when data is missing._
 
 ```r
 D <- read.csv("data/BANES_Historic_Car_Park_Occupancy.csv", nrow = 150000,
@@ -100,13 +106,16 @@ head(D)
 ## 6 13/02/2016 02:10:01 AM (51.3902305335, -2.40590782211)
 ```
 
-<p>Looking interesting… but I won’t look too closely for now. The fun starts tomorrow!</p>
-<hr>
-</div>
-<div id="day-01-121116-car-parks-what-car-parks" class="section level3">
-<h3>Day 01 (12/11/16): Car parks? What car parks?</h3>
-<p>A logical first step would be to work out where all the information we have is coming from!</p>
-<p>A week or two ago I attended a learning night run by Bath: Hacked, which was an introduction to using the mapping tool <a href="http://carto.com">Carto</a> (formerly CartoDB) for visualizing geographic data. And notice that we have some location information…</p>
+Looking interesting… but I won't look too closely for now. The fun starts tomorrow!
+
+---
+
+### Day 01 (12/11/16): Car parks? What car parks?
+
+A logical first step would be to work out where all the information we have is coming from!
+
+A week or two ago I attended a learning night run by Bath: Hacked, which was an introduction to using the mapping tool [Carto](http://carto.com) (formerly CartoDB) for visualizing geographic data. And notice that we have some location information...
+
 
 ```r
 # D is our 150000-row dataframe of records
@@ -167,14 +176,18 @@ carto_df
 write.csv(carto_df, file = "carto_df.csv")
 ```
 
-<p>So let’s see where these car parks are!</p>
+
+So let's see where these car parks are!
 
 <iframe width='100%' height='520' frameborder='0' src='https://olj23.carto.com/viz/16d7e938-a869-11e6-b20f-0e3ebc282e83/embed_map' allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
 
-<hr>
+---
 
-<h3>Day 02 (13/11/16): Maximum capacities</h3>
-<p>Making use of the small dataframe I created yesterday (which has one entry per car park), and for now sticking to R’s base graphics:</p>
+### Day 02 (13/11/16): Maximum capacities
+
+Making use of the small dataframe I created yesterday (which has one entry per car park), and for now sticking to R's base graphics:
+
+
 
 ```r
 df <- read.csv("carto_df.csv")
@@ -189,15 +202,18 @@ bp <- barplot(df$Capacity, main = "Car park capacities",
 text(bp, labels = df$Name, pos = 4)
 ```
 
-<img src="13_11_16_capacities.jpeg" />
 
-</div>
-</div>
-<hr>
 
-<h3>Day 03 (14/11/16): Capacities over time (Day 02 Reprise)</h3>
-<p>It crossed my mind earlier today that I had made a couple of assumptions about the data I’m working with - primarily, I assumed that for a given car park, each record would have the same values for certain columns. Before doing anything else, I thought I should check that this was actually the case.</p>
-<p>The columns in question are: <code>Location</code>, <code>Easting</code>, <code>Northing</code> (which are all related, of course) and <code>Capacities</code>.</p>
+![](13_11_16_capacities.jpeg)
+
+---
+
+### Day 03 (14/11/16): Capacities over time (Day 02 Reprise)
+
+It crossed my mind earlier today that I had made a couple of assumptions about the data I'm working with - primarily, I assumed that for a given car park, each record would have the same values for certain columns. Before doing anything else, I thought I should check that this was actually the case.
+
+The columns in question are: `Location`, `Easting`, `Northing` (which are all related, of course) and `Capacities`.
+
 
 ```r
 # Read in all the data - caution to the wind, if my laptop melts then it melts
@@ -268,8 +284,13 @@ locations
 ## 9 Levels:  ... (51.4113171399, -2.38697144144)
 ```
 
-```reastings```
-```rconsole## [[1]]
+
+```r
+eastings
+```
+
+```rconsole
+## [[1]]
 ## [1] 375115
 ## 
 ## [[2]]
@@ -295,8 +316,17 @@ locations
 ## 
 ## [[9]]
 ## [1] NA```
-```rnorthings```
-```r## [[1]]
+
+
+```r
+northings
+```
+
+
+
+
+```r
+## [[1]]
 ## [1] 164421
 ## 
 ## [[2]]
@@ -322,7 +352,14 @@ locations
 ## 
 ## [[9]]
 ## [1] NA```
-```rcapacities```
+
+
+
+
+```r
+capacities
+```
+
 ```rconsole
 ## [[1]]
 ##  [1] 720 680 900 700 626 800 860 638 603 602 630 596 623 519 528 563 840
@@ -349,9 +386,14 @@ locations
 ## [1] 1252 1320
 ## 
 ## [[9]]
-## [1] 500```
-<p>The first three columns only have one value per car park - great, our car parks aren’t moving!</p>
-<p>However… it does seem that some capacities are not constant. Let’s try to see how they change over time.</p>
+## [1] 500
+```
+
+
+The first three columns only have one value per car park - great, our car parks aren't moving!
+
+However… it does seem that some capacities are not constant. Let's try to see how they change over time.
+
 
 ```r
 # Create new dataframe with columns of interest only, and taking out "test car
@@ -375,16 +417,26 @@ p <- ggplot(data = df2, aes(x = LastUpdate, y = Capacity, group = Name)) +
 p
 ```
 
-<img src="day03.jpeg" />
 
-<p>The plot reveals some interesting information about the “changes” in capacities. For Newbridge P+R, the capacity increases over time, and remains level after each increase. It seems likely, then, that this is a genuine increase in capacity over time due to extensions to the car park.</p>
-<p>For the other car parks, any changes are suspiciously short-lived and the capacities return to their previous values soon after any change. For this reason I think it is likely that these are mostly misrecorded values - although of course it is possible that there were short-term, temporary extensions/closures of the car parks.</p>
-<p>The records for Avon Street CP also end abruptly and early in mid-summer of this year.</p>
-<p>By pure chance, my visualization from yesterday (of maximum capacities) was using records from February 2016 - a time of relative stability, and when Newbridge P+R had reached its current maximum capacity - and so it is still, I would say, a valid representation of the data. But having had a much better look at the data today it is obvious I got a bit lucky!</p>
-<hr>
-<h3>Day 04 (15/11/16): Percentage occupancy by day (with strangely-ordered days…)</h3>
-<p>It’s a long title today. This is reflective of the long time I have spent trying to re-order the panels in today’s visualization, without success… more details shortly.</p>
-<p>First, let’s get the data we’re interested in today.</p>
+![](day03.jpeg)
+
+The plot reveals some interesting information about the “changes” in capacities. For Newbridge P+R, the capacity increases over time, and remains level after each increase. It seems likely, then, that this is a genuine increase in capacity over time due to extensions to the car park.
+
+For the other car parks, any changes are suspiciously short-lived and the capacities return to their previous values soon after any change. For this reason I think it is likely that these are mostly misrecorded values - although of course it is possible that there were short-term, temporary extensions/closures of the car parks.
+
+The records for Avon Street CP also end abruptly and early in mid-summer of this year.
+
+By pure chance, my visualization from yesterday (of maximum capacities) was using records from February 2016 - a time of relative stability, and when Newbridge P+R had reached its current maximum capacity - and so it is still, I would say, a valid representation of the data. But having had a much better look at the data today it is obvious I got a bit lucky!
+
+---
+
+### Day 04 (15/11/16): Percentage occupancy by day (with strangely-ordered days…)
+
+It's a long title today. This is reflective of the long time I have spent trying to re-order the panels in today's visualization, without success… more details shortly.
+
+First, let's get the data we're interested in today.
+
+
 ```r
 # Separate interesting columns from dataframe of all records
 df3 <- df[!(df$Name == "test car park"), c("Name", "Percentage", "LastUpdate")]
@@ -412,20 +464,43 @@ df5 <- aggregate(df4$Percentage,
                       "Name" = df4$Name),
                  mean)
 ```
-<p>Let’s have a quick look at what we’ve achieved:</p>
-```rhead(df5)```
-```rconsole##        Time Day           Name        x
+
+
+Let's have a quick look at what we've achieved:
+
+
+```r
+head(df5)
+```
+
+
+
+
+```rconsole
+##        Time Day           Name        x
 ## 1 0.0000000 Fri Avon Street CP 7.366279
 ## 2 0.1666667 Fri Avon Street CP 6.670732
 ## 3 0.3333333 Fri Avon Street CP 6.456140
 ## 4 0.5000000 Fri Avon Street CP 6.465839
 ## 5 0.6666667 Fri Avon Street CP 5.774566
-## 6 0.8333333 Fri Avon Street CP 6.361963```
-```rnrow(df5)```
-```rconsole## [1] 8064```
-<p>Reassuringly, df5 contains 8064 entries:</p>
-<p>6{10-min intervals per hour}*24{hours}*7{days}*8{car parks} = 8064</p>
-<p>Now let’s create the plot!</p>
+## 6 0.8333333 Fri Avon Street CP 6.361963
+```
+
+```r
+nrow(df5)
+```
+
+```rconsole
+## [1] 8064
+```
+
+Reassuringly, df5 contains 8064 entries:
+
+6{10-min intervals per hour}\*24{hours}\*7{days}\*8{car parks} = 8064
+
+Now let's create the plot!
+
+
 ```r
 library(ggplot2)
 
@@ -435,36 +510,47 @@ p <- ggplot(data = df5, aes(x = as.double(Time), y = df5$x, group = Name)) +
     guides(colour = guide_legend(override.aes = list(size = 3)))
 p
 ```
-<img src="day04.jpeg" />
-<p>Looking good - except for two things:</p>
-<ul>
-<li>x-axis labels are not nicely formatted</li>
-<li>Panels are not sensibly ordered</li>
-</ul>
-<p>I have tried at some length to solve each of these issues - particularly the second, which I thought I could solve by reordering the underlying factor:</p>
+
+![](day04.jpeg)
+
+Looking good - except for two things:
+
+* x-axis labels are not nicely formatted
+* Panels are not sensibly ordered
+
+I have tried at some length to solve each of these issues - particularly the second, which I thought I could solve by reordering the underlying factor:
+
+
 ```r
 df5$Day1 <- factor(df5$Day,  levels = c("Mon", "Tue", "Wed", "Thu", "Fri",
                                         "Sat", "Sun"))
 ```
-                                        
-<p>But plotting again faceting by <code>Day1</code> instead of <code>Day</code> only reorders the labels, and does not reorder the plots themselves - i.e. Wednesday’s data is now labelled as Sunday. This is obviously worse than what I currently have (it’s plain wrong, rather than just “not pretty”) so I haven’t included it here.</p>
-<p>I am going to try to stick to the plan of one visualization per day - but along with my already busy schedule and regular maths workload, I am obviously putting myself under a great deal of time pressure! At best I have a couple of hours to dedicate to this project on any given day, and this isn’t very long considering I am learning pretty much from scratch as I go along!</p>
-<p>I’m hoping, then, that this won’t become a common refrain, but… I’ve run out of time today! I’ll revisit this visualization at some point soon if I figure out what I was doing wrong.</p>
-<div id="motivation-for-this-project" class="section level2">
-<div id="day-01-121116-car-parks-what-car-parks" class="section level3">
-<hr>
-</div>
-<div class="section level3">
-<h3></h3>
-<h3>Day 05 (16/11/16): Occupancy per weekday, by car park</h3>
-<p>Before doing anything else, I’m going to remove the redundant columns from the dataframe of all records, and save the new smaller dataframe to a CSV file - which should then be quicker to load and easier work with.</p>
+
+But plotting again faceting by `Day1` instead of `Day` only reorders the labels, and does not reorder the plots themselves - i.e. Wednesday's data is now labelled as Sunday. This is obviously worse than what I currently have (it's plain wrong, rather than just “not pretty”) so I haven't included it here.
+
+I am going to try to stick to the plan of one visualization per day - but along with my already busy schedule and regular maths workload, I am obviously putting myself under a great deal of time pressure! At best I have a couple of hours to dedicate to this project on any given day, and this isn't very long considering I am learning pretty much from scratch as I go along!
+
+I'm hoping, then, that this won't become a common refrain, but… I've run out of time today! I'll revisit this visualization at some point soon if I figure out what I was doing wrong.
+
+---
+
+### Day 05 (16/11/16): Occupancy per weekday, by car park
+
+Before doing anything else, I'm going to remove the redundant columns from the dataframe of all records, and save the new smaller dataframe to a CSV file - which should then be quicker to load and easier work with.
+
 ```r
 df <- df[, c("Name", "LastUpdate", "Capacity", "Occupancy", "Percentage", "Status")]
 
 write.csv(df, file = "df.csv")
 ```
-```rdf <- read.csv("C:/Users/Owen/Documents/Coding/Parking/df.csv")```
-<p>Following another moment of mild panic this morning, I’m also going to check that the times being recorded are adjusted for GMT/BST each spring and autumn. If they are then I don’t need to worry - if not, I’ll have to do some time-correction work…</p>
+
+```r
+df <- read.csv("C:/Users/Owen/Documents/Coding/Parking/df.csv")
+```
+
+Following another moment of mild panic this morning, I'm also going to check that the times being recorded are adjusted for GMT/BST each spring and autumn. If they are then I don't need to worry - if not, I'll have to do some time-correction work...
+
+
 ```r
 # I'll have a look at records from spring of 2016 - clocks changed on 27/03/2016
 times <- df$LastUpdate[grep("^27/03/2016", df$LastUpdate)]
@@ -473,18 +559,37 @@ hours <- as.POSIXlt(times, format = "%d/%m/%Y %I:%M:%S %p", tz = "UTC")$hour
 # Check number of records for a few hours, including 1AM (shouldn't be any!)
 c(sum(hours == 1), sum(hours == 2), sum(hours == 16), sum(hours == 21))
 ```
-```rconsole## [1] 12 86 96 98```
-<p>Suspiciously, there ARE records between 01:00 and 02:00 - and roughly 1/8 as many as for each other hour. The plot thickens when we remember that we have 8 car parks. Is one car park guilty?</p>
+
+
+```rconsole
+## [1] 12 86 96 98
+```
+
+
+Suspiciously, there ARE records between 01:00 and 02:00 - and roughly 1/8 as many as for each other hour. The plot thickens when we remember that we have 8 car parks. Is one car park guilty?
+
+
 ```r
 names <- df$Name[grep("^27/03/2016", df$LastUpdate)]
 names[hours == 1]
 ```
-```rconsole##  [1] Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP
+
+
+```rconsole
+##  [1] Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP
 ##  [8] Podium CP Podium CP Podium CP Podium CP Podium CP
-## 9 Levels: Avon Street CP Charlotte Street CP ... test car park```
-<p>Guilty as charged… I shall, for now, ignore any potential timeshift, and I will investigate this further tomorrow.</p>
-<p>Right, on to today’s visualization!</p>
-<p>I’m going to have a go at a somewhat similar plot to yesterday - but facetting by car park, rather than by day.</p>
+## 9 Levels: Avon Street CP Charlotte Street CP ... test car park
+```
+
+
+Guilty as charged… I shall, for now, ignore any potential timeshift, and I will investigate this further tomorrow.
+
+Right, on to today's visualization!
+
+I'm going to have a go at a somewhat similar plot to yesterday - but facetting by car park, rather than by day.
+
+
+
 ```r
 library(ggplot2)
 
@@ -510,7 +615,9 @@ p <- ggplot(data = df5, aes(x = as.double(Time), y = Day1)) +
           legend.position = "None")
 p
 ```
-<img src="day05.jpeg" />
-<p>And regarding yesterday’s plot… good news! I am indebted to <a href="http://stackoverflow.com/users/2641825/paul-rougieux">Paul Rougieux</a> for pointing out that I was using <code>y = df5$x</code> in my <code>ggplot</code> code yesterday, where I ought to have been using <code>y = x</code>   - changing this solves the problem! So here is yesterday’s visualization again, but ordered more sensibly.</p>
-<img src="day04fixed.jpeg" />
-</div>
+
+![](day05.jpeg)
+
+And regarding yesterday's plot… good news! I am indebted to [Paul Rougieux](http://stackoverflow.com/users/2641825/paul-rougieux) for pointing out that I was using `y = df5$x` in my `ggplot` code yesterday, where I ought to have been using `y = x` - changing this solves the problem! So here is yesterday's visualization again, but ordered more sensibly.
+
+![](day04fixed.jpeg)
