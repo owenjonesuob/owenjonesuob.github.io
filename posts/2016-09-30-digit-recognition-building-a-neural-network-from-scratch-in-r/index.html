@@ -225,32 +225,18 @@ window.Quarto = {
 
 
 
-<p>
-<em><b>Update:</b></em> &nbsp;On 3rd March 2017, I presented a workshop based on this project at the Bath Machine Learning Meetup. You can see the event page <a href="https://www.meetup.com/Bath-Machine-Learning-Meetup/events/237475341/">here</a>!
-</p>
+<p><em><strong>Update:</strong></em> On 3rd March 2017, I presented a workshop based on this project at the Bath Machine Learning Meetup. You can see the event page <a href="https://www.meetup.com/Bath-Machine-Learning-Meetup/events/237475341/">here</a>!</p>
 <hr>
-<div id="header" class="fluid-row">
-<h3 class="title toc-ignore anchored">
-Motivation for this project
-</h3>
-</div>
-<section id="motivation-for-this-project" class="level2">
-<p>
-A few months ago I was introduced to data science and machine learning by a friend. Since then I have developed a great interest in the field, and recently my imagination has been captured by the topic of neural networks.
-</p>
-<p>
-Combining this, a desire to improve my programming skills, my irrational fondness for R as a programming language, and a <a href="https://www.kaggle.com/c/digit-recognizer">digit recognition challenge</a> hosted online by Kaggle, I decided to create, train and utilize a simple neural network - entirely from scratch - within R.
-</p>
+<section id="motivation-for-this-project" class="level3">
+<h3 class="anchored" data-anchor-id="motivation-for-this-project">Motivation for this project</h3>
+<p>A few months ago I was introduced to data science and machine learning by a friend. Since then I have developed a great interest in the field, and recently my imagination has been captured by the topic of neural networks.</p>
+<p>Combining this, a desire to improve my programming skills, my irrational fondness for R as a programming language, and a <a href="https://www.kaggle.com/c/digit-recognizer">digit recognition challenge</a> hosted online by Kaggle, I decided to create, train and utilize a simple neural network - entirely from scratch - within R.</p>
 <hr>
-</section></main></div>
-<section id="the-neural-network-methodology-and-notes" class="level2">
-<h3 data-anchor-id="the-neural-network-methodology-and-notes">
-The neural network: methodology and notes
-</h3>
-<section id="setting-up-the-environment" class="level3">
-<h4 data-anchor-id="setting-up-the-environment">
-Setting up the environment
-</h4>
+</section>
+<section id="the-neural-network-methodology-and-notes" class="level3">
+<h3 class="anchored" data-anchor-id="the-neural-network-methodology-and-notes">The neural network: methodology and notes</h3>
+<section id="setting-up-the-environment" class="level4">
+<h4 class="anchored" data-anchor-id="setting-up-the-environment">Setting up the environment</h4>
 <p>I have used two packages other than those included with base R: <code>reshape2</code> and <code>ggplot2</code>, both of which are widely-used packages that can be installed from the CRAN repository. These are used within the <code>visualize</code> function (and its variants) to simplify the plotting process; I shall explain exactly how this is done later on.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
@@ -258,58 +244,28 @@ Setting up the environment
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed, for reproducibility of 'random' samples found later</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="functions" class="level3">
-<h4 data-anchor-id="functions">
-Functions
-</h4>
-I have broken down the construction and training of the neural network into several functions. These functions are:
+<section id="functions" class="level4">
+<h4 class="anchored" data-anchor-id="functions">Functions</h4>
+<p>I have broken down the construction and training of the neural network into several functions. These functions are:</p>
 <ul>
-<li>
-<code>computeCost</code>
-</li>
-<li>
-<code>computeGrad</code>
-</li>
-<li>
-<code>loadData</code>
-</li>
-<li>
-<code>makeSets</code>
-</li>
-<li>
-<code>optLambda</code>
-</li>
-<li>
-<code>optNeurons</code>
-</li>
-<li>
-<code>predict</code>
-</li>
-<li>
-<code>randomInitParams</code>
-</li>
-<li>
-<code>sigmoid</code>
-</li>
-<li>
-<code>sigmoidGradient</code>
-</li>
-<li>
-<code>visualize</code>
-</li>
-<li>
-<code>visualizeBW</code>
-</li>
-<li>
-<code>visualizeMulti</code>
-</li>
+<li><code>computeCost</code></li>
+<li><code>computeGrad</code></li>
+<li><code>loadData</code></li>
+<li><code>makeSets</code></li>
+<li><code>optLambda</code></li>
+<li><code>optNeurons</code></li>
+<li><code>predict</code></li>
+<li><code>randomInitParams</code></li>
+<li><code>sigmoid</code></li>
+<li><code>sigmoidGradient</code></li>
+<li><code>visualize</code></li>
+<li><code>visualizeBW</code></li>
+<li><code>visualizeMulti</code></li>
 </ul>
 <p>I will explain the purpose of each of them at the time that they are used in the project.</p>
 </section>
-<section id="inspecting-the-data" class="level3">
-<h4 data-anchor-id="inspecting-the-data">
-Inspecting the data
-</h4>
+<section id="inspecting-the-data" class="level4">
+<h4 class="anchored" data-anchor-id="inspecting-the-data">Inspecting the data</h4>
 <p>The data is provided in two <code>.csv</code> files. We will talk about <code>test.csv</code> later - for now we’ll focus on the first file, <code>train.csv</code>, which contains 42000 rows of data in 785 columns. Each row corresponds to one 28x28 pixel grayscale image of a handwritten digit from 0 to 9. The first column is a label indicating which digit is represented in the image. The next 784 columns are an ‘unrolled’ representation of the image: the first 28 entries represent the first row of the image, the next 28 represent the second row, and so on. Each entry has a value from 0 to 255 representing the ‘intensity’ of the pixel it represents. Let’s examine the first row of <code>train.csv</code>:</p>
 <pre class="rconsole"><code>##   label pixel0 pixel1 "..." pixel352 pixel353 "..." pixel782 pixel783
 ## 1     1      0      0   ...      240       81   ...        0        0</code></pre>
@@ -339,13 +295,11 @@ Inspecting the data
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>img <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>( <span class="fu">read.csv</span>(<span class="st">"data/train.csv"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">nrows =</span> <span class="dv">1</span>)[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)] )</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">visualize</span>(img)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><img src="1.png"></p>
+<p><img src="1.png" class="img-fluid"></p>
 <p>It’s now clear to us that this image is of the digit 1 - as confirmed by its label. We will look at some more examples shortly, but first we will read the data into R.</p>
 </section>
-<section id="loading-and-tidying-the-data" class="level3">
-<h4 data-anchor-id="loading-and-tidying-the-data">
-Loading and tidying the data
-</h4>
+<section id="loading-and-tidying-the-data" class="level4">
+<h4 class="anchored" data-anchor-id="loading-and-tidying-the-data">Loading and tidying the data</h4>
 <p>The function <code>loadData</code> is used to load the training and test data into the R workspace (up to an optional cutoff point):</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># loadData reads in train and test data and stores them in the workspace</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -375,12 +329,8 @@ Loading and tidying the data
 <pre class="rconsole"><code>## [1] "Reading training examples..."
 ## [1] "Reading test examples..."
 ## [1] "Data loaded!"</code></pre>
-<p>
-For now we’ll focus on the <code>train</code> data, which will be used to train and evaluate the performance of the neural network. The data are currently in a large dataframe where each row corresponds to an image; the first column contains the label, and the subsequent columns contain the pixel values, as described earlier.
-</p>
-<p>
-The function <code>makeSets</code> performs two jobs. First it separates the labels from the image data. Each value in the image data is scaled from 0 to 1 since this improves the network’s performance. The data is then divided into three matrices: <code>xtrain</code>, <code>xval</code> and <code>xtest</code>. These contain 60%, 20% and 20% of the examples respectively. The labels are split into numeric vectors <code>ytrain</code>, <code>yval</code> and <code>ytest</code> in the same way. Note that the first entry of <code>ytrain</code> is the label for the first row of <code>xtrain</code>, and so on. The new matrices and vectors are stored in the workspace. <em>Note: Labels of <code>0</code> are replaced with <code>10</code> in the <code>y~</code> vectors - this is to avoid computation issues which may arise later (since R indexes vectors from 1 rather than 0).</em>
-</p>
+<p>For now we’ll focus on the <code>train</code> data, which will be used to train and evaluate the performance of the neural network. The data are currently in a large dataframe where each row corresponds to an image; the first column contains the label, and the subsequent columns contain the pixel values, as described earlier.</p>
+<p>The function <code>makeSets</code> performs two jobs. First it separates the labels from the image data. Each value in the image data is scaled from 0 to 1 since this improves the network’s performance. The data is then divided into three matrices: <code>xtrain</code>, <code>xval</code> and <code>xtest</code>. These contain 60%, 20% and 20% of the examples respectively. The labels are split into numeric vectors <code>ytrain</code>, <code>yval</code> and <code>ytest</code> in the same way. Note that the first entry of <code>ytrain</code> is the label for the first row of <code>xtrain</code>, and so on. The new matrices and vectors are stored in the workspace. <em>Note: Labels of <code>0</code> are replaced with <code>10</code> in the <code>y~</code> vectors - this is to avoid computation issues which may arise later (since R indexes vectors from 1 rather than 0).</em></p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># makeSets creates training, cross-validation and test sets from a set of data</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>makeSets <span class="ot">&lt;-</span> <span class="cf">function</span>(dataset) {</span>
@@ -413,12 +363,8 @@ The function <code>makeSets</code> performs two jobs. First it separates the lab
 <span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">makeSets</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>
-Each of these sets has a specific purpose: <code>xtrain</code> (the training set) will be used to train the network, <code>xval</code> (the cross-validation set) will be used to adjust the network’s hyper-parameters (see the next section), and <code>xtest</code> will be used to evaluate the overall performance of the network.
-</p>
-<p>
-Now that the data are in a nicer format for calculations, we can look at some more examples of images represented in <code>xtrain</code> using <code>visualizeMulti</code>, a slight adaptation of the <code>visualize</code> function.
-</p>
+<p>Each of these sets has a specific purpose: <code>xtrain</code> (the training set) will be used to train the network, <code>xval</code> (the cross-validation set) will be used to adjust the network’s hyper-parameters (see the next section), and <code>xtest</code> will be used to evaluate the overall performance of the network.</p>
+<p>Now that the data are in a nicer format for calculations, we can look at some more examples of images represented in <code>xtrain</code> using <code>visualizeMulti</code>, a slight adaptation of the <code>visualize</code> function.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># visualizeMulti recreates images from the unrolled matrices that represent them</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>visualizeMulti <span class="ot">&lt;-</span> <span class="cf">function</span>(imgvecs) {</span>
@@ -465,19 +411,13 @@ Now that the data are in a nicer format for calculations, we can look at some mo
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">visualizeMulti</span>(xtrain[s, ])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="rconsole"><code>## [1] "Converting data type..."
 ## [1] "Plotting images..."</code></pre>
-<p><img src="2.png"></p>
+<p><img src="2.png" class="img-fluid"></p>
 <pre class="rconsole"><code>## [1] "Visualization complete!"</code></pre>
 </section>
-<section id="setting-hyper-parameters" class="level3">
-<h4 data-anchor-id="setting-hyper-parameters">
-Setting hyper-parameters
-</h4>
-<p>
-The hyper-parameters of the network are responsible for the structure of the network and for fine-tuning its performance. There are two hyper-parameters which will remain fixed for this network: these are <code>input_layer_size</code> and <code>output_layer_size</code>. The input layer is just the raw input into the network, which in this case is the 784-length vector representing an image. The output layer will give the ‘result’ of that input, which we want to be a value from 1 to 10 representing the digit in the image (recall <code>0</code> is labelled as <code>10</code>).
-</p>
-<p>
-The neural network will have two other hyper-parameters which can be adjusted later using the cross-validation set <code>xval</code>. The first of these is <code>hidden_layer_size</code>, which sets how many neurons will be present in the hidden layer of the network and therefore how many features will be learned by the network. The second is <code>lambda</code>, which will control the ‘strictness’ of regularization of the parameters: the higher the value, the harsher the penalty for overly specialized features. This will help prevent the network overfitting the training data, and then performing poorly on the test data.
-</p>
+<section id="setting-hyper-parameters" class="level4">
+<h4 class="anchored" data-anchor-id="setting-hyper-parameters">Setting hyper-parameters</h4>
+<p>The hyper-parameters of the network are responsible for the structure of the network and for fine-tuning its performance. There are two hyper-parameters which will remain fixed for this network: these are <code>input_layer_size</code> and <code>output_layer_size</code>. The input layer is just the raw input into the network, which in this case is the 784-length vector representing an image. The output layer will give the ‘result’ of that input, which we want to be a value from 1 to 10 representing the digit in the image (recall <code>0</code> is labelled as <code>10</code>).</p>
+<p>The neural network will have two other hyper-parameters which can be adjusted later using the cross-validation set <code>xval</code>. The first of these is <code>hidden_layer_size</code>, which sets how many neurons will be present in the hidden layer of the network and therefore how many features will be learned by the network. The second is <code>lambda</code>, which will control the ‘strictness’ of regularization of the parameters: the higher the value, the harsher the penalty for overly specialized features. This will help prevent the network overfitting the training data, and then performing poorly on the test data.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fixed-value hyper-parameters</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>input_layer_size <span class="ot">&lt;-</span> <span class="fu">dim</span>(xtrain)[<span class="dv">2</span>]</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>output_layer_size <span class="ot">&lt;-</span> <span class="dv">10</span></span>
@@ -486,10 +426,8 @@ The neural network will have two other hyper-parameters which can be adjusted la
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>hidden_layer_size <span class="ot">&lt;-</span> <span class="dv">25</span></span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="initializing-parameters" class="level3">
-<h4 data-anchor-id="initializing-parameters">
-Initializing parameters
-</h4>
+<section id="initializing-parameters" class="level4">
+<h4 class="anchored" data-anchor-id="initializing-parameters">Initializing parameters</h4>
 <p>The parameters, or weights, of the network are what allows it to learn. To avoid multiple neurons learning the same features, these weights must be initialized to small random numbers, rather than just 0. The function <code>randomInitParams</code> performs this task.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># randomInitParams outputs a random parameter vector for reshaping into Theta1</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># and Theta2</span></span>
@@ -511,10 +449,8 @@ Initializing parameters
 <div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>init_params <span class="ot">&lt;-</span> <span class="fu">randomInitParams</span>(input_layer_size, hidden_layer_size,</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                                output_layer_size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="forward-propagation-and-the-cost-function" class="level3">
-<h4 data-anchor-id="forward-propagation-and-the-cost-function">
-Forward propagation and the cost function
-</h4>
+<section id="forward-propagation-and-the-cost-function" class="level4">
+<h4 class="anchored" data-anchor-id="forward-propagation-and-the-cost-function">Forward propagation and the cost function</h4>
 <p>An underlying principle of machine learning is to minimize a cost function (or objective function) by adjusting parameters. The calculation of the cost for this network is handled by <code>computeCost</code>.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># computeCost computes the cost function of the network</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -565,15 +501,9 @@ Forward propagation and the cost function
 <span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a>    J</span>
 <span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>
-The first part of the function takes the <code>init_params</code> generated earlier and reshapes them into two matrices, <code>Theta1</code> and <code>Theta2</code>. The rows of these matrices are, in effect, the neurons of the network.
-</p>
-<p>
-In the middle section of <code>computeCost</code> we see how the network classifies an input as one of the 10 outputs through a process known as forward propagation. Each input vector (i.e.&nbsp;each row of the input matrix) has a bias unit (of value <code>1</code>) added at the 0th position. Two steps are then performed to calculate the hidden layer’s output for a particular input.
-</p>
-<p>
-First, the dot product of the input vector X and each neuron in the hidden layer (i.e.&nbsp;each row in <code>Theta1</code>) is calculated, and stored in a vector <code>z1</code>:
-</p>
+<p>The first part of the function takes the <code>init_params</code> generated earlier and reshapes them into two matrices, <code>Theta1</code> and <code>Theta2</code>. The rows of these matrices are, in effect, the neurons of the network.</p>
+<p>In the middle section of <code>computeCost</code> we see how the network classifies an input as one of the 10 outputs through a process known as forward propagation. Each input vector (i.e.&nbsp;each row of the input matrix) has a bias unit (of value <code>1</code>) added at the 0th position. Two steps are then performed to calculate the hidden layer’s output for a particular input.</p>
+<p>First, the dot product of the input vector X and each neuron in the hidden layer (i.e.&nbsp;each row in <code>Theta1</code>) is calculated, and stored in a vector <code>z1</code>:</p>
 <p><span class="math display">\[z_{1_i} = \sum_{j=0}^{input\_layer\_size} \theta_{ij}^{(1)}X_j\]</span></p>
 <p>This vector is then passed to the activation function. In this project the <code>sigmoid</code> function is used:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sigmoid calculates the sigmoid of z, g(z)</span></span>
@@ -584,36 +514,17 @@ First, the dot product of the input vector X and each neuron in the hidden layer
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span><span class="sc">:</span><span class="dv">10</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, <span class="fu">sigmoid</span>(x), <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><img src="3.png"></p>
-<p>
-This has the effect of mapping large positive values in (z_1) to 1 and large negative values to 0, and values close to zero (roughly within the range -2 to 2) are mapped more or less linearly onto the values between 0 and 1. The result of applying the sigmoid function to (z_3), called (a_3), is the output of the hidden layer for the original input.
-</p>
-<p>
-The output of the hidden layer is the input to the final layer. A bias unit is again added at position 0, and then the same process is followed as before:
-</p>
+<p><img src="3.png" class="img-fluid"></p>
+<p>This has the effect of mapping large positive values in <span class="math inline">\(z_1\)</span> to 1 and large negative values to 0, and values close to zero (roughly within the range -2 to 2) are mapped more or less linearly onto the values between 0 and 1. The result of applying the sigmoid function to <span class="math inline">\(z_3\)</span>, called <span class="math inline">\(a_3\)</span>, is the output of the hidden layer for the original input.</p>
+<p>The output of the hidden layer is the input to the final layer. A bias unit is again added at position 0, and then the same process is followed as before:</p>
 <p><span class="math display">\[z_{2_i} = \sum_{j=0}^{hidden\_layer\_size} \theta_{ij}^{(2)}a_{2_j}\]</span> <span class="math display">\[a_{3_i} = sigmoid(z_{2_i})\]</span></p>
+<p><span class="math inline">\(a_3\)</span> is the output of the final layer in the network, and so it is the overall output of the network. <em>Note: Using matrix multiplication allows <code>computeCost</code> to perform these steps on multiple inputs simultaneously and is much faster computationally than using a <code>for</code> loop.</em></p>
+<p>Once all the inputs have been forward-propagated through the network, the cost J of the network can be calculated. The cost is a measure of how ‘wrong’ the net was in its classification of each image. For each input vector, the difference between the actual and expected output of the net is calculated. For example, if the image was of the digit 3, then the expected output of the net is a length-10 vector where all entries are 0 except for a 1 at the 3rd position. The further away the actual output is from this expected output, the higher the cost for that input. The sum of the costs of all the inputs is stored in <code>J</code>.</p>
+<p>There is one more step in the cost calculation. A extra term is added: a scaled sum of the squared value of every parameter in the network. This is the regularization term, the scale of which is controlled by the hyper-parameter <code>lambda</code> which was set earlier. The higher the value of <code>lambda</code>, the heavier the penalty for large parameters (and large parameters are generally a sign of overfitting).</p>
 </section>
-</section>
-<div class="MathJax_Display">
-
-</div>
-<section id="the-neural-network-methodology-and-notes" class="level2">
-<section id="forward-propagation-and-the-cost-function" class="level3">
-<p>
-(a_3) is the output of the final layer in the network, and so it is the overall output of the network. <em>Note: Using matrix multiplication allows <code>computeCost</code> to perform these steps on multiple inputs simultaneously and is much faster computationally than using a <code>for</code> loop.</em>
-</p>
-<p>
-Once all the inputs have been forward-propagated through the network, the cost J of the network can be calculated. The cost is a measure of how ‘wrong’ the net was in its classification of each image. For each input vector, the difference between the actual and expected output of the net is calculated. For example, if the image was of the digit 3, then the expected output of the net is a length-10 vector where all entries are 0 except for a 1 at the 3rd position. The further away the actual output is from this expected output, the higher the cost for that input. The sum of the costs of all the inputs is stored in <code>J</code>.
-</p>
-<p>
-There is one more step in the cost calculation. A extra term is added: a scaled sum of the squared value of every parameter in the network. This is the regularization term, the scale of which is controlled by the hyper-parameter <code>lambda</code> which was set earlier. The higher the value of <code>lambda</code>, the heavier the penalty for large parameters (and large parameters are generally a sign of overfitting).
-</p>
-</section>
-<section id="backpropagation-and-partial-derivatives" class="level3">
-<h4 data-anchor-id="backpropagation-and-partial-derivatives">
-Backpropagation and partial derivatives
-</h4>
-<p>The process of training the network involves optimizing the cost function by adjusting the network’s parameters. This is done using R’s <code>optim </code>function - the full process is discussed in the next section. Before we do this, however, we will discuss another function - <code>computeGrad</code>.</p>
+<section id="backpropagation-and-partial-derivatives" class="level4">
+<h4 class="anchored" data-anchor-id="backpropagation-and-partial-derivatives">Backpropagation and partial derivatives</h4>
+<p>The process of training the network involves optimizing the cost function by adjusting the network’s parameters. This is done using R’s <code>optim</code> function - the full process is discussed in the next section. Before we do this, however, we will discuss another function - <code>computeGrad</code>.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># computeGrad computes the partial derivatives of the cost function with respect</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># to each of the parameters in Theta1 and Theta2</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -706,12 +617,8 @@ Backpropagation and partial derivatives
 <span id="cb20-90"><a href="#cb20-90" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-91"><a href="#cb20-91" aria-hidden="true" tabindex="-1"></a>    grad</span>
 <span id="cb20-92"><a href="#cb20-92" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>
-The first two sections are the same as the first sections of <code>computeCost</code>: the parameter vector is reshaped into matrices <code>Theta1</code> and <code>Theta2</code>, and the input matrix is propagated forwards through the network.
-</p>
-<p>
-Then, however, we come to a new process: backpropagation. The aim of backpropagation is to assess how much of an effect each individual parameter has on the cost function. This is done by calculating the partial derivative of the cost function with respect to each parameter in turn, by feeding back the error from each unit in each layer. One stage of this process uses the function <code>sigmoidGradient</code>:
-</p>
+<p>The first two sections are the same as the first sections of <code>computeCost</code>: the parameter vector is reshaped into matrices <code>Theta1</code> and <code>Theta2</code>, and the input matrix is propagated forwards through the network.</p>
+<p>Then, however, we come to a new process: backpropagation. The aim of backpropagation is to assess how much of an effect each individual parameter has on the cost function. This is done by calculating the partial derivative of the cost function with respect to each parameter in turn, by feeding back the error from each unit in each layer. One stage of this process uses the function <code>sigmoidGradient</code>:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sigmoidGradient calculates the sigmoid gradient of z, g'(z)</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>sigmoidGradient <span class="ot">&lt;-</span> <span class="cf">function</span>(z) {</span>
@@ -722,86 +629,47 @@ Then, however, we come to a new process: backpropagation. The aim of backpropaga
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This is the derivative of the sigmoid function, with respect to the input.</p>
 <p>Once the backpropagation step is complete, the gradient for each parameter is regularized in a similar manner to the cost in <code>computeCost</code> - the larger the parameter, the greater the effect of the parameter on the network. <em>Note: By convention, the bias parameters are not regularized.</em> The output of the function is then a vector of the ‘unrolled’ forms of <code>Theta1</code> and <code>Theta2</code>.</p>
+<p>This is the derivative of the sigmoid function, with respect to the input. Once the backpropagation step is complete, the gradient for each parameter is regularized in a similar manner to the cost in <code>computeCost</code> - the larger the parameter, the greater the effect of the parameter on the network. <em>Note: By convention, the bias parameters are not regularized.</em> The output of the function is then a vector of the ‘unrolled’ forms of <code>Theta1</code> and <code>Theta2</code>.</p>
 </section>
-<section id="training-the-network" class="level3">
-<h4 data-anchor-id="training-the-network">
-Training the network
-</h4>
-<p>
-Everything is now in place for the training of the network. As mentioned earlier, the aim is to minimize the cost function by changing the parameters of the network. This is done using the <code>optim</code> function.
-</p>
-<p>
-In this case, five arguments need to be passed to <code>optim</code>:
-</p>
-<ol>
-<li>
-<code>par</code> – a vector of initial values for the parameters to be optimized over
-</li>
-<li>
-<code>fn</code> – a function to be minimized, with first argument the vector of parameters over which minimization is to take place
-</li>
-<li>
-<code>gr</code> – a function to return the gradient for the <code>“BFGS”</code>, <code>“CG”</code> and <code>“L-BFGS-B”</code> methods
-</li>
-<li>
-<code>method</code> – the method to be used
-</li>
-<li>
-<code>control</code> – a list of control parameters
-</li>
+<section id="training-the-network" class="level4">
+<h4 class="anchored" data-anchor-id="training-the-network">Training the network</h4>
+<p>Everything is now in place for the training of the network. As mentioned earlier, the aim is to minimize the cost function by changing the parameters of the network. This is done using the <code>optim</code> function.</p>
+<p>In this case, five arguments need to be passed to <code>optim</code>:</p>
+<ol type="1">
+<li><code>par</code> – a vector of initial values for the parameters to be optimized over</li>
+<li><code>fn</code> – a function to be minimized, with first argument the vector of parameters over which minimization is to take place</li>
+<li><code>gr</code> – a function to return the gradient for the <code>"BFGS"</code>, <code>"CG"</code> and <code>"L-BFGS-B"</code> methods</li>
+<li><code>method</code> – the method to be used</li>
+<li><code>control</code> – a list of control parameters</li>
 </ol>
-We will use the following arguments:
-<table class="table">
+<p>We will use the following arguments:</p>
+<table class="caption-top table">
 <thead>
 <tr class="header">
-<th align="left">
-Argument name
-</th>
-<th align="left">
-Argument value
-</th>
+<th>Argument name</th>
+<th>Argument value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">
-<code>par</code>
-</td>
-<td align="left">
-<code>init_params</code>
-</td>
+<td><code>par</code></td>
+<td><code>init_params</code></td>
 </tr>
 <tr class="even">
-<td align="left">
-<code>fn</code>
-</td>
-<td align="left">
-anonymous function based on <code>computeCost</code>
-</td>
+<td><code>fn</code></td>
+<td><code>anonymous function based on computeCost</code></td>
 </tr>
 <tr class="odd">
-<td align="left">
-<code>gr</code>
-</td>
-<td align="left">
-anonymous function based on <code>computeGrad</code>
-</td>
+<td><code>gr</code></td>
+<td><code>anonymous function based on computeGrad</code></td>
 </tr>
 <tr class="even">
-<td align="left">
-<code>method</code>
-</td>
-<td align="left">
-<code>L-BFGS-B</code>
-</td>
+<td><code>method</code></td>
+<td><code>L-BFGS-B</code></td>
 </tr>
 <tr class="odd">
-<td align="left">
-<code>control</code>
-</td>
-<td align="left">
-<code>list(maxit = 50)</code>
-</td>
+<td><code>control</code></td>
+<td><code>list(maxit = 50)</code></td>
 </tr>
 </tbody>
 </table>
@@ -815,12 +683,8 @@ anonymous function based on <code>computeGrad</code>
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>                                           output_layer_size,</span>
 <span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>                                           xtrain, ytrain, lambda),</span>
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">method =</span> <span class="st">"L-BFGS-B"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">maxit =</span> <span class="dv">50</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>
-The two anonymous functions are required since only the first argument, the parameters vector, is changed in each case, whereas the rest of the arguments remain constant. The optimization <code>method</code> used, <code>L-BFGS-B</code>, seems to perform best for this application but other methods can be experimented with. A limit of 50 optimization iterations is set by <code>control</code> - this is to limit computation time, but again this can be tweaked if desired.
-</p>
-<p>
-<code>optim</code> gives several outputs - the first of these is the now-optimized vector of parameters (the second is the minimized cost). This vector can be reshaped into the two parameter matrices <code>Theta1</code> and <code>Theta2</code>.
-</p>
+<p>The two anonymous functions are required since only the first argument, the parameters vector, is changed in each case, whereas the rest of the arguments remain constant. The optimization <code>method</code> used, <code>L-BFGS-B</code>, seems to perform best for this application but other methods can be experimented with. A limit of 50 optimization iterations is set by <code>control</code> - this is to limit computation time, but again this can be tweaked if desired.</p>
+<p><code>optim</code> gives several outputs - the first of these is the now-optimized vector of parameters (the second is the minimized cost). This vector can be reshaped into the two parameter matrices <code>Theta1</code> and <code>Theta2</code>.</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>nn_params <span class="ot">&lt;-</span> optim_out[[<span class="dv">1</span>]]</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape nn_params into Theta1 and Theta2</span></span>
@@ -829,11 +693,9 @@ The two anonymous functions are required since only the first argument, the para
 <span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>Theta2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(nn_params[(k <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span><span class="fu">length</span>(nn_params)],</span>
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>                 output_layer_size, hidden_layer_size <span class="sc">+</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="making-predictions" class="level3">
-<h4 data-anchor-id="making-predictions">
-Making predictions
-</h4>
-<p>Now that we have trained the network, we can see how well it does when making predictions for images it hasn’t seen before. The <code>predict </code>function makes these predictions. We’ll assess the network’s performance using the cross-validation set <code>xval</code>.</p>
+<section id="making-predictions" class="level4">
+<h4 class="anchored" data-anchor-id="making-predictions">Making predictions</h4>
+<p>Now that we have trained the network, we can see how well it does when making predictions for images it hasn’t seen before. The <code>predict</code> function makes these predictions. We’ll assess the network’s performance using the cross-validation set <code>xval</code>.</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># predict gives the predicted values of input vectors in a matrix X</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>predict <span class="ot">&lt;-</span> <span class="cf">function</span>(Theta1, Theta2, X) {</span>
@@ -853,22 +715,18 @@ Making predictions
 <pre class="rconsole"><code>## [1] "Accuracy: 93.1%"</code></pre>
 <p>This initial runthrough achieves an accuracy of above 93%, which is already reasonably impressive!</p>
 </section>
-<section id="visualizing-the-hidden-layer" class="level3">
-<h4 data-anchor-id="visualizing-the-hidden-layer">
-Visualizing the hidden layer
-</h4>
+<section id="visualizing-the-hidden-layer" class="level4">
+<h4 class="anchored" data-anchor-id="visualizing-the-hidden-layer">Visualizing the hidden layer</h4>
 <p>It would be interesting to see exactly what features the neurons in the hidden layer have learned to look for in the input images. We can visualize these features by passing <code>Theta1</code>, without the first column of bias parameters, to <code>visualizeMulti</code>:</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">visualizeMulti</span>(Theta1[, <span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="rconsole"><code>## [1] "Converting data type..."
 ## [1] "Plotting images..."</code></pre>
-<p><img src="5.png"></p>
+<p><img src="5.png" class="img-fluid"></p>
 <pre class="rconsole"><code>## [1] "Visualization complete!"</code></pre>
 <p>It is possible to make out some shapes and curves, but it is interesting to see the difference between the features the network learns and the features humans might use to describe a digit.</p>
 </section>
-<section id="mistakes" class="level3">
-<h4 data-anchor-id="mistakes">
-Mistakes
-</h4>
+<section id="mistakes" class="level4">
+<h4 class="anchored" data-anchor-id="mistakes">Mistakes</h4>
 <p>It is also worth seeing some of the images the network didn’t manage to classify correctly.</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>wrong <span class="ot">&lt;-</span> <span class="fu">which</span>(preds <span class="sc">!=</span> yval)</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">sample</span>(wrong, <span class="dv">25</span>)</span>
@@ -876,20 +734,15 @@ Mistakes
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">visualizeMulti</span>(xval[s, ])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "Converting data type..."</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "Plotting images..."</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><img src="6.png"></p>
+<p><img src="6.png" class="img-fluid"></p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "Visualization complete!"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>In some cases it is difficult for a human to say with absolute certainty which digit is represented, so it is understandable that the network makes some errors. However, it may be possible to improve the network’s performance through adjustments to the hyper-parameters set earlier.</p>
+<p>In some cases it is difficult for a human to say with absolute certainty which digit is represented, so it is understandable that the network makes some errors. However, it may be possible to improve the network’s performance through adjustments to the hyper-parameters set earlier.</p>
 </section>
-<section id="adjusting-lambda" class="level3">
-<h4 data-anchor-id="adjusting-lambda">
-Adjusting lambda
-</h4>
-<p>
-We can try adjusting each of the non-fixed hyper-parameters in turn to see if we can improve the network’s performance.
-</p>
-<p>
-First we can train the network with several different values of <code>lambda</code> and plot the accuracy of the resulting network against these values. <code>optLambda</code> performs this task.
-</p>
+<section id="adjusting-lambda" class="level4">
+<h4 class="anchored" data-anchor-id="adjusting-lambda">Adjusting lambda</h4>
+<p>We can try adjusting each of the non-fixed hyper-parameters in turn to see if we can improve the network’s performance.</p>
+<p>First we can train the network with several different values of <code>lambda</code> and plot the accuracy of the resulting network against these values. <code>optLambda</code> performs this task.</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># optLambda can be used to help visualize which value of lambda will give the</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co"># best performance for the network</span></span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -931,13 +784,11 @@ First we can train the network with several different values of <code>lambda</co
 <span id="cb34-39"><a href="#cb34-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(lambdavec, accuracy, <span class="at">pch =</span> <span class="dv">4</span>)</span>
 <span id="cb34-40"><a href="#cb34-40" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">optLambda</span>( <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><img src="7.png"></p>
+<p><img src="7.png" class="img-fluid"></p>
 <p>It seems that our initial value of 1 for <code>lambda</code> is not the best value we could be using; there is no clear trend in the results, but it seems a larger value (perhaps around <code>4</code>) will give us a greater accuracy. We will adjust <code>lambda</code> with this improvement shortly.</p>
 </section>
-<section id="adding-more-neurons" class="level3">
-<h4 data-anchor-id="adding-more-neurons">
-Adding more neurons
-</h4>
+<section id="adding-more-neurons" class="level4">
+<h4 class="anchored" data-anchor-id="adding-more-neurons">Adding more neurons</h4>
 <p>By increasing the number of neurons in the hidden layer, we increase the number of features the network can look for in an image, although at the cost of increased computation time. We can see the effect of adding more neurons to the hidden layer using <code>optNeurons</code>.</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># optNeurons can be used to see the effect of adding more neurons to the hidden</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co"># layer</span></span>
@@ -995,13 +846,11 @@ Adding more neurons
 <span id="cb36-54"><a href="#cb36-54" aria-hidden="true" tabindex="-1"></a>    <span class="fu">text</span>(neuronvec, accuracy, <span class="at">labels =</span> compTime, <span class="at">cex =</span> <span class="fl">0.8</span>, <span class="at">pos =</span> <span class="dv">1</span>)</span>
 <span id="cb36-55"><a href="#cb36-55" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">optNeurons</span>( <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">25</span>, <span class="dv">35</span>, <span class="dv">45</span>, <span class="dv">55</span>, <span class="dv">65</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><img src="8.png"></p>
+<p><img src="8.png" class="img-fluid"></p>
 <p>It can be seen that adding extra neurons consistently increases the accuracy of the network - however, the rate of improvement slows after about 35 neurons have been added, and the computation time increases significantly at each stage due to the ever-larger matrices involved. Therefore I shall for now continue to use a 25-unit hidden layer, since the training process otherwise becomes rather tedious, but for the final training run I shall use a 50-unit layer since this will give a slight increase to the accuracy score.</p>
 </section>
-<section id="one-more-attempt-at-improvement" class="level3">
-<h4 data-anchor-id="one-more-attempt-at-improvement">
-One more attempt at improvement
-</h4>
+<section id="one-more-attempt-at-improvement" class="level4">
+<h4 class="anchored" data-anchor-id="one-more-attempt-at-improvement">One more attempt at improvement</h4>
 <p>At one point or another I became curious as to whether the network would better learn to recognize features if the images were first converted into pure black-and-white images, where each pixel in the image is either ‘on’ or ‘off’. <code>visualizeBW</code> performs this transformation.</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># visualizeBW creates a black-and-white only visual representation of an image</span></span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    </span>
@@ -1024,7 +873,7 @@ One more attempt at improvement
 <span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p1[[<span class="dv">3</span>]], <span class="at">vp =</span> <span class="fu">viewport</span>(<span class="at">layout.pos.row =</span> <span class="dv">1</span>, <span class="at">layout.pos.col =</span> <span class="dv">1</span>))</span>
 <span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p2[[<span class="dv">3</span>]], <span class="at">vp =</span> <span class="fu">viewport</span>(<span class="at">layout.pos.row =</span> <span class="dv">1</span>, <span class="at">layout.pos.col =</span> <span class="dv">2</span>))</span>
 <span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p3[[<span class="dv">3</span>]], <span class="at">vp =</span> <span class="fu">viewport</span>(<span class="at">layout.pos.row =</span> <span class="dv">1</span>, <span class="at">layout.pos.col =</span> <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><img src="9.png"></p>
+<p><img src="9.png" class="img-fluid"></p>
 <p>We can try training the network on black-and-white versions of the <code>xtrain</code> images:</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>tolerance <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1060,18 +909,14 @@ One more attempt at improvement
 <pre class="rconsole"><code>## [1] "Accuracy: 92.2%"</code></pre>
 <p>It turns out that the network actually performs worse on these black-and-white images (even using different <code>tolerance</code> values) than on the unaltered images. This is perhaps unsurprising: by limiting each pixel to being only ‘on’ or ‘off’, we lose a lot of the information contained in the image, and so reduce the amount of information available for the network to train on. From now on, then, I shall only use the original unaltered images for training.</p>
 </section>
-<section id="updating-hyper-parameters" class="level3">
-<h4 data-anchor-id="updating-hyper-parameters">
-Updating hyper-parameters
-</h4>
+<section id="updating-hyper-parameters" class="level4">
+<h4 class="anchored" data-anchor-id="updating-hyper-parameters">Updating hyper-parameters</h4>
 <p>Having seen the effects of changing each hyper-parameter earlier, we can now update the hyper-parameters to obtain the best performance from the network.</p>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="dv">2</span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>hidden_layer_size <span class="ot">&lt;-</span> <span class="dv">50</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="re-evaluating-performance" class="level3">
-<h4 data-anchor-id="re-evaluating-performance">
-Re-evaluating performance
-</h4>
+<section id="re-evaluating-performance" class="level4">
+<h4 class="anchored" data-anchor-id="re-evaluating-performance">Re-evaluating performance</h4>
 <p>The network can now be re-trained with the updated hyper-parameters, and its performance evaluated on <code>xtest</code> - which has not been used up to this point to prevent it from influencing the training process in any way (this is another measure to prevent overfitting and hence an overly-optimistic accuracy estimate).</p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>optim_out <span class="ot">&lt;-</span> <span class="fu">optim</span>(init_params,</span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>                   <span class="cf">function</span>(p) <span class="fu">computeCost</span>(p, input_layer_size,</span>
@@ -1098,10 +943,8 @@ Re-evaluating performance
 <pre class="rconsole"><code>## [1] "Accuracy: 95.0%"</code></pre>
 <p>This is significantly better than the previous accuracy, so our effort has not been in vain!</p>
 </section>
-<section id="making-predictions-for-unlabelled-images" class="level3">
-<h4 data-anchor-id="making-predictions-for-unlabelled-images">
-Making predictions for unlabelled images
-</h4>
+<section id="making-predictions-for-unlabelled-images" class="level4">
+<h4 class="anchored" data-anchor-id="making-predictions-for-unlabelled-images">Making predictions for unlabelled images</h4>
 <p>The network is now as accurate as it reasonably can be in its classification of images, so it is time to try it out on <code>test</code> - the unlabelled images we loaded earlier.</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># test images are still in a dataframe, so convert them to matrix format</span></span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>testMat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(test)</span>
@@ -1146,22 +989,15 @@ Making predictions for unlabelled images
 <hr>
 </section>
 </section>
-<section id="project-evaluation" class="level2">
-<h3 data-anchor-id="project-evaluation">
-Project evaluation
-</h3>
-<p>
-Although not the best submission to the competiton by quite a stretch, and certainly too inaccurate to use in any important applications, I am very pleased with the outcome of this project. By modern-day standards, a single-hidden-layer fully-connected network is very primitive, and yet for a network of such simple architecture the performance is reasonable.
-</p>
-<p>
-Overall this has been an enjoyable project to put together. Writing the code was challenging but has reinforced my understanding of the structure and mechanical workings of the basic neural network model upon which many new designs and improvements are based. The compilation of this write-up was also a challenge, partly because I had no previous experience with R Markdown (the formatting language used to create the document) and partly because I have tried throughout to explain, more or less from first principles, exactly what process I was following and more importantly why I was following it. Certainly this has been a useful exercise for me - and hopefully it might prove useful to anyone else who happens to come across my work!
-</p>
+<section id="project-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="project-evaluation">Project evaluation</h3>
+<p>Although not the best submission to the competiton by quite a stretch, and certainly too inaccurate to use in any important applications, I am very pleased with the outcome of this project. By modern-day standards, a single-hidden-layer fully-connected network is very primitive, and yet for a network of such simple architecture the performance is reasonable.</p>
+<p>Overall this has been an enjoyable project to put together. Writing the code was challenging but has reinforced my understanding of the structure and mechanical workings of the basic neural network model upon which many new designs and improvements are based. The compilation of this write-up was also a challenge, partly because I had no previous experience with R Markdown (the formatting language used to create the document) and partly because I have tried throughout to explain, more or less from first principles, exactly what process I was following and more importantly why I was following it. Certainly this has been a useful exercise for me - and hopefully it might prove useful to anyone else who happens to come across my work!</p>
 
 
 </section>
 
-
- <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -1727,7 +1563,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <input type="hidden" id="giscus-base-theme" value="light">
 <input type="hidden" id="giscus-alt-theme" value="dark">
- <!-- /content -->
+</div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">

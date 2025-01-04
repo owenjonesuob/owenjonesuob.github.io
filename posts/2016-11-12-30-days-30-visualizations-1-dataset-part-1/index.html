@@ -194,40 +194,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<h2 id="header" class="fluid-row anchored">
-Project overview
-</h2>
-<section id="motivation-for-this-project" class="level2">
-<p>
-I am currently involved with a very exciting machine learning project being run within the <a href="https://www.meetup.com/Bath-Machine-Learning-Meetup/">Bath Machine Learning Meetup</a> group (I’m sure I’ll write a future post with more details on this project, but it is currently at a very early stage!). In collaboration with <a href="https://www.bathhacked.org/">Bath: Hacked</a> we are using <a href="https://data.bathhacked.org/Government-and-Society/BANES-Historic-Car-Park-Occupancy/x29s-cczc">this set of open data</a>, which contains information about the occupancy of car parks in the Bath &amp; North East Somerset (B&amp;NES) area from the last two years or so.
-</p>
-<p>
-While looking for something to listen to whilst making my daily bus commute to and from the university, I recently discovered the marvellous <a href="http://partiallyderivative.com">Partially Derivative</a> podcast. In one of the early episodes (S1E2, to be precise) one topic of conversation particularly caught my attention: Paul Downey’s blog post <a href="http://blog.whatfettle.com/2014/10/13/one-csv-thirty-stories/">“One CSV, thirty stories”</a>. The concept is simple: take a single dataset, and produce a different visualization of the data each day for 30 days.
-</p>
-<p>
-Seeing as we will be working with the car parking dataset a great deal in coming months, and inspired by Downey’s post, I thought I would try something similar. So, without further ado…
-</p>
+<section id="project-overview" class="level2">
+<h2 class="anchored" data-anchor-id="project-overview">Project overview</h2>
+<p>I am currently involved with a very exciting machine learning project being run within the <a href="https://www.meetup.com/Bath-Machine-Learning-Meetup/">Bath Machine Learning Meetup</a> group (I’m sure I’ll write a future post with more details on this project, but it is currently at a very early stage!). In collaboration with <a href="https://www.bathhacked.org/">Bath: Hacked</a> we are using <a href="https://data.bathhacked.org/Government-and-Society/BANES-Historic-Car-Park-Occupancy/x29s-cczc">this set of open data</a>, which contains information about the occupancy of car parks in the Bath &amp; North East Somerset (B&amp;NES) area from the last two years or so.</p>
+<p>While looking for something to listen to whilst making my daily bus commute to and from the university, I recently discovered the marvellous <a href="http://partiallyderivative.com">Partially Derivative</a> podcast. In one of the early episodes (S1E2, to be precise) one topic of conversation particularly caught my attention: Paul Downey’s blog post <a href="http://blog.whatfettle.com/2014/10/13/one-csv-thirty-stories/">“One CSV, thirty stories”</a>. The concept is simple: take a single dataset, and produce a different visualization of the data each day for 30 days.</p>
+<p>Seeing as we will be working with the car parking dataset a great deal in coming months, and inspired by Downey’s post, I thought I would try something similar. So, without further ado…</p>
 <hr>
 <section id="day-00-111116-sneak-preview" class="level3">
-<h3 class="anchored" data-anchor-id="day-00-111116-sneak-preview">
-</h3>
-<h3 class="anchored">
-Day 00 (11/11/16): Sneak preview
-</h3>
-<p>
-I thought it would be a good idea to have a quick look at the dataset before starting out. I will, of course, be using R (to start with at least!).
-</p>
-<p>
-I downloaded the dataset as a CSV file from the Bath: Hacked datastore (the link is above) - the file on the website is updated continuously with live data from sensors in the car parks. The version I downloaded (at 22:11 on 11/11/16) weighs in at a hefty 316MB, and contains a very large number of records:
-</p>
+<h3 class="anchored" data-anchor-id="day-00-111116-sneak-preview">Day 00 (11/11/16): Sneak preview</h3>
+<p>I thought it would be a good idea to have a quick look at the dataset before starting out. I will, of course, be using R (to start with at least!).</p>
+<p>I downloaded the dataset as a CSV file from the Bath: Hacked datastore (the link is above) - the file on the website is updated continuously with live data from sensors in the car parks. The version I downloaded (at 22:11 on 11/11/16) weighs in at a hefty 316MB, and contains a very large number of records:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">count.fields</span>(<span class="st">"data/BANES_Historic_Car_Park_Occupancy.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="rconsole"><code>## [1] 1528228</code></pre>
-<p>
-To avoid converting my Pentium-core laptop into a puddle of molten plastic, for now I’ll only try to deal with about 10% of these records. Looking at <a href="https://github.com/BathHacked/documentation/wiki/Bath-Car-Park-Data">the dataset’s documentation</a> we see that “scripts are set up to query the B&amp;NES car park database every 5 minutes, the data is then pushed to the Bath: Hacked data store to… append to a historical set”. Therefore it shouldn’t be a problem to read in only the first 150000 rows of the CSV file, since these rows should contain an equal spread of data from each of the distinct car parks.
-</p>
-<p>
-Let’s have a quick first look at our data! <em>Note: a few records are empty in certain fields (future investigation may be necessary…) - I’ll fill these fields with NAs for now to make it more obvious when data is missing.</em>
-</p>
+<p>To avoid converting my Pentium-core laptop into a puddle of molten plastic, for now I’ll only try to deal with about 10% of these records. Looking at <a href="https://github.com/BathHacked/documentation/wiki/Bath-Car-Park-Data">the dataset’s documentation</a> we see that “scripts are set up to query the B&amp;NES car park database every 5 minutes, the data is then pushed to the Bath: Hacked data store to… append to a historical set”. Therefore it shouldn’t be a problem to read in only the first 150000 rows of the CSV file, since these rows should contain an equal spread of data from each of the distinct car parks.</p>
+<p>Let’s have a quick first look at our data! <em>Note: a few records are empty in certain fields (future investigation may be necessary…) - I’ll fill these fields with NAs for now to make it more obvious when data is missing.</em></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/BANES_Historic_Car_Park_Occupancy.csv"</span>, <span class="at">nrow =</span> <span class="dv">150000</span>,</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">na.strings =</span> <span class="fu">c</span>(<span class="st">"NA"</span>, <span class="st">""</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(D)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -280,21 +260,13 @@ Let’s have a quick first look at our data! <em>Note: a few records are empty i
 ## 4 13/02/2016 02:10:01 AM (51.3783156754, -2.35939373665)
 ## 5 13/02/2016 02:10:01 AM (51.3842422001, -2.35906657317)
 ## 6 13/02/2016 02:10:01 AM (51.3902305335, -2.40590782211)</code></pre>
-<p>
-Looking interesting… but I won’t look too closely for now. The fun starts tomorrow!
-</p>
+<p>Looking interesting… but I won’t look too closely for now. The fun starts tomorrow!</p>
 <hr>
-</section></section></main></div>
+</section>
 <section id="day-01-121116-car-parks-what-car-parks" class="level3">
-<h3 data-anchor-id="day-01-121116-car-parks-what-car-parks">
-Day 01 (12/11/16): Car parks? What car parks?
-</h3>
-<p>
-A logical first step would be to work out where all the information we have is coming from!
-</p>
-<p>
-A week or two ago I attended a learning night run by Bath: Hacked, which was an introduction to using the mapping tool <a href="http://carto.com">Carto</a> (formerly CartoDB) for visualizing geographic data. And notice that we have some location information…
-</p>
+<h3 class="anchored" data-anchor-id="day-01-121116-car-parks-what-car-parks">Day 01 (12/11/16): Car parks? What car parks?</h3>
+<p>A logical first step would be to work out where all the information we have is coming from!</p>
+<p>A week or two ago I attended a learning night run by Bath: Hacked, which was an introduction to using the mapping tool <a href="http://carto.com">Carto</a> (formerly CartoDB) for visualizing geographic data. And notice that we have some location information…</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># D is our 150000-row dataframe of records</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Reduce D to a new dataframe, which consists only of the first row to contain</span></span>
@@ -345,18 +317,14 @@ A week or two ago I attended a learning night run by Bath: Hacked, which was an 
 ## 8     1252 -2.383894 51.35294</code></pre>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Write this to a CSV ready for upload</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(carto_df, <span class="at">file =</span> <span class="st">"carto_df.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>
-So let’s see where these car parks are!
-</p>
+<p>So let’s see where these car parks are!</p>
 <iframe width="100%" height="520" frameborder="0" src="https://olj23.carto.com/viz/16d7e938-a869-11e6-b20f-0e3ebc282e83/embed_map" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen="" oallowfullscreen="" msallowfullscreen="">
 </iframe>
 <hr>
-<h3>
-Day 02 (13/11/16): Maximum capacities
-</h3>
-<p>
-Making use of the small dataframe I created yesterday (which has one entry per car park), and for now sticking to R’s base graphics:
-</p>
+</section>
+<section id="day-02-131116-maximum-capacities" class="level3">
+<h3 class="anchored" data-anchor-id="day-02-131116-maximum-capacities">Day 02 (13/11/16): Maximum capacities</h3>
+<p>Making use of the small dataframe I created yesterday (which has one entry per car park), and for now sticking to R’s base graphics:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"carto_df.csv"</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-order by Capacity</span></span>
@@ -367,19 +335,13 @@ Making use of the small dataframe I created yesterday (which has one entry per c
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">col =</span> <span class="fu">cm.colors</span>(<span class="dv">8</span>), <span class="at">mgp =</span> <span class="fu">c</span>(<span class="fl">2.5</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(bp, <span class="at">labels =</span> df<span class="sc">$</span>Name, <span class="at">pos =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><img src="13_11_16_capacities.jpeg"></p>
-
-
+<p><img src="13_11_16_capacities.jpeg" class="img-fluid"></p>
 <hr>
-<h3>
-Day 03 (14/11/16): Capacities over time (Day 02 Reprise)
-</h3>
-<p>
-It crossed my mind earlier today that I had made a couple of assumptions about the data I’m working with - primarily, I assumed that for a given car park, each record would have the same values for certain columns. Before doing anything else, I thought I should check that this was actually the case.
-</p>
-<p>
-The columns in question are: <code>Location</code>, <code>Easting</code>, <code>Northing</code> (which are all related, of course) and <code>Capacities</code>.
-</p>
+</section>
+<section id="day-03-141116-capacities-over-time-day-02-reprise" class="level3">
+<h3 class="anchored" data-anchor-id="day-03-141116-capacities-over-time-day-02-reprise">Day 03 (14/11/16): Capacities over time (Day 02 Reprise)</h3>
+<p>It crossed my mind earlier today that I had made a couple of assumptions about the data I’m working with - primarily, I assumed that for a given car park, each record would have the same values for certain columns. Before doing anything else, I thought I should check that this was actually the case.</p>
+<p>The columns in question are: <code>Location</code>, <code>Easting</code>, <code>Northing</code> (which are all related, of course) and <code>Capacities</code>.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in all the data - caution to the wind, if my laptop melts then it melts</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/BANES_Historic_Car_Park_Occupancy.csv"</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -437,7 +399,69 @@ The columns in question are: <code>Location</code>, <code>Easting</code>, <code>
 ## [[9]]
 ## [1] 
 ## 9 Levels:  ... (51.4113171399, -2.38697144144)</code></pre>
-<p><code>reastings</code> <code>rconsole## [[1]] ## [1] 375115 ##  ## [[2]] ## [1] 374884 ##  ## [[3]] ## [1] 373183 ##  ## [[4]] ## [1] 375083 ##  ## [[5]] ## [1] 375109 ##  ## [[6]] ## [1] 371853 ##  ## [[7]] ## [1] 374445 ##  ## [[8]] ## [1] 373363 ##  ## [[9]] ## [1] NA</code> <code>rnorthings</code> <code>r## [[1]] ## [1] 164421 ##  ## [[2]] ## [1] 164469 ##  ## [[3]] ## [1] 168104 ##  ## [[4]] ## [1] 164424 ##  ## [[5]] ## [1] 165083 ##  ## [[6]] ## [1] 165766 ##  ## [[7]] ## [1] 165097 ##  ## [[8]] ## [1] 161610 ##  ## [[9]] ## [1] NA</code> <code>rcapacities</code></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>eastings</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="rconsole"><code>## [[1]]
+## [1] 375115
+## 
+## [[2]]
+## [1] 374884
+## 
+## [[3]]
+## [1] 373183
+## 
+## [[4]]
+## [1] 375083
+## 
+## [[5]]
+## [1] 375109
+## 
+## [[6]]
+## [1] 371853
+## 
+## [[7]]
+## [1] 374445
+## 
+## [[8]]
+## [1] 373363
+## 
+## [[9]]
+## [1] NA```
+
+
+```r
+northings</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [[1]]</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 164421</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="do">## [[2]]</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 164469</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="do">## [[3]]</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 168104</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="do">## [[4]]</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 164424</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="do">## [[5]]</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 165083</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="do">## [[6]]</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 165766</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="do">## [[7]]</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 165097</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="do">## [[8]]</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 161610</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a><span class="do">## [[9]]</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] NA```</span></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a><span class="st">```</span><span class="at">r</span></span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a><span class="at">capacities</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="rconsole"><code>## [[1]]
 ##  [1] 720 680 900 700 626 800 860 638 603 602 630 596 623 519 528 563 840
 ## 
@@ -463,204 +487,155 @@ The columns in question are: <code>Location</code>, <code>Easting</code>, <code>
 ## [1] 1252 1320
 ## 
 ## [[9]]
-## [1] 500```
-&lt;p&gt;The first three columns only have one value per car park - great, our car parks aren’t moving!&lt;/p&gt;
-&lt;p&gt;However… it does seem that some capacities are not constant. Let’s try to see how they change over time.&lt;/p&gt;
-
-```r
-# Create new dataframe with columns of interest only, and taking out "test car
-# park" data since this isn't of any interest to us
-df2 &lt;- df[!(df$Name == "test car park"), c("Name", "LastUpdate", "Capacity")]
-
-# Reformat "LastUpdate" column as POSIXct datetime, rather than character
-df2$LastUpdate &lt;- as.POSIXct(df2$LastUpdate, format = "%d/%m/%Y %I:%M:%S %p")
-
-# We'll use ggplot2 for our plotting today
-library(ggplot2)
-
-p &lt;- ggplot(data = df2, aes(x = LastUpdate, y = Capacity, group = Name)) +
-    geom_line(aes(colour = Name), size = 1.5) +
-    scale_x_datetime(date_labels = "%b %Y") + xlab("") + ylab("Capacity") +
-    guides(colour = guide_legend(override.aes = list(size = 3))) +
-    ggtitle("Capacities over time") +
-    theme(plot.title = element_text(size = 22, face = "bold"))
-
-# Plot it!
-p</code></pre>
-<p><img src="day03.jpeg"></p>
-<p>
-The plot reveals some interesting information about the “changes” in capacities. For Newbridge P+R, the capacity increases over time, and remains level after each increase. It seems likely, then, that this is a genuine increase in capacity over time due to extensions to the car park.
-</p>
-<p>
-For the other car parks, any changes are suspiciously short-lived and the capacities return to their previous values soon after any change. For this reason I think it is likely that these are mostly misrecorded values - although of course it is possible that there were short-term, temporary extensions/closures of the car parks.
-</p>
-<p>
-The records for Avon Street CP also end abruptly and early in mid-summer of this year.
-</p>
-<p>
-By pure chance, my visualization from yesterday (of maximum capacities) was using records from February 2016 - a time of relative stability, and when Newbridge P+R had reached its current maximum capacity - and so it is still, I would say, a valid representation of the data. But having had a much better look at the data today it is obvious I got a bit lucky!
-</p>
+## [1] 500</code></pre>
+<p>The first three columns only have one value per car park - great, our car parks aren’t moving!</p>
+<p>However… it does seem that some capacities are not constant. Let’s try to see how they change over time.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create new dataframe with columns of interest only, and taking out "test car</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># park" data since this isn't of any interest to us</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> df[<span class="sc">!</span>(df<span class="sc">$</span>Name <span class="sc">==</span> <span class="st">"test car park"</span>), <span class="fu">c</span>(<span class="st">"Name"</span>, <span class="st">"LastUpdate"</span>, <span class="st">"Capacity"</span>)]</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Reformat "LastUpdate" column as POSIXct datetime, rather than character</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>df2<span class="sc">$</span>LastUpdate <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(df2<span class="sc">$</span>LastUpdate, <span class="at">format =</span> <span class="st">"%d/%m/%Y %I:%M:%S %p"</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll use ggplot2 for our plotting today</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> df2, <span class="fu">aes</span>(<span class="at">x =</span> LastUpdate, <span class="at">y =</span> Capacity, <span class="at">group =</span> Name)) <span class="sc">+</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">colour =</span> Name), <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_datetime</span>(<span class="at">date_labels =</span> <span class="st">"%b %Y"</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Capacity"</span>) <span class="sc">+</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">colour =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">3</span>))) <span class="sc">+</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"Capacities over time"</span>) <span class="sc">+</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">22</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot it!</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="day03.jpeg" class="img-fluid"></p>
+<p>The plot reveals some interesting information about the “changes” in capacities. For Newbridge P+R, the capacity increases over time, and remains level after each increase. It seems likely, then, that this is a genuine increase in capacity over time due to extensions to the car park.</p>
+<p>For the other car parks, any changes are suspiciously short-lived and the capacities return to their previous values soon after any change. For this reason I think it is likely that these are mostly misrecorded values - although of course it is possible that there were short-term, temporary extensions/closures of the car parks.</p>
+<p>The records for Avon Street CP also end abruptly and early in mid-summer of this year.</p>
+<p>By pure chance, my visualization from yesterday (of maximum capacities) was using records from February 2016 - a time of relative stability, and when Newbridge P+R had reached its current maximum capacity - and so it is still, I would say, a valid representation of the data. But having had a much better look at the data today it is obvious I got a bit lucky!</p>
 <hr>
-<h3>
-Day 04 (15/11/16): Percentage occupancy by day (with strangely-ordered days…)
-</h3>
-<p>
-It’s a long title today. This is reflective of the long time I have spent trying to re-order the panels in today’s visualization, without success… more details shortly.
-</p>
-<p>
-First, let’s get the data we’re interested in today.
-</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Separate interesting columns from dataframe of all records</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>df3 <span class="ot">&lt;-</span> df[<span class="sc">!</span>(df<span class="sc">$</span>Name <span class="sc">==</span> <span class="st">"test car park"</span>), <span class="fu">c</span>(<span class="st">"Name"</span>, <span class="st">"Percentage"</span>, <span class="st">"LastUpdate"</span>)]</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert LastUpdate to POSIXct and store in a new vector</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>updates <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(df3<span class="sc">$</span>LastUpdate, <span class="at">format =</span> <span class="st">"%d/%m/%Y %I:%M:%S %p"</span>,</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">tz =</span> <span class="st">"UTC"</span>)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Change every datatime to "time to nearest 10 minutes" (600 seconds)</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>times <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(<span class="fu">round</span>(<span class="fu">as.double</span>(updates) <span class="sc">/</span> <span class="dv">600</span>) <span class="sc">*</span> <span class="dv">600</span>,</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>                    <span class="at">origin =</span> <span class="fu">as.POSIXlt</span>(<span class="st">"1970-01-01"</span>), <span class="at">tz =</span> <span class="st">"UTC"</span>)</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>decimal_times <span class="ot">&lt;-</span> <span class="fu">as.POSIXlt</span>(times)<span class="sc">$</span>hour <span class="sc">+</span> <span class="fu">as.POSIXlt</span>(times)<span class="sc">$</span>min<span class="sc">/</span><span class="dv">60</span></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Change every datetime to weekday abbreviation</span></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>days <span class="ot">&lt;-</span> <span class="fu">format</span>(updates, <span class="st">"%a"</span>)</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Add these new columns to our dataframe</span></span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>df4 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(df3, <span class="st">"Day"</span> <span class="ot">=</span> days, <span class="st">"Time"</span> <span class="ot">=</span> decimal_times)</span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Take average of Percentage over each timeblock, per day, per car park</span></span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>df5 <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(df4<span class="sc">$</span>Percentage,</span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">list</span>(<span class="st">"Time"</span> <span class="ot">=</span> df4<span class="sc">$</span>Time,</span>
-<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Day"</span> <span class="ot">=</span> df4<span class="sc">$</span>Day,</span>
-<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Name"</span> <span class="ot">=</span> df4<span class="sc">$</span>Name),</span>
-<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>                 mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>
-Let’s have a quick look at what we’ve achieved:
-</p>
-<code>rhead(df5)</code> <code>rconsole##        Time Day           Name        x ## 1 0.0000000 Fri Avon Street CP 7.366279 ## 2 0.1666667 Fri Avon Street CP 6.670732 ## 3 0.3333333 Fri Avon Street CP 6.456140 ## 4 0.5000000 Fri Avon Street CP 6.465839 ## 5 0.6666667 Fri Avon Street CP 5.774566 ## 6 0.8333333 Fri Avon Street CP 6.361963</code> <code>rnrow(df5)</code> <code>rconsole## [1] 8064</code>
-<p>
-Reassuringly, df5 contains 8064 entries:
-</p>
-<p>
-6{10-min intervals per hour}<em>24{hours}</em>7{days}*8{car parks} = 8064
-</p>
-<p>
-Now let’s create the plot!
-</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> df5, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.double</span>(Time), <span class="at">y =</span> df5<span class="sc">$</span>x, <span class="at">group =</span> Name)) <span class="sc">+</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> Day) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Percentage occupancy"</span>, <span class="at">x =</span> <span class="st">"Time (hour)"</span>) <span class="sc">+</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">colour =</span> Name)) <span class="sc">+</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">colour =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">3</span>)))</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<img src="day04.jpeg">
-<p>
-Looking good - except for two things:
-</p>
+</section>
+<section id="day-04-151116-percentage-occupancy-by-day-with-strangely-ordered-days" class="level3">
+<h3 class="anchored" data-anchor-id="day-04-151116-percentage-occupancy-by-day-with-strangely-ordered-days">Day 04 (15/11/16): Percentage occupancy by day (with strangely-ordered days…)</h3>
+<p>It’s a long title today. This is reflective of the long time I have spent trying to re-order the panels in today’s visualization, without success… more details shortly.</p>
+<p>First, let’s get the data we’re interested in today.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Separate interesting columns from dataframe of all records</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>df3 <span class="ot">&lt;-</span> df[<span class="sc">!</span>(df<span class="sc">$</span>Name <span class="sc">==</span> <span class="st">"test car park"</span>), <span class="fu">c</span>(<span class="st">"Name"</span>, <span class="st">"Percentage"</span>, <span class="st">"LastUpdate"</span>)]</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert LastUpdate to POSIXct and store in a new vector</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>updates <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(df3<span class="sc">$</span>LastUpdate, <span class="at">format =</span> <span class="st">"%d/%m/%Y %I:%M:%S %p"</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">tz =</span> <span class="st">"UTC"</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Change every datatime to "time to nearest 10 minutes" (600 seconds)</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>times <span class="ot">&lt;-</span> <span class="fu">as.POSIXct</span>(<span class="fu">round</span>(<span class="fu">as.double</span>(updates) <span class="sc">/</span> <span class="dv">600</span>) <span class="sc">*</span> <span class="dv">600</span>,</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>                    <span class="at">origin =</span> <span class="fu">as.POSIXlt</span>(<span class="st">"1970-01-01"</span>), <span class="at">tz =</span> <span class="st">"UTC"</span>)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>decimal_times <span class="ot">&lt;-</span> <span class="fu">as.POSIXlt</span>(times)<span class="sc">$</span>hour <span class="sc">+</span> <span class="fu">as.POSIXlt</span>(times)<span class="sc">$</span>min<span class="sc">/</span><span class="dv">60</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Change every datetime to weekday abbreviation</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>days <span class="ot">&lt;-</span> <span class="fu">format</span>(updates, <span class="st">"%a"</span>)</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Add these new columns to our dataframe</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>df4 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(df3, <span class="st">"Day"</span> <span class="ot">=</span> days, <span class="st">"Time"</span> <span class="ot">=</span> decimal_times)</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Take average of Percentage over each timeblock, per day, per car park</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>df5 <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(df4<span class="sc">$</span>Percentage,</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">list</span>(<span class="st">"Time"</span> <span class="ot">=</span> df4<span class="sc">$</span>Time,</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Day"</span> <span class="ot">=</span> df4<span class="sc">$</span>Day,</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Name"</span> <span class="ot">=</span> df4<span class="sc">$</span>Name),</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>                 mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Let’s have a quick look at what we’ve achieved:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="rconsole"><code>##        Time Day           Name        x
+## 1 0.0000000 Fri Avon Street CP 7.366279
+## 2 0.1666667 Fri Avon Street CP 6.670732
+## 3 0.3333333 Fri Avon Street CP 6.456140
+## 4 0.5000000 Fri Avon Street CP 6.465839
+## 5 0.6666667 Fri Avon Street CP 5.774566
+## 6 0.8333333 Fri Avon Street CP 6.361963</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(df5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="rconsole"><code>## [1] 8064</code></pre>
+<p>Reassuringly, df5 contains 8064 entries:</p>
+<p>6{10-min intervals per hour}*24{hours}*7{days}*8{car parks} = 8064</p>
+<p>Now let’s create the plot!</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> df5, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.double</span>(Time), <span class="at">y =</span> df5<span class="sc">$</span>x, <span class="at">group =</span> Name)) <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> Day) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Percentage occupancy"</span>, <span class="at">x =</span> <span class="st">"Time (hour)"</span>) <span class="sc">+</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">colour =</span> Name)) <span class="sc">+</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">colour =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">3</span>)))</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="day04.jpeg" class="img-fluid"></p>
+<p>Looking good - except for two things:</p>
 <ul>
-<li>
-x-axis labels are not nicely formatted
-</li>
-<li>
-Panels are not sensibly ordered
-</li>
+<li>x-axis labels are not nicely formatted</li>
+<li>Panels are not sensibly ordered</li>
 </ul>
-<p>
-I have tried at some length to solve each of these issues - particularly the second, which I thought I could solve by reordering the underlying factor:
-</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df5<span class="sc">$</span>Day1 <span class="ot">&lt;-</span> <span class="fu">factor</span>(df5<span class="sc">$</span>Day,  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Mon"</span>, <span class="st">"Tue"</span>, <span class="st">"Wed"</span>, <span class="st">"Thu"</span>, <span class="st">"Fri"</span>,</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                                        <span class="st">"Sat"</span>, <span class="st">"Sun"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>
-But plotting again faceting by <code>Day1</code> instead of <code>Day</code> only reorders the labels, and does not reorder the plots themselves - i.e.&nbsp;Wednesday’s data is now labelled as Sunday. This is obviously worse than what I currently have (it’s plain wrong, rather than just “not pretty”) so I haven’t included it here.
-</p>
-<p>
-I am going to try to stick to the plan of one visualization per day - but along with my already busy schedule and regular maths workload, I am obviously putting myself under a great deal of time pressure! At best I have a couple of hours to dedicate to this project on any given day, and this isn’t very long considering I am learning pretty much from scratch as I go along!
-</p>
-<p>
-I’m hoping, then, that this won’t become a common refrain, but… I’ve run out of time today! I’ll revisit this visualization at some point soon if I figure out what I was doing wrong.
-</p>
-<section id="motivation-for-this-project" class="level2">
-<section id="day-01-121116-car-parks-what-car-parks" class="level3">
+<p>I have tried at some length to solve each of these issues - particularly the second, which I thought I could solve by reordering the underlying factor:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df5<span class="sc">$</span>Day1 <span class="ot">&lt;-</span> <span class="fu">factor</span>(df5<span class="sc">$</span>Day,  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Mon"</span>, <span class="st">"Tue"</span>, <span class="st">"Wed"</span>, <span class="st">"Thu"</span>, <span class="st">"Fri"</span>,</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>                                        <span class="st">"Sat"</span>, <span class="st">"Sun"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>But plotting again faceting by <code>Day1</code> instead of <code>Day</code> only reorders the labels, and does not reorder the plots themselves - i.e.&nbsp;Wednesday’s data is now labelled as Sunday. This is obviously worse than what I currently have (it’s plain wrong, rather than just “not pretty”) so I haven’t included it here.</p>
+<p>I am going to try to stick to the plan of one visualization per day - but along with my already busy schedule and regular maths workload, I am obviously putting myself under a great deal of time pressure! At best I have a couple of hours to dedicate to this project on any given day, and this isn’t very long considering I am learning pretty much from scratch as I go along!</p>
+<p>I’m hoping, then, that this won’t become a common refrain, but… I’ve run out of time today! I’ll revisit this visualization at some point soon if I figure out what I was doing wrong.</p>
 <hr>
-
-<section class="level3">
-<h3 data-anchor-id="">
-</h3>
-<h3>
-Day 05 (16/11/16): Occupancy per weekday, by car park
-</h3>
-<p>
-Before doing anything else, I’m going to remove the redundant columns from the dataframe of all records, and save the new smaller dataframe to a CSV file - which should then be quicker to load and easier work with.
-</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df[, <span class="fu">c</span>(<span class="st">"Name"</span>, <span class="st">"LastUpdate"</span>, <span class="st">"Capacity"</span>, <span class="st">"Occupancy"</span>, <span class="st">"Percentage"</span>, <span class="st">"Status"</span>)]</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(df, <span class="at">file =</span> <span class="st">"df.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<code>rdf &lt;- read.csv("C:/Users/Owen/Documents/Coding/Parking/df.csv")</code>
-<p>
-Following another moment of mild panic this morning, I’m also going to check that the times being recorded are adjusted for GMT/BST each spring and autumn. If they are then I don’t need to worry - if not, I’ll have to do some time-correction work…
-</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># I'll have a look at records from spring of 2016 - clocks changed on 27/03/2016</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>times <span class="ot">&lt;-</span> df<span class="sc">$</span>LastUpdate[<span class="fu">grep</span>(<span class="st">"^27/03/2016"</span>, df<span class="sc">$</span>LastUpdate)]</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>hours <span class="ot">&lt;-</span> <span class="fu">as.POSIXlt</span>(times, <span class="at">format =</span> <span class="st">"%d/%m/%Y %I:%M:%S %p"</span>, <span class="at">tz =</span> <span class="st">"UTC"</span>)<span class="sc">$</span>hour</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Check number of records for a few hours, including 1AM (shouldn't be any!)</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">sum</span>(hours <span class="sc">==</span> <span class="dv">1</span>), <span class="fu">sum</span>(hours <span class="sc">==</span> <span class="dv">2</span>), <span class="fu">sum</span>(hours <span class="sc">==</span> <span class="dv">16</span>), <span class="fu">sum</span>(hours <span class="sc">==</span> <span class="dv">21</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<code>rconsole## [1] 12 86 96 98</code>
-<p>
-Suspiciously, there ARE records between 01:00 and 02:00 - and roughly 1/8 as many as for each other hour. The plot thickens when we remember that we have 8 car parks. Is one car park guilty?
-</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>names <span class="ot">&lt;-</span> df<span class="sc">$</span>Name[<span class="fu">grep</span>(<span class="st">"^27/03/2016"</span>, df<span class="sc">$</span>LastUpdate)]</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>names[hours <span class="sc">==</span> <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<code>rconsole##  [1] Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP ##  [8] Podium CP Podium CP Podium CP Podium CP Podium CP ## 9 Levels: Avon Street CP Charlotte Street CP ... test car park</code>
-<p>
-Guilty as charged… I shall, for now, ignore any potential timeshift, and I will investigate this further tomorrow.
-</p>
-<p>
-Right, on to today’s visualization!
-</p>
-<p>
-I’m going to have a go at a somewhat similar plot to yesterday - but facetting by car park, rather than by day.
-</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> df5, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.double</span>(Time), <span class="at">y =</span> Day1)) <span class="sc">+</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> Name) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Time (hour)"</span>, <span class="at">y =</span> <span class="st">""</span>) <span class="sc">+</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> Name, <span class="at">alpha =</span> x), <span class="at">shape =</span> <span class="dv">20</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">colour =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">3</span>))) <span class="sc">+</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_alpha</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_discrete</span>(<span class="at">limits =</span> <span class="fu">rev</span>(<span class="fu">levels</span>(df5<span class="sc">$</span>Day1))) <span class="sc">+</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"Occupancy per weekday, by car park"</span>) <span class="sc">+</span></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">22</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.position =</span> <span class="st">"None"</span>)</span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plibrary</span>(ggplot2)</span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> df5, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.double</span>(Time), <span class="at">y =</span> Day1)) <span class="sc">+</span></span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> Name) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Time (hour)"</span>, <span class="at">y =</span> <span class="st">""</span>) <span class="sc">+</span></span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> Name, <span class="at">alpha =</span> x), <span class="at">shape =</span> <span class="dv">20</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">colour =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">3</span>))) <span class="sc">+</span></span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_alpha</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_discrete</span>(<span class="at">limits =</span> <span class="fu">rev</span>(<span class="fu">levels</span>(df5<span class="sc">$</span>Day1))) <span class="sc">+</span></span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"Occupancy per weekday, by car park"</span>) <span class="sc">+</span></span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">22</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.position =</span> <span class="st">"None"</span>)</span>
-<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<img src="day05.jpeg">
-<p>
-And regarding yesterday’s plot… good news! I am indebted to <a href="http://stackoverflow.com/users/2641825/paul-rougieux">Paul Rougieux</a> for pointing out that I was using <code>y = df5$x</code> in my <code>ggplot</code> code yesterday, where I ought to have been using <code>y = x</code> - changing this solves the problem! So here is yesterday’s visualization again, but ordered more sensibly.
-</p>
-<p><img src="day04fixed.jpeg"></p>
 </section>
+<section id="day-05-161116-occupancy-per-weekday-by-car-park" class="level3">
+<h3 class="anchored" data-anchor-id="day-05-161116-occupancy-per-weekday-by-car-park">Day 05 (16/11/16): Occupancy per weekday, by car park</h3>
+<p>Before doing anything else, I’m going to remove the redundant columns from the dataframe of all records, and save the new smaller dataframe to a CSV file - which should then be quicker to load and easier work with.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df[, <span class="fu">c</span>(<span class="st">"Name"</span>, <span class="st">"LastUpdate"</span>, <span class="st">"Capacity"</span>, <span class="st">"Occupancy"</span>, <span class="st">"Percentage"</span>, <span class="st">"Status"</span>)]</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(df, <span class="at">file =</span> <span class="st">"df.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"C:/Users/Owen/Documents/Coding/Parking/df.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Following another moment of mild panic this morning, I’m also going to check that the times being recorded are adjusted for GMT/BST each spring and autumn. If they are then I don’t need to worry - if not, I’ll have to do some time-correction work…</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># I'll have a look at records from spring of 2016 - clocks changed on 27/03/2016</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>times <span class="ot">&lt;-</span> df<span class="sc">$</span>LastUpdate[<span class="fu">grep</span>(<span class="st">"^27/03/2016"</span>, df<span class="sc">$</span>LastUpdate)]</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>hours <span class="ot">&lt;-</span> <span class="fu">as.POSIXlt</span>(times, <span class="at">format =</span> <span class="st">"%d/%m/%Y %I:%M:%S %p"</span>, <span class="at">tz =</span> <span class="st">"UTC"</span>)<span class="sc">$</span>hour</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Check number of records for a few hours, including 1AM (shouldn't be any!)</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">sum</span>(hours <span class="sc">==</span> <span class="dv">1</span>), <span class="fu">sum</span>(hours <span class="sc">==</span> <span class="dv">2</span>), <span class="fu">sum</span>(hours <span class="sc">==</span> <span class="dv">16</span>), <span class="fu">sum</span>(hours <span class="sc">==</span> <span class="dv">21</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="rconsole"><code>## [1] 12 86 96 98</code></pre>
+<p>Suspiciously, there ARE records between 01:00 and 02:00 - and roughly 1/8 as many as for each other hour. The plot thickens when we remember that we have 8 car parks. Is one car park guilty?</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>names <span class="ot">&lt;-</span> df<span class="sc">$</span>Name[<span class="fu">grep</span>(<span class="st">"^27/03/2016"</span>, df<span class="sc">$</span>LastUpdate)]</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>names[hours <span class="sc">==</span> <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="rconsole"><code>##  [1] Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP Podium CP
+##  [8] Podium CP Podium CP Podium CP Podium CP Podium CP
+## 9 Levels: Avon Street CP Charlotte Street CP ... test car park</code></pre>
+<p>Guilty as charged… I shall, for now, ignore any potential timeshift, and I will investigate this further tomorrow.</p>
+<p>Right, on to today’s visualization!</p>
+<p>I’m going to have a go at a somewhat similar plot to yesterday - but facetting by car park, rather than by day.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> df5, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.double</span>(Time), <span class="at">y =</span> Day1)) <span class="sc">+</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> Name) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Time (hour)"</span>, <span class="at">y =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> Name, <span class="at">alpha =</span> x), <span class="at">shape =</span> <span class="dv">20</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">colour =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">3</span>))) <span class="sc">+</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_alpha</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_discrete</span>(<span class="at">limits =</span> <span class="fu">rev</span>(<span class="fu">levels</span>(df5<span class="sc">$</span>Day1))) <span class="sc">+</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"Occupancy per weekday, by car park"</span>) <span class="sc">+</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">22</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.position =</span> <span class="st">"None"</span>)</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plibrary</span>(ggplot2)</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> df5, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.double</span>(Time), <span class="at">y =</span> Day1)) <span class="sc">+</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> Name) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Time (hour)"</span>, <span class="at">y =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> Name, <span class="at">alpha =</span> x), <span class="at">shape =</span> <span class="dv">20</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">colour =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">3</span>))) <span class="sc">+</span></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_alpha</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_discrete</span>(<span class="at">limits =</span> <span class="fu">rev</span>(<span class="fu">levels</span>(df5<span class="sc">$</span>Day1))) <span class="sc">+</span></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"Occupancy per weekday, by car park"</span>) <span class="sc">+</span></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">22</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.position =</span> <span class="st">"None"</span>)</span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><img src="day05.jpeg" class="img-fluid"></p>
+<p>And regarding yesterday’s plot… good news! I am indebted to <a href="http://stackoverflow.com/users/2641825/paul-rougieux">Paul Rougieux</a> for pointing out that I was using <code>y = df5$x</code> in my <code>ggplot</code> code yesterday, where I ought to have been using <code>y = x</code> - changing this solves the problem! So here is yesterday’s visualization again, but ordered more sensibly.</p>
+<p><img src="day04fixed.jpeg" class="img-fluid"></p>
 
 
 </section>
 </section>
-</section>
 
-
-
- <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -1226,7 +1201,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <input type="hidden" id="giscus-base-theme" value="light">
 <input type="hidden" id="giscus-alt-theme" value="dark">
- <!-- /content -->
+</div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">

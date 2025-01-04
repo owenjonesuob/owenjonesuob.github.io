@@ -225,115 +225,59 @@ window.Quarto = {
 
 
 
-<div id="header" class="fluid-row">
-<h3 class="title toc-ignore anchored">
-Context
-</h3>
-</div>
-<section id="context" class="level2">
-<p>
-On this site’s homepage I allude to the fact that there are ‘other things’ I am generally supposed to be doing instead of putting together these projects. One such ‘other thing’ is the time-devouring task of researching work placements (I am hoping to complete a year-long placement from next summer as part of my degree).
-</p>
-<p>
-Several job descriptions which have caught my attention have something in common (other than generally being data science related): they don’t list a salary. At least, not explicitly. Instead they advertise a “competitive” salary or, on occasion, hint that applications to the position should include “salary expectations”.
-</p>
-<p>
-After seeing this for the third or fourth time, I realised I didn’t have any “salary expectations”. So once again abandoning the task I had planned on dedicating the weekend to, I set forth on this project.
-</p>
+<section id="context" class="level3">
+<h3 class="anchored" data-anchor-id="context">Context</h3>
+<p>On this site’s homepage I allude to the fact that there are ‘other things’ I am generally supposed to be doing instead of putting together these projects. One such ‘other thing’ is the time-devouring task of researching work placements (I am hoping to complete a year-long placement from next summer as part of my degree).</p>
+<p>Several job descriptions which have caught my attention have something in common (other than generally being data science related): they don’t list a salary. At least, not explicitly. Instead they advertise a “competitive” salary or, on occasion, hint that applications to the position should include “salary expectations”.</p>
+<p>After seeing this for the third or fourth time, I realised I didn’t have any “salary expectations”. So once again abandoning the task I had planned on dedicating the weekend to, I set forth on this project.</p>
 <hr>
-</section></main></div>
-<section id="finding-the-average-placement-year-salary" class="level2">
-<h3 data-anchor-id="finding-the-average-placement-year-salary">
-Finding the average placement year salary
-</h3>
-<section id="source-of-information" class="level3">
-<h4 data-anchor-id="source-of-information">
-Source of information
-</h4>
-<p>
-A quick Google search of ‘placement year uk’ brings up <a href="https://www.ratemyplacement.co.uk/search?show=jobs">RateMyPlacement</a> as the first result. This website claims to be “the TripAdvisor” for placements - the following paragraph can be found on their <a href="http://rmpenterprise.co.uk/services/ratemyplacement/">‘About’</a> page:
-</p>
-<blockquote class="blockquote">
-<p>
-Our website is specifically targeted towards undergraduates, offering current university students the jobs they need to get their careers started. RateMyPlacement is the leader in this niche market, advertising more undergraduate placements, internships, vacation schemes and insights than any other website.
-</p>
-</blockquote>
-<p>
-I decided to use this website, rather than a more general job-listing site such as Indeed, as my source since it guarantees that any jobs listed will be of the sort I am looking for - specifically, placement jobs, rather than full-time or the ambiguous ‘temporary’ or ‘contract’ jobs listed on many other sites.
-</p>
 </section>
-<section id="loading-packages-into-r" class="level3">
-<h4 data-anchor-id="loading-packages-into-r">
-Loading packages into R
-</h4>
-<p>
-I have used the <code>magrittr</code> package’s ‘pipe’ operator (<code>%&gt;%</code>) rather extensively, since I find it greatly improves the readability of the code. It is particularly useful when performing many sequential operations on the same object, as will be seen shortly.
-</p>
-<p>
-The <code>RCurl</code> and <code>XML</code> packages are used to deal with the initially-overwhelming HTML code.
-</p>
+<section id="finding-the-average-placement-year-salary" class="level3">
+<h3 class="anchored" data-anchor-id="finding-the-average-placement-year-salary">Finding the average placement year salary</h3>
+<section id="source-of-information" class="level4">
+<h4 class="anchored" data-anchor-id="source-of-information">Source of information</h4>
+<p>A quick Google search of ‘placement year uk’ brings up <a href="https://www.ratemyplacement.co.uk/search?show=jobs">RateMyPlacement</a> as the first result. This website claims to be “the TripAdvisor” for placements - the following paragraph can be found on their <a href="http://rmpenterprise.co.uk/services/ratemyplacement/">‘About’</a> page:</p>
+<blockquote class="blockquote">
+<p>Our website is specifically targeted towards undergraduates, offering current university students the jobs they need to get their careers started. RateMyPlacement is the leader in this niche market, advertising more undergraduate placements, internships, vacation schemes and insights than any other website.</p>
+</blockquote>
+<p>I decided to use this website, rather than a more general job-listing site such as Indeed, as my source since it guarantees that any jobs listed will be of the sort I am looking for - specifically, placement jobs, rather than full-time or the ambiguous ‘temporary’ or ‘contract’ jobs listed on many other sites.</p>
+</section>
+<section id="loading-packages-into-r" class="level4">
+<h4 class="anchored" data-anchor-id="loading-packages-into-r">Loading packages into R</h4>
+<p>I have used the <code>magrittr</code> package’s ‘pipe’ operator (<code>%&gt;%</code>) rather extensively, since I find it greatly improves the readability of the code. It is particularly useful when performing many sequential operations on the same object, as will be seen shortly.</p>
+<p>The <code>RCurl</code> and <code>XML</code> packages are used to deal with the initiall y-overwhelming HTML code.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RCurl)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(XML)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="detective-work" class="level3">
-<h4 data-anchor-id="detective-work">
-‘Detective work’
-</h4>
-<p>
-To begin with, we need to have a look at our target website and work out exactly where the ‘interesting’ parts are located. I’m using Google Chrome, but many other web browsers will be equally suitable for carrying out the following steps.
-</p>
-<p>
-This is the page that initially loads:
-</p>
-<img src="site.PNG">
-<p>
-It is clearly a list of search results, although we currently don’t exactly what form they are in - i.e.&nbsp;if they are laid out in an HTML table (which would simplify matters) or not (which is more likely!). We can find out using the developer console, which can be opened by pressing F12.
-</p>
-<p>
-The ‘Inspect element’ button at the top left of the console can be used to quickly locate the section of HTML code responsible for a given feature on the page. Let’s have a look at one of the search results.
-</p>
-<p><img src="resultconsole.PNG"></p>
-<p>
-Each result is within a pair of <code>&lt;div&gt;</code> tags (no tables in sight, unfortunately). Within each result there are several pieces of information. Only one of these is of interest to us (for this project at least): the salary. A little further inspection shows that this information is contained in one element of an unordered list, specifically - and rather confusingly - in the <code>&lt;li&gt;</code> element which has <code>class=location</code>, presumably due to some previous website redesign.
-</p>
-<p><img src="salaryconsole.PNG"></p>
-<p>
-There is the option to refine the search results further, but for now we’ll use the unfiltered set of results. It is worth noting that we don’t need to filter by duration since the site uses pro rata annual salary figures for all listed placements.
-</p>
+<section id="detective-work" class="level4">
+<h4 class="anchored" data-anchor-id="detective-work">‘Detective work’</h4>
+<p>To begin with, we need to have a look at our target website and work out exactly where the ‘interesting’ parts are located. I’m using Google Chrome, but many other web browsers will be equally suitable for carrying out the following steps.</p>
+<p>This is the page that initially loads:</p>
+<p><img src="site.PNG" class="img-fluid"></p>
+<p>It is clearly a list of search results, although we currently don’t exactly what form they are in - i.e.&nbsp;if they are laid out in an HTML table (which would simplify matters) or not (which is more likely!). We can find out using the developer console, which can be opened by pressing F12.</p>
+<p>The ‘Inspect element’ button at the top left of the console can be used to quickly locate the section of HTML code responsible for a given feature on the page. Let’s have a look at one of the search results.</p>
+<p><img src="resultconsole.PNG" class="img-fluid"></p>
+<p>Each result is within a pair of <code>&lt;div&gt;</code> tags (no tables in sight, unfortunately). Within each result there are several pieces of information. Only one of these is of interest to us (for this project at least): the salary. A little further inspection shows that this information is contained in one element of an unordered list, specifically - and rather confusingly - in the <code>&lt;li&gt;</code> element which has <code>class=location</code>, presumably due to some previous website redesign.</p>
+<p><img src="salaryconsole.PNG" class="img-fluid"></p>
+<p>There is the option to refine the search results further, but for now we’ll use the unfiltered set of results. It is worth noting that we don’t need to filter by duration since the site uses pro rata annual salary figures for all listed placements.</p>
 </section>
-<section id="extracting-salaries" class="level3">
-<h4 data-anchor-id="extracting-salaries">
-Extracting salaries
-</h4>
-<p>
-Now we know where the information we want is, we can begin the process of importing it into R and tidying it up. I will use the <code>%&gt;%</code> operator here, and eventually the aim is to end up with a numeric vector containing each job’s (mean) salary - so I will work with an object called <code>salaries</code>, even though initially it is very different to its final form.
-</p>
-<p>
-The first stage is to load the raw HTML file into R. The <code>getURL</code> function (from the <code>RCurl</code> package) imports the HTML document as a single character string - which needless to say is very long (<code>nchar(salaries)</code> reveals it is 205604 characters long, to be precise) and not particularly readable.
-</p>
+<section id="extracting-salaries" class="level4">
+<h4 class="anchored" data-anchor-id="extracting-salaries">Extracting salaries</h4>
+<p>Now we know where the information we want is, we can begin the process of importing it into R and tidying it up. I will use the <code>%&gt;%</code> operator here, and eventually the aim is to end up with a numeric vector containing each job’s (mean) salary - so I will work with an object called <code>salaries</code>, even though initially it is very different to its final form.</p>
+<p>The first stage is to load the raw HTML file into R. The <code>getURL</code> function (from the <code>RCurl</code> package) imports the HTML document as a single character string - which needless to say is very long (<code>nchar(salaries)</code> reveals it is 205604 characters long, to be precise) and not particularly readable.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>salaries <span class="ot">&lt;-</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>        <span class="st">"https://www.ratemyplacement.co.uk/search?show=jobs"</span> <span class="sc">%&gt;%</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">getURL</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">substring</span>(salaries, <span class="dv">100001</span>, <span class="dv">101000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "           &amp;lt;h2 class=\"Job-titleHeader\"&amp;gt;Engineering Coordinator Placement&amp;lt;/h2&amp;gt;\n            &amp;lt;/a&amp;gt;\n            &amp;lt;p class=\"Search-industry\"&amp;gt;&amp;lt;i class=\"icon-company\"&amp;gt;&amp;lt;/i&amp;gt;\n                Volvo Group UK&amp;lt;/p&amp;gt;\n            &amp;lt;ul class=\"Search-labels\"&amp;gt;\n                &amp;lt;li class=\"deadline\"&amp;gt;&amp;lt;span\n                            class=\"icon-calendar\"&amp;gt;&amp;lt;/span&amp;gt; 31st Oct 2016                &amp;lt;/li&amp;gt;\n                &amp;lt;li class=\"location\"&amp;gt;&amp;lt;span class=\"icon-salary\"&amp;gt;&amp;lt;/span&amp;gt;\n                                            Competitive\n                                    &amp;lt;/li&amp;gt;\n                &amp;lt;li class=\"duration\"&amp;gt;&amp;lt;span class=\"icon-company\"&amp;gt;&amp;lt;/span&amp;gt; Placement Year (10 Months+)&amp;lt;/li&amp;gt;\n                &amp;lt;li class=\"company\"&amp;gt;&amp;lt;span class=\"icon-location\"&amp;gt;&amp;lt;/span&amp;gt; West Midlands&amp;lt;/li&amp;gt;\n            &amp;lt;/ul&amp;gt;\n        &amp;lt;/div&amp;gt;\n        &amp;lt;div class=\"icon-cta\"&amp;gt;\n\n                        \n                &amp;lt;a href=\"#\" class=\"circle-cta my-wishlist tracker login\"\n                   data-message=\"You need to be logged in to add a job to your tracker\"\n           "</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>
-Luckily, the <code>XML</code> package can be used to manipulate this awkward mass of text into something much easier to work with in R. First, <code>htmlParse</code> is used to parse the HTML code so that each set of tags is represented as a ‘node’. The result of this can then be used in <code>xpathApply</code> with two other arguments.
-</p>
-<p>
-The first is an XPath query <code>//li<span class="citation" data-cites="class">[@class='location']</span></code>, where:
-</p>
+<p>Luckily, the <code>XML</code> package can be used to manipulate this awkward mass of text into something much easier to work with in R. First, <code>htmlParse</code> is used to parse the HTML code so that each set of tags is represented as a ‘node’. The result of this can then be used in <code>xpathApply</code> with two other arguments.</p>
+<p>The first is an XPath query <code>//li[@class='location']</code>, where:</p>
 <ul>
-<li>
-<code>//li</code> finds all ‘list element’ (<code>&lt;li&gt;</code>) nodes
-</li>
-<li>
-<code><span class="citation" data-cites="class">[@class='location']</span></code> finds the subset of these nodes which have a <code>class</code> attribute of <code>location</code> (recall that this is where the salaries are stored)
-</li>
+<li><code>//li</code> finds all ‘list element’ (<code>&lt;li&gt;</code>) nodes</li>
+<li><code>[@class='location']</code> finds the subset of these nodes which have a <code>class</code> attribute of <code>location</code> (recall that this is where the salaries are stored)</li>
 </ul>
-<p>
-The second is what we want to return from each of these nodes, which in this case is its <code>xmlValue</code>. The values are returned by <code>xpathApply</code> in list form.
-</p>
+<p>The second is what we want to return from each of these nodes, which in this case is its <code>xmlValue</code>. The values are returned by <code>xpathApply</code> in list form.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>salaries <span class="ot">&lt;-</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    salaries <span class="sc">%&gt;%</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">htmlParse</span>() <span class="sc">%&gt;%</span></span>
@@ -346,26 +290,14 @@ The second is what we want to return from each of these nodes, which in this cas
 ## 
 ## [[3]]
 ## [1] "\n                                            £18,000 - £19,999                                    "</code></pre>
-<p>
-We now have the data we want - although each salary is still in an untidy character vector. To tidy each element we can first remove any of the following from the string:
-</p>
+<p>We now have the data we want - although each salary is still in an untidy character vector. To tidy each element we can first remove any of the following from the string:</p>
 <ul>
-<li>
-<code></code>
-</li>
-<li>
-[space]
-</li>
-<li>
-<code>£</code>
-</li>
-<li>
-<code>,</code>
-</li>
+<li><code>\n</code></li>
+<li>[space]</li>
+<li><code>£</code></li>
+<li><code>,</code></li>
 </ul>
-<p>
-Each salary is either not given (listed as “Competitive”) or is given as a range. We can split each character vector at the ‘<code>-</code>’ symbol (if it is present) to obtain separate character vectors containing the lower and upper values of the range.
-</p>
+<p>Each salary is either not given (listed as “Competitive”) or is given as a range. We can split each character vector at the ‘<code>-</code>’ symbol (if it is present) to obtain separate character vectors containing the lower and upper values of the range.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>salaries <span class="ot">&lt;-</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    salaries <span class="sc">%&gt;%</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lapply</span>(gsub, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">n| |£|,"</span>, <span class="at">replacement =</span> <span class="st">""</span>) <span class="sc">%&gt;%</span></span>
@@ -384,13 +316,10 @@ Each salary is either not given (listed as “Competitive”) or is given as a r
 ## [[3]]
 ## [[3]][[1]]
 ## [1] "18000" "19999"</code></pre>
-<p>
-Initially I had planned on calculating the midway point for each range of salaries. However there is an easier option, given that the (eventual) vector of salaries will be averaged anyway. Averaging each pair of range values, and then averaging all of the resulting values, is equivalent to simply averaging all the range values:
-</p>
+<p>Initially I had planned on calculating the midway point for each range of salaries. However there is an easier option, given that the (eventual) vector of salaries will be averaged anyway. Averaging each pair of range values, and then averaging all of the resulting values, is equivalent to simply averaging all the range values:</p>
 <p><span class="math display">\[\frac{\frac{(a^{(1)}_1 + a^{(1)}_2)}{2} + \frac{(a^{(2)}_1 + a^{(2)}_2)}{2} + \ldots + \frac{(a^{(n)}_1 + a^{(n)}_2)}{2}}{n} = \frac{(a^{(1)}_1 + a^{(1)}_2) + \ldots + (a^{(n)}_1 + a^{(n)}_2)}{2n}\]</span></p>
 <p>
-So we can simply <code>unlist</code> each pair of range values and then <code>unlist</code> the whole salary list to obtain a character vector. Using <code>as.numeric</code> then changes this to a numeric vector, where all the “Competitive” (i.e.&nbsp;unlisted) salaries are coerced to <code>NA</code>. The mean of this vector (ignoring <code>NA</code>s) is the average salary for all the positions listed on the webpage.
-</p>
+</p><p>So we can simply <code>unlist</code> each pair of range values and then <code>unlist</code> the whole salary list to obtain a character vector. Using <code>as.numeric</code> then changes this to a numeric vector, where all the “Competitive” (i.e.&nbsp;unlisted) salaries are coerced to <code>NA</code>. The mean of this vector (ignoring <code>NA</code>s) is the average salary for all the positions listed on the webpage.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>salaries <span class="ot">&lt;-</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    salaries <span class="sc">%&gt;%</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">lapply</span>(unlist) <span class="sc">%&gt;%</span></span>
@@ -402,37 +331,19 @@ So we can simply <code>unlist</code> each pair of range values and then <code>un
 <div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(salaries, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="rconsole"><code>## [1] 17307.19</code></pre>
 </section>
-<section id="multiple-pages-creating-urls" class="level3">
-<h4 data-anchor-id="multiple-pages-creating-urls">
-Multiple pages: creating URLs
-</h4>
-<p>
-Now that we can get the mean salary for one page, we can consider the fact that there are actually multiple pages of positions - and with positions being added and removed continuously, the number of pages we need to get data from could change.
-</p>
-<p>
-The first task is to find how many pages of results we need to look at. As before, we start by importing and parsing the first page of results, but this time we will use a different XPath query.
-</p>
-<p>
-First we must have another look at the webpage - but this time we are interested in the ‘pages’ bar at the bottom of the list of results:
-</p>
-<img src="paginationconsole.PNG">
-<p>
-We want the page number that appears in the button immediately to the left of the ‘Next page’ button. We can construct the XPath query <code>//li<span class="citation" data-cites="class">[@class='pagination-last']</span>/preceding::li[1]</code>:
-</p>
+<section id="multiple-pages-creating-urls" class="level4">
+<h4 class="anchored" data-anchor-id="multiple-pages-creating-urls">Multiple pages: creating URLs</h4>
+<p>Now that we can get the mean salary for one page, we can consider the fact that there are actually multiple pages of positions - and with positions being added and removed continuously, the number of pages we need to get data from could change.</p>
+<p>The first task is to find how many pages of results we need to look at. As before, we start by importing and parsing the first page of results, but this time we will use a different XPath query.</p>
+<p>First we must have another look at the webpage - but this time we are interested in the ‘pages’ bar at the bottom of the list of results:</p>
+<p><img src="paginationconsole.PNG" class="img-fluid"></p>
+<p>We want the page number that appears in the button immediately to the left of the ‘Next page’ button. We can construct the XPath query <code>//li[@class='pagination-last']/preceding::li[1]</code>:</p>
 <ul>
-<li>
-<code>//li</code> finds all ‘list element’ nodes on the page
-</li>
-<li>
-<code><span class="citation" data-cites="class">[@class='pagination-last']</span></code> finds the subset of these nodes with <code>class</code> attribute <code>pagination-last</code> (there is only one such node, which is the ‘Next page’ button)
-</li>
-<li>
-<code>/preceding::li[1]</code> finds, working backwards from the current node, the 1st ‘list element’ node
-</li>
+<li><code>//li</code> finds all ‘list element’ nodes on the page</li>
+<li><code>[@class='pagination-last']</code> finds the subset of these nodes with <code>class</code> attribute <code>pagination-last</code> (there is only one such node, which is the ‘Next page’ button)</li>
+<li><code>/preceding::li[1]</code> finds, working backwards from the current node, the 1st ‘list element’ node</li>
 </ul>
-<p>
-The <code>xmlValue</code> of this node is the number appearing in the last numbered button - i.e.&nbsp;the number of results pages. It is currently in character vector form and inside a list (courtesy of <code>xpathApply</code>), but it can be extracted easily enough.
-</p>
+<p>The <code>xmlValue</code> of this node is the number appearing in the last numbered button - i.e.&nbsp;the number of results pages. It is currently in character vector form and inside a list (courtesy of <code>xpathApply</code>), but it can be extracted easily enough.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>num_pages <span class="ot">&lt;-</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://www.ratemyplacement.co.uk/search?show=jobs"</span> <span class="sc">%&gt;%</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">getURL</span>() <span class="sc">%&gt;%</span></span>
@@ -442,9 +353,7 @@ The <code>xmlValue</code> of this node is the number appearing in the last numbe
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.numeric</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>num_pages</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="rconsole"><code>## [1] 10</code></pre>
-<p>
-To manually navigate to a different results page we simply need to add <code>page=[page number]&amp;</code> to the search string in the page address; so we can make a list of all the results pages as follows.
-</p>
+<p>To manually navigate to a different results page we simply need to add <code>page=[page number]&amp;</code> to the search string in the page address; so we can make a list of all the results pages as follows.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>urls <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">paste0</span>(<span class="st">"https://www.ratemyplacement.co.uk/search?page="</span>,</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                           x, <span class="st">"&amp;show=jobs"</span>)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -458,16 +367,10 @@ To manually navigate to a different results page we simply need to add <code>pag
 ## [[3]]
 ## [1] "https://www.ratemyplacement.co.uk/search?page=3&amp;amp;show=jobs</code></pre>
 </section>
-<section id="finding-the-mean-salary" class="level3">
-<h4 data-anchor-id="finding-the-mean-salary">
-Finding the mean salary
-</h4>
-<p>
-We can now run the salary-extracting code on each page in turn. We’ll store the full list salaries from each page for later analysis.
-</p>
-<p>
-<em>Note: There are three sponsored results which appear at the top of each results page - these are the same on all pages, so are not counted for any pages except the first (i.e.&nbsp;for all but the first page, the first 4 elements of <code>salaries</code> are removed, corresponding to two “Competitive” listings and one numerical listing - the make-up of the sponsored listings at the time of writing).</em>
-</p>
+<section id="finding-the-mean-salary" class="level4">
+<h4 class="anchored" data-anchor-id="finding-the-mean-salary">Finding the mean salary</h4>
+<p>We can now run the salary-extracting code on each page in turn. We’ll store the full list salaries from each page for later analysis.</p>
+<p><em>Note: There are three sponsored results which appear at the top of each results page - these are the same on all pages, so are not counted for any pages except the first (i.e.&nbsp;for all but the first page, the first 4 elements of <code>salaries</code> are removed, corresponding to two “Competitive” listings and one numerical listing - the make-up of the sponsored listings at the time of writing).</em></p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>page_salaries <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"list"</span>, <span class="at">length =</span> <span class="dv">0</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>page_avg_salary <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">mode =</span> <span class="st">"numeric"</span>, <span class="at">length =</span> num_pages)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -493,14 +396,10 @@ We can now run the salary-extracting code on each page in turn. We’ll store th
 <span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>    page_avg_salary[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(salaries, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>
-So now we have a list of all salaries, and vector of the average salaries of all the positions on each results page. If we calculate the mean of this vector then we will have the mean salary across all the positions.
-</p>
+<p>So now we have a list of all salaries, and vector of the average salaries of all the positions on each results page. If we calculate the mean of this vector then we will have the mean salary across all the positions.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(page_avg_salary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="rconsole"><code>## [1] 17878.68</code></pre>
-<p>
-We can also visualize the proportions of different salaries being offered:
-</p>
+<p>We can also visualize the proportions of different salaries being offered:</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>page_salaries <span class="ot">&lt;-</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    page_salaries <span class="sc">%&gt;%</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unlist</span>() <span class="sc">%&gt;%</span></span>
@@ -511,54 +410,31 @@ We can also visualize the proportions of different salaries being offered:
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(p, <span class="at">y =</span> <span class="fu">summary</span>(page_salaries), <span class="at">label =</span> <span class="fu">summary</span>(page_salaries), <span class="at">pos =</span> <span class="dv">3</span>,</span>
 <span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex =</span> <span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><img src="ratesofpay.png"></p>
-<p>
-This reveals how nearly twice as many positions are advertised <em>without</em> an explicit salary as those advertised with one. (It also reveals that one of the salaries coerced to <code>NA</code> earlier was in fact “Unpaid”, rather than “Competitive”. Although it shows I was a little careless earlier when I stated that all non-numeric elements were “Competitive”, it doesn’t have any effect on the calculations.)
-</p>
+<p><img src="ratesofpay.png" class="img-fluid"></p>
+<p>This reveals how nearly twice as many positions are advertised <em>without</em> an explicit salary as those advertised with one. (It also reveals that one of the salaries coerced to <code>NA</code> earlier was in fact “Unpaid”, rather than “Competitive”. Although it shows I was a little careless earlier when I stated that all non-numeric elements were “Competitive”, it doesn’t have any effect on the calculations.)</p>
 </section>
-<section id="london-specific-salaries" class="level3">
-<h4>
-London-specific salaries
-</h4>
-<p>
-Although I do have a general dislike for London, I am slowly coming to terms with the fact that many companies with data science positions are young start-ups, and the vast majority of them are located in the capital. As such, and knowing that London is more expensive than other areas of the country, I thought I would re-run the code on the placements listed with locations ‘Central London and City’ and ‘Greater London’ only. This extra filtering is done by adding <code>&amp;location=CTY,GTL</code> to the end of the HTTP address. The results are as follows:
-</p>
+<section id="london-specific-salaries" class="level4">
+<h4 class="anchored" data-anchor-id="london-specific-salaries">London-specific salaries</h4>
+<p>Although I do have a general dislike for London, I am slowly coming to terms with the fact that many companies with data science positions are young start-ups, and the vast majority of them are located in the capital. As such, and knowing that London is more expensive than other areas of the country, I thought I would re-run the code on the placements listed with locations ‘Central London and City’ and ‘Greater London’ only. This extra filtering is done by adding <code>&amp;location=CTY,GTL</code> to the end of the HTTP address. The results are as follows:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(page_avg_salary_L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="rconsole"><code>## [1] 19015.6</code></pre>
-<p>
-This is, as expected, higher than the nationwide figure.
-</p>
-<p>
-A quick look at the relevant plot reveals some more information:
-</p>
-<p><img src="ratesofpayl.png"></p>
-<p>
-Notice how the highest-paid positions are all in London (between the nationwide and London plots, there is no difference in the bars for the two highest salary bands). The significant decrease is in the number of lower-than-average-salary positions.
-</p>
+<p>This is, as expected, higher than the nationwide figure.</p>
+<p>A quick look at the relevant plot reveals some more information:</p>
+<p><img src="ratesofpayl.png" class="img-fluid"></p>
+<p>Notice how the highest-paid positions are all in London (between the nationwide and London plots, there is no difference in the bars for the two highest salary bands). The significant decrease is in the number of lower-than-average-salary positions.</p>
 <hr>
-
-
-<section id="project-evaluation" class="level2">
-<h3 data-anchor-id="project-evaluation">
-Project evaluation
-</h3>
-<p>
-It turns out that the average annual placement position salary is just under £18,000, increasing to slightly over £19,000 for London-based placements.
-</p>
-<p>
-This was my first attempt at a project using non-tabluar web-based data. Moreover, I had no previous experience with the HTML-manipulating packages in R, and as per usual a large amount of reading and experimentation was necessary before I managed to achieve what I was aiming for. Perhaps it is a little ambitious to call this a ‘web scraping’ project, but I believe it has given me some of the fundamental knowledge needed to put together more complicated projects involving web data in the future. An added bonus was my discovery of the XPath language, which might have come in handy for <a href="../../posts/2016-10-02-ie-automation-with-vba-in-microsoft-excel/index.html">one of my previous projects</a>.
-</p>
-<p>
-All in all, I shall consider this a weekend well spent, although it has no doubt come at the cost of a few late-night maths sessions later in the week.
-</p>
 </section>
+</section>
+<section id="project-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="project-evaluation">Project evaluation</h3>
+<p>It turns out that the average annual placement position salary is just under £18,000, increasing to slightly over £19,000 for London-based placements.</p>
+<p>This was my first attempt at a project using non-tabluar web-based data. Moreover, I had no previous experience with the HTML-manipulating packages in R, and as per usual a large amount of reading and experimentation was necessary before I managed to achieve what I was aiming for. Perhaps it is a little ambitious to call this a ‘web scraping’ project, but I believe it has given me some of the fundamental knowledge needed to put together more complicated projects involving web data in the future. An added bonus was my discovery of the XPath language, which might have come in handy for <a href="../../posts/2016-10-02-ie-automation-with-vba-in-microsoft-excel/index.html">one of my previous projects</a>.</p>
+<p>All in all, I shall consider this a weekend well spent, although it has no doubt come at the cost of a few late-night maths sessions later in the week.</p>
 
 
 </section>
-</section>
 
-
- <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -1124,7 +1000,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <input type="hidden" id="giscus-base-theme" value="light">
 <input type="hidden" id="giscus-alt-theme" value="dark">
- <!-- /content -->
+</div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
