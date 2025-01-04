@@ -15,17 +15,20 @@ website:
   page-footer: |
     <img src="/neuronsbanner.png">
     <br>
-    <span>Copyright &#169; 2024 <a href="https://owenjonesuob.github.io/">Owen Jones</a></span>
+    <span>Copyright &#169; 2025 <a href="https://owenjonesuob.github.io/">Owen Jones</a></span>
   favicon: favicon.png
   twitter-card:
     creator: "@owenjonesuob"
-  google-analytics: "UA-91389971-1"
 format:
   html:
     theme:
       light: flatly
       dark: darkly
     css: styles.css
+    include-in-header:
+      - text: |
+          <script data-goatcounter="https://owenjonesuob.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
 
 execute:
   freeze: auto
