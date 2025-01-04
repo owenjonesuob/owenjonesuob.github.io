@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.553">
+<meta name="generator" content="quarto-1.6.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="dcterms.date" content="2016-09-30">
 <meta name="description" content="Notes from my very first project: building a simple neural network for handwritten digit recognition">
 
-<title>Products of Procrastination - Digit Recognition - Building a neural network from scratch in R</title>
+<title>Digit Recognition - Building a neural network from scratch in R – Products of Procrastination</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -35,7 +35,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -72,12 +72,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ea72dc5fed832574809a9c94082fbbb.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-04dd6a5ca28aac96903e51a8fbffbcaa.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-b3883a83b6cdceb4314f965facc5c958.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -105,22 +105,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script data-goatcounter="https://owenjonesuob.goatcounter.com/count" async="" src="//gc.zgo.at/count.js"></script>
 
-<script type="text/javascript">
-
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-ga('create', 'UA-91389971-1', 'auto');
-
-ga('send', {
-  hitType: 'pageview',
-  'anonymizeIp': true,
-});
-</script>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -151,7 +138,7 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../../styles.css">
-<meta name="twitter:title" content="Products of Procrastination - Digit Recognition - Building a neural network from scratch in R">
+<meta name="twitter:title" content="Digit Recognition - Building a neural network from scratch in R – Products of Procrastination">
 <meta name="twitter:description" content="Notes from my very first project: building a simple neural network for handwritten digit recognition">
 <meta name="twitter:image" content="https://owenjonesuob.github.io/posts/2016-09-30-digit-recognition-building-a-neural-network-from-scratch-in-r/5.png">
 <meta name="twitter:creator" content="@owenjonesuob">
@@ -172,7 +159,7 @@ window.Quarto = {
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -193,7 +180,7 @@ window.Quarto = {
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
@@ -247,7 +234,7 @@ window.Quarto = {
 Motivation for this project
 </h3>
 </div>
-<div id="motivation-for-this-project" class="section level2">
+<section id="motivation-for-this-project" class="level2">
 <p>
 A few months ago I was introduced to data science and machine learning by a friend. Since then I have developed a great interest in the field, and recently my imagination has been captured by the topic of neural networks.
 </p>
@@ -255,13 +242,13 @@ A few months ago I was introduced to data science and machine learning by a frie
 Combining this, a desire to improve my programming skills, my irrational fondness for R as a programming language, and a <a href="https://www.kaggle.com/c/digit-recognizer">digit recognition challenge</a> hosted online by Kaggle, I decided to create, train and utilize a simple neural network - entirely from scratch - within R.
 </p>
 <hr>
-</div>
+</section></main></div>
 <section id="the-neural-network-methodology-and-notes" class="level2">
-<h3 class="anchored" data-anchor-id="the-neural-network-methodology-and-notes">
+<h3 data-anchor-id="the-neural-network-methodology-and-notes">
 The neural network: methodology and notes
 </h3>
 <section id="setting-up-the-environment" class="level3">
-<h4 class="anchored" data-anchor-id="setting-up-the-environment">
+<h4 data-anchor-id="setting-up-the-environment">
 Setting up the environment
 </h4>
 <p>I have used two packages other than those included with base R: <code>reshape2</code> and <code>ggplot2</code>, both of which are widely-used packages that can be installed from the CRAN repository. These are used within the <code>visualize</code> function (and its variants) to simplify the plotting process; I shall explain exactly how this is done later on.</p>
@@ -272,7 +259,7 @@ Setting up the environment
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="functions" class="level3">
-<h4 class="anchored" data-anchor-id="functions">
+<h4 data-anchor-id="functions">
 Functions
 </h4>
 I have broken down the construction and training of the neural network into several functions. These functions are:
@@ -320,7 +307,7 @@ I have broken down the construction and training of the neural network into seve
 <p>I will explain the purpose of each of them at the time that they are used in the project.</p>
 </section>
 <section id="inspecting-the-data" class="level3">
-<h4 class="anchored" data-anchor-id="inspecting-the-data">
+<h4 data-anchor-id="inspecting-the-data">
 Inspecting the data
 </h4>
 <p>The data is provided in two <code>.csv</code> files. We will talk about <code>test.csv</code> later - for now we’ll focus on the first file, <code>train.csv</code>, which contains 42000 rows of data in 785 columns. Each row corresponds to one 28x28 pixel grayscale image of a handwritten digit from 0 to 9. The first column is a label indicating which digit is represented in the image. The next 784 columns are an ‘unrolled’ representation of the image: the first 28 entries represent the first row of the image, the next 28 represent the second row, and so on. Each entry has a value from 0 to 255 representing the ‘intensity’ of the pixel it represents. Let’s examine the first row of <code>train.csv</code>:</p>
@@ -356,7 +343,7 @@ Inspecting the data
 <p>It’s now clear to us that this image is of the digit 1 - as confirmed by its label. We will look at some more examples shortly, but first we will read the data into R.</p>
 </section>
 <section id="loading-and-tidying-the-data" class="level3">
-<h4 class="anchored" data-anchor-id="loading-and-tidying-the-data">
+<h4 data-anchor-id="loading-and-tidying-the-data">
 Loading and tidying the data
 </h4>
 <p>The function <code>loadData</code> is used to load the training and test data into the R workspace (up to an optional cutoff point):</p>
@@ -482,7 +469,7 @@ Now that the data are in a nicer format for calculations, we can look at some mo
 <pre class="rconsole"><code>## [1] "Visualization complete!"</code></pre>
 </section>
 <section id="setting-hyper-parameters" class="level3">
-<h4 class="anchored" data-anchor-id="setting-hyper-parameters">
+<h4 data-anchor-id="setting-hyper-parameters">
 Setting hyper-parameters
 </h4>
 <p>
@@ -500,7 +487,7 @@ The neural network will have two other hyper-parameters which can be adjusted la
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="initializing-parameters" class="level3">
-<h4 class="anchored" data-anchor-id="initializing-parameters">
+<h4 data-anchor-id="initializing-parameters">
 Initializing parameters
 </h4>
 <p>The parameters, or weights, of the network are what allows it to learn. To avoid multiple neurons learning the same features, these weights must be initialized to small random numbers, rather than just 0. The function <code>randomInitParams</code> performs this task.</p>
@@ -525,7 +512,7 @@ Initializing parameters
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                                output_layer_size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="forward-propagation-and-the-cost-function" class="level3">
-<h4 class="anchored" data-anchor-id="forward-propagation-and-the-cost-function">
+<h4 data-anchor-id="forward-propagation-and-the-cost-function">
 Forward propagation and the cost function
 </h4>
 <p>An underlying principle of machine learning is to minimize a cost function (or objective function) by adjusting parameters. The calculation of the cost for this network is handled by <code>computeCost</code>.</p>
@@ -623,7 +610,7 @@ There is one more step in the cost calculation. A extra term is added: a scaled 
 </p>
 </section>
 <section id="backpropagation-and-partial-derivatives" class="level3">
-<h4 class="anchored" data-anchor-id="backpropagation-and-partial-derivatives">
+<h4 data-anchor-id="backpropagation-and-partial-derivatives">
 Backpropagation and partial derivatives
 </h4>
 <p>The process of training the network involves optimizing the cost function by adjusting the network’s parameters. This is done using R’s <code>optim </code>function - the full process is discussed in the next section. Before we do this, however, we will discuss another function - <code>computeGrad</code>.</p>
@@ -737,7 +724,7 @@ Then, however, we come to a new process: backpropagation. The aim of backpropaga
 <p>Once the backpropagation step is complete, the gradient for each parameter is regularized in a similar manner to the cost in <code>computeCost</code> - the larger the parameter, the greater the effect of the parameter on the network. <em>Note: By convention, the bias parameters are not regularized.</em> The output of the function is then a vector of the ‘unrolled’ forms of <code>Theta1</code> and <code>Theta2</code>.</p>
 </section>
 <section id="training-the-network" class="level3">
-<h4 class="anchored" data-anchor-id="training-the-network">
+<h4 data-anchor-id="training-the-network">
 Training the network
 </h4>
 <p>
@@ -843,7 +830,7 @@ The two anonymous functions are required since only the first argument, the para
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>                 output_layer_size, hidden_layer_size <span class="sc">+</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="making-predictions" class="level3">
-<h4 class="anchored" data-anchor-id="making-predictions">
+<h4 data-anchor-id="making-predictions">
 Making predictions
 </h4>
 <p>Now that we have trained the network, we can see how well it does when making predictions for images it hasn’t seen before. The <code>predict </code>function makes these predictions. We’ll assess the network’s performance using the cross-validation set <code>xval</code>.</p>
@@ -867,7 +854,7 @@ Making predictions
 <p>This initial runthrough achieves an accuracy of above 93%, which is already reasonably impressive!</p>
 </section>
 <section id="visualizing-the-hidden-layer" class="level3">
-<h4 class="anchored" data-anchor-id="visualizing-the-hidden-layer">
+<h4 data-anchor-id="visualizing-the-hidden-layer">
 Visualizing the hidden layer
 </h4>
 <p>It would be interesting to see exactly what features the neurons in the hidden layer have learned to look for in the input images. We can visualize these features by passing <code>Theta1</code>, without the first column of bias parameters, to <code>visualizeMulti</code>:</p>
@@ -879,7 +866,7 @@ Visualizing the hidden layer
 <p>It is possible to make out some shapes and curves, but it is interesting to see the difference between the features the network learns and the features humans might use to describe a digit.</p>
 </section>
 <section id="mistakes" class="level3">
-<h4 class="anchored" data-anchor-id="mistakes">
+<h4 data-anchor-id="mistakes">
 Mistakes
 </h4>
 <p>It is also worth seeing some of the images the network didn’t manage to classify correctly.</p>
@@ -894,7 +881,7 @@ Mistakes
 <p>In some cases it is difficult for a human to say with absolute certainty which digit is represented, so it is understandable that the network makes some errors. However, it may be possible to improve the network’s performance through adjustments to the hyper-parameters set earlier.</p>
 </section>
 <section id="adjusting-lambda" class="level3">
-<h4 class="anchored" data-anchor-id="adjusting-lambda">
+<h4 data-anchor-id="adjusting-lambda">
 Adjusting lambda
 </h4>
 <p>
@@ -948,7 +935,7 @@ First we can train the network with several different values of <code>lambda</co
 <p>It seems that our initial value of 1 for <code>lambda</code> is not the best value we could be using; there is no clear trend in the results, but it seems a larger value (perhaps around <code>4</code>) will give us a greater accuracy. We will adjust <code>lambda</code> with this improvement shortly.</p>
 </section>
 <section id="adding-more-neurons" class="level3">
-<h4 class="anchored" data-anchor-id="adding-more-neurons">
+<h4 data-anchor-id="adding-more-neurons">
 Adding more neurons
 </h4>
 <p>By increasing the number of neurons in the hidden layer, we increase the number of features the network can look for in an image, although at the cost of increased computation time. We can see the effect of adding more neurons to the hidden layer using <code>optNeurons</code>.</p>
@@ -1012,7 +999,7 @@ Adding more neurons
 <p>It can be seen that adding extra neurons consistently increases the accuracy of the network - however, the rate of improvement slows after about 35 neurons have been added, and the computation time increases significantly at each stage due to the ever-larger matrices involved. Therefore I shall for now continue to use a 25-unit hidden layer, since the training process otherwise becomes rather tedious, but for the final training run I shall use a 50-unit layer since this will give a slight increase to the accuracy score.</p>
 </section>
 <section id="one-more-attempt-at-improvement" class="level3">
-<h4 class="anchored" data-anchor-id="one-more-attempt-at-improvement">
+<h4 data-anchor-id="one-more-attempt-at-improvement">
 One more attempt at improvement
 </h4>
 <p>At one point or another I became curious as to whether the network would better learn to recognize features if the images were first converted into pure black-and-white images, where each pixel in the image is either ‘on’ or ‘off’. <code>visualizeBW</code> performs this transformation.</p>
@@ -1074,7 +1061,7 @@ One more attempt at improvement
 <p>It turns out that the network actually performs worse on these black-and-white images (even using different <code>tolerance</code> values) than on the unaltered images. This is perhaps unsurprising: by limiting each pixel to being only ‘on’ or ‘off’, we lose a lot of the information contained in the image, and so reduce the amount of information available for the network to train on. From now on, then, I shall only use the original unaltered images for training.</p>
 </section>
 <section id="updating-hyper-parameters" class="level3">
-<h4 class="anchored" data-anchor-id="updating-hyper-parameters">
+<h4 data-anchor-id="updating-hyper-parameters">
 Updating hyper-parameters
 </h4>
 <p>Having seen the effects of changing each hyper-parameter earlier, we can now update the hyper-parameters to obtain the best performance from the network.</p>
@@ -1082,7 +1069,7 @@ Updating hyper-parameters
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>hidden_layer_size <span class="ot">&lt;-</span> <span class="dv">50</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="re-evaluating-performance" class="level3">
-<h4 class="anchored" data-anchor-id="re-evaluating-performance">
+<h4 data-anchor-id="re-evaluating-performance">
 Re-evaluating performance
 </h4>
 <p>The network can now be re-trained with the updated hyper-parameters, and its performance evaluated on <code>xtest</code> - which has not been used up to this point to prevent it from influencing the training process in any way (this is another measure to prevent overfitting and hence an overly-optimistic accuracy estimate).</p>
@@ -1112,7 +1099,7 @@ Re-evaluating performance
 <p>This is significantly better than the previous accuracy, so our effort has not been in vain!</p>
 </section>
 <section id="making-predictions-for-unlabelled-images" class="level3">
-<h4 class="anchored" data-anchor-id="making-predictions-for-unlabelled-images">
+<h4 data-anchor-id="making-predictions-for-unlabelled-images">
 Making predictions for unlabelled images
 </h4>
 <p>The network is now as accurate as it reasonably can be in its classification of images, so it is time to try it out on <code>test</code> - the unlabelled images we loaded earlier.</p>
@@ -1159,8 +1146,8 @@ Making predictions for unlabelled images
 <hr>
 </section>
 </section>
-<div id="project-evaluation" class="section level2">
-<h3 class="anchored">
+<section id="project-evaluation" class="level2">
+<h3 data-anchor-id="project-evaluation">
 Project evaluation
 </h3>
 <p>
@@ -1171,8 +1158,10 @@ Overall this has been an enjoyable project to put together. Writing the code was
 </p>
 
 
+</section>
 
-</div></main> <!-- /main -->
+
+ <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -1352,18 +1341,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1395,7 +1373,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp("https:\/\/owenjonesuob\.github\.io");
@@ -1403,7 +1401,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
@@ -1500,7 +1498,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
@@ -1730,14 +1727,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <input type="hidden" id="giscus-base-theme" value="light">
 <input type="hidden" id="giscus-alt-theme" value="dark">
-</div> <!-- /content -->
+ <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-<p><img src="../../neuronsbanner.png"> <br> <span>Copyright © 2024 <a href="https://owenjonesuob.github.io/">Owen Jones</a></span></p>
+<p><img src="../../neuronsbanner.png"> <br> <span>Copyright © 2025 <a href="https://owenjonesuob.github.io/">Owen Jones</a></span></p>
 </div>
     <div class="nav-footer-right">
       &nbsp;

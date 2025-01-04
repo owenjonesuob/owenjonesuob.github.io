@@ -9,7 +9,7 @@
 <link>https://owenjonesuob.github.io/</link>
 <atom:link href="https://owenjonesuob.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>I&#39;m a data scientist/engineer living in Cardiff, United Kingdom. This is a collection of projects I have spent time on while I was supposed to be doing other things.</description>
-<generator>quarto-1.4.553</generator>
+<generator>quarto-1.6.40</generator>
 <lastBuildDate>Sat, 27 Apr 2024 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Use deploy keys to access private repos within GitHub Actions</title>
@@ -91,6 +91,7 @@
 background-color: null;
 font-style: inherit;">jobs</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span></span>
 <span id="cb2-2"><span class="at" style="color: #657422;
 background-color: null;
@@ -98,6 +99,7 @@ font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">some-job-name</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span></span>
 <span id="cb2-3"><span class="at" style="color: #657422;
 background-color: null;
@@ -105,6 +107,7 @@ font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">runs-on</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> ubuntu-latest</span></span>
@@ -115,18 +118,21 @@ font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">steps</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span></span>
 <span id="cb2-6"></span>
 <span id="cb2-7"><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">-</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> Checkout this repo</span></span>
@@ -136,6 +142,7 @@ font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">uses</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> actions/checkout@v4</span></span>
@@ -145,6 +152,7 @@ font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">with</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span></span>
 <span id="cb2-10"><span class="at" style="color: #657422;
 background-color: null;
@@ -152,6 +160,7 @@ font-style: inherit;">          </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">submodules</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="ch" style="color: #20794D;
@@ -162,12 +171,14 @@ font-style: inherit;">false</span></span>
 background-color: null;
 font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">-</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> Checkout your-extra-repo submodule</span></span>
@@ -177,6 +188,7 @@ font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">uses</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> actions/checkout@v4</span></span>
@@ -186,6 +198,7 @@ font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">with</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span></span>
 <span id="cb2-15"><span class="at" style="color: #657422;
 background-color: null;
@@ -193,6 +206,7 @@ font-style: inherit;">          </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">repository</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> your-user-or-org/your-extra-repo</span></span>
@@ -202,6 +216,7 @@ font-style: inherit;">          </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">ssh-key</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> ${{ secrets.YOUR_EXTRA_REPO_DEPLOY_KEY }}</span></span>
@@ -211,6 +226,7 @@ font-style: inherit;">          </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">path</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> ./path/to/submodule</span></span>
@@ -234,17 +250,20 @@ font-style: inherit;">      # More steps...</span></span></code></pre></div>
 background-color: null;
 font-style: inherit;">repos</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span></span>
 <span id="cb3-2"><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">  </span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">-</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">repo</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> https://github.com/pre-commit/pre-commit-hooks</span></span>
@@ -254,6 +273,7 @@ font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">rev</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> v4.5.0</span></span>
@@ -263,17 +283,20 @@ font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">hooks</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span></span>
 <span id="cb3-5"><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">-</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">id</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> trailing-whitespace</span></span>
@@ -281,12 +304,14 @@ font-style: inherit;"> trailing-whitespace</span></span>
 background-color: null;
 font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">-</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">id</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> end-of-file-fixer</span></span>
@@ -294,12 +319,14 @@ font-style: inherit;"> end-of-file-fixer</span></span>
 background-color: null;
 font-style: inherit;">  </span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">-</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">repo</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> https://github.com/lorenzwalthert/precommit</span></span>
@@ -309,6 +336,7 @@ font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">rev</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> v0.4.1</span></span>
@@ -318,17 +346,20 @@ font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">hooks</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span></span>
 <span id="cb3-10"><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">-</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">id</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> parsable-R</span></span>
@@ -336,12 +367,14 @@ font-style: inherit;"> parsable-R</span></span>
 background-color: null;
 font-style: inherit;">  </span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">-</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">repo</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> git@github.com:your-user-or-org/your-extra-repo</span></span>
@@ -351,6 +384,7 @@ font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">rev</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> v0.0.1</span></span>
@@ -360,17 +394,20 @@ font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">hooks</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span></span>
 <span id="cb3-14"><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">-</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">id</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> your-first-hook</span></span>
@@ -378,12 +415,14 @@ font-style: inherit;"> your-first-hook</span></span>
 background-color: null;
 font-style: inherit;">      </span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">-</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">id</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> your-second-hook</span></span></code></pre></div></li>
@@ -392,6 +431,7 @@ font-style: inherit;"> your-second-hook</span></span></code></pre></div></li>
 background-color: null;
 font-style: inherit;">jobs</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span></span>
 <span id="cb4-2"><span class="at" style="color: #657422;
 background-color: null;
@@ -399,6 +439,7 @@ font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">run</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span></span>
 <span id="cb4-3"><span class="at" style="color: #657422;
 background-color: null;
@@ -406,6 +447,7 @@ font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">runs-on</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> ubuntu-latest</span></span>
@@ -415,18 +457,21 @@ font-style: inherit;">    </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">steps</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span></span>
 <span id="cb4-5"></span>
 <span id="cb4-6"><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">    </span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">-</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">uses</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> actions/checkout@v4</span></span>
@@ -436,6 +481,7 @@ font-style: inherit;">      </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">with</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span></span>
 <span id="cb4-8"><span class="at" style="color: #657422;
 background-color: null;
@@ -443,6 +489,7 @@ font-style: inherit;">        </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">fetch-depth</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="dv" style="color: #AD0000;
@@ -453,12 +500,14 @@ font-style: inherit;">0</span></span>
 background-color: null;
 font-style: inherit;">    </span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">-</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">uses</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> actions/setup-python@v5</span></span>
@@ -467,12 +516,14 @@ font-style: inherit;"> actions/setup-python@v5</span></span>
 background-color: null;
 font-style: inherit;">    </span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">-</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> Install dependencies</span></span>
@@ -480,6 +531,7 @@ font-style: inherit;"> Install dependencies</span></span>
 background-color: null;
 font-style: inherit;">      run</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">: </span><span class="ch" style="color: #20794D;
 background-color: null;
 font-style: inherit;">|</span></span>
@@ -495,12 +547,14 @@ font-style: inherit;">|</span></span>
 background-color: null;
 font-style: inherit;">    </span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">-</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> </span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">:</span><span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;"> Run pre-commit</span></span>
@@ -508,6 +562,7 @@ font-style: inherit;"> Run pre-commit</span></span>
 background-color: null;
 font-style: inherit;">      run</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">: </span><span class="ch" style="color: #20794D;
 background-color: null;
 font-style: inherit;">|</span></span>
@@ -798,6 +853,7 @@ font-style: inherit;">use_data</span>(diamantes)</span></code></pre></div>
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(x, y) x<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span>y</span>
@@ -811,6 +867,7 @@ font-style: inherit;">&lt;-</span> f</span>
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(x) {</span>
 <span id="cb6-2">  <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1712,6 +1769,7 @@ font-style: inherit;">import</span> random</span>
 <span id="cb5-3"></span>
 <span id="cb5-4"><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">class</span> MarkovGenerator(<span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">object</span>):</span>
@@ -1721,6 +1779,7 @@ background-color: null;
 font-style: inherit;"># When we create a "MarkovGenerator" object, these things happen:</span></span>
 <span id="cb5-7">    <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
@@ -1774,14 +1833,17 @@ background-color: null;
 font-style: inherit;"># Get all collections of n words</span></span>
 <span id="cb5-22">    <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">def</span> tuples(<span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>):</span>
 <span id="cb5-23">        </span>
 <span id="cb5-24">        <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">range</span>(<span class="va" style="color: #111111;
@@ -1801,6 +1863,7 @@ background-color: null;
 font-style: inherit;"># https://stackoverflow.com/questions/231767/what-does-the-yield-keyword-do-in-python</span></span>
 <span id="cb5-27">            <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">yield</span> (<span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.words[i<span class="op" style="color: #5E5E5E;
@@ -1811,8 +1874,10 @@ font-style: inherit;">self</span>.tuple_size<span class="op" style="color: #5E5E
 background-color: null;
 font-style: inherit;">+</span>k] <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> k <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
@@ -1831,14 +1896,17 @@ background-color: null;
 font-style: inherit;"># Build the cache dictionary        </span></span>
 <span id="cb5-31">    <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">def</span> build_cache(<span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>):</span>
 <span id="cb5-32"></span>
 <span id="cb5-33">        <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> tup <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.tuples():</span>
@@ -1857,8 +1925,10 @@ font-style: inherit;">=</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">tuple</span>(w <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> w <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> tup[:<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
@@ -1867,8 +1937,10 @@ font-style: inherit;">1</span>])</span>
 <span id="cb5-38">            </span>
 <span id="cb5-39">            <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> key <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.cache:</span>
@@ -1889,6 +1961,7 @@ font-style: inherit;">1</span>])</span>
 <span id="cb5-44">                </span>
 <span id="cb5-45">            <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">else</span>:</span>
 <span id="cb5-46">                <span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -1909,6 +1982,7 @@ background-color: null;
 font-style: inherit;"># Generate an output text string            </span></span>
 <span id="cb5-51">    <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">def</span> generate_text(<span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>, length):</span>
@@ -1937,8 +2011,10 @@ font-style: inherit;">self</span>.words[seed<span class="op" style="color: #5E5E
 background-color: null;
 font-style: inherit;">+</span>k] <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> k <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
@@ -1959,8 +2035,10 @@ background-color: null;
 font-style: inherit;"># length is how many words we want in the output</span></span>
 <span id="cb5-61">        <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">range</span>(length):</span>
@@ -1989,6 +2067,7 @@ background-color: null;
 font-style: inherit;"># Stick all the generated words together and return!</span></span>
 <span id="cb5-71">        <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">return</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">" "</span>.join(gen_words)</span></code></pre></div>
@@ -2072,8 +2151,10 @@ font-style: inherit;"># Get the text from between each pair of &lt;font&gt; tags
 background-color: null;
 font-style: inherit;">=</span> [passage.get_text() <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> passage <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> soup.blockquote.find_all(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"font"</span>)]</span>
@@ -2168,8 +2249,10 @@ font-style: inherit;">=</span> [url.parent[<span class="st" style="color: #20794
 background-color: null;
 font-style: inherit;">"href"</span>] <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> url <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> soup.find_all(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"img"</span>, src<span class="op" style="color: #5E5E5E;
@@ -2218,8 +2301,10 @@ font-style: inherit;">=</span> []</span>
 <span id="cb16-2"></span>
 <span id="cb16-3"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> url <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> speech_urls[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>:]:</span>
@@ -2258,8 +2343,10 @@ font-style: inherit;"># Add the speech to the list</span></span>
 background-color: null;
 font-style: inherit;">=</span> [passage.get_text() <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> passage <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> soup.blockquote.find_all(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"font"</span>)]</span>
@@ -2467,8 +2554,8 @@ While we see some wild fluctuations, there is a point worth noting here: the P+R
 </p>
 <p><img src="https://owenjonesuob.github.io/posts/2017-01-27-summary-of-30-days-30-visualizations-1-dataset/day29.jpeg"></p>
 </section>
-<div id="dubious-records" class="section level2">
-<h2 class="anchored">
+<section id="dubious-records" class="level2">
+<h2 class="anchored" data-anchor-id="dubious-records">
 Dubious records
 </h2>
 <p>
@@ -2484,30 +2571,7 @@ It’s clear that we have some outlying points here. It turns out that if we sta
 <p><img src="https://owenjonesuob.github.io/posts/2017-01-27-summary-of-30-days-30-visualizations-1-dataset/day11.jpeg"></p>
 <p>
 Whereas a car park at 0% or 100% capacity might not be <em>too</em> unusual, a car park at more than 100% capacity shouldn’t be too common. Having said that, on occasion this can be explained - as <a href="https://github.com/BathHacked/documentation/wiki/Bath-Car-Park-Data">the dataset’s documentation</a> notes - by cars being parked in unofficial spaces, or by cars prowling full car parks in hope of nabbing a spot as someone else leaves. (Notice most of the full/overfilled records are from the shopping car parks.)
-</p></div>
-<p>
-But we also have a large number of records where there were somehow fewer than zero cars in the car park. Obviously when this happens there must have been some sort of error - and in most cases, the method of data collection is the culprit.
-</p>
-<p>
-Again referring to the documentation we learn that occupancy is measured by keeping a running total of two counts - entries and exits. For each car park, there is a sensor on each gate. When a car goes in, we add 1 to the occupancy, and when a car leaves, we subtract 1. Simple enough, and generally effective.
-</p>
-<p>
-Every so often though one of these sensors fails, and we end up with a monotonic increase or decrease in occupancy until someone notices and runs down to the offending car park to change the sensor. The occupancy is then manually recalibrated (this happens on occasion anyway, usually overnight). Broken sensors explain the vast majority of the remaining “strange” records - in the case of the negative occupancy records, 99.8% of them are relatively close to zero.
-</p>
-<p><img src="https://owenjonesuob.github.io/posts/2017-01-27-summary-of-30-days-30-visualizations-1-dataset/day13.jpeg"></p>
-<p>
-But then again, some <em>aren’t</em> relatively close to zero. The 26 records where an occupancy of about -15000 is recorded all come from SouthGate General car park, from a single afternoon - there is just an immediate drop from one record to the next, and then an immediate rise a couple of hours later. But even if we shift the records back up to approximately where they should be (by adding about 15220 to the recorded occupancy) we can see that they don’t line up with the records on either side.
-</p>
-<p><img src="https://owenjonesuob.github.io/posts/2017-01-27-summary-of-30-days-30-visualizations-1-dataset/day16.jpeg"></p>
-<p>
-OK, in case it wasn’t clear, I wasn’t entirely serious earlier when I said I didn’t know why the P+Rs were busiest in early December (I think anyone who’s lived in Bath knows why!). However, in the case of these rogue records I genuinely have no idea why they are so wrong; my best guess is some sort of error in the process of uploading the records from the sensors to the online database.
-</p>
-<p>
-I can also now confess that the plots which appear in the first section of this piece are based on a somewhat tidied version of the data where I have removed any dubious records. These records do have an effect on calculated averages, as can be seen by comparing the plots below - the second plot is identical to the plot from earlier, the first is the same plot but with dubious records included.
-</p>
-<p><img src="https://owenjonesuob.github.io/posts/2017-01-27-summary-of-30-days-30-visualizations-1-dataset/day04fixed.jpeg"></p>
-<img src="https://owenjonesuob.github.io/posts/2017-01-27-summary-of-30-days-30-visualizations-1-dataset/day26.jpeg">
- ]]></description>
+</p></section> ]]></description>
   <category>data</category>
   <category>R</category>
   <category>visualization</category>
